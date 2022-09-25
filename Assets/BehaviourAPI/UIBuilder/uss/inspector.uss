@@ -1,0 +1,60 @@
+VisualElement {
+}
+
+.container {
+    color: rgb(185, 185, 185);
+    width: 250px;
+    height: auto;
+    background-color: rgb(39, 39, 39);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left-color: rgb(147, 147, 147);
+    border-right-color: rgb(147, 147, 147);
+    border-top-color: rgb(147, 147, 147);
+    border-bottom-color: rgb(147, 147, 147);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    overflow: hidden;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.header {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.header-button {
+    width: 20px;
+    height: 20px;
+}
+
+.body {
+    background-color: rgb(89, 89, 89);
+    min-height: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    min-width: auto;
+    border-top-color: rgb(58, 58, 58);
+    border-top-width: 1px;
+    visibility: visible;
+    overflow: visible;
+}
+
+.element-title {
+    -unity-text-align: middle-center;
+    color: rgb(255, 227, 146);
+    -unity-font-style: bold;
+}

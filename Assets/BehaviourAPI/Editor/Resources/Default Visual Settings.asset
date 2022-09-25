@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3494c24d2728134b8b49a82be90b60e, type: 3}
+  m_Name: Default visual settings
+  m_EditorClassIdentifier: 
+  VariablesStylesheet: {fileID: 7433441132597879392, guid: c5f5dcbebd273ee45b64af1f7e57867b, type: 3}
+  GraphStylesheet: {fileID: 7433441132597879392, guid: 663ad6dc1131d8a49b3325ce5adac0b2, type: 3}
+  InspectorLayout: {fileID: 9197481963319205126, guid: f5671cfb82c8bff429e71d46a7bcf704, type: 3}
+  InspectorStylesheet: {fileID: 7433441132597879392, guid: b72c7ce7d6a97524fbee0b753c8b4f84, type: 3}
+  NodeLayout: {fileID: 9197481963319205126, guid: 75e395042e81bd648821b64966763281, type: 3}
+  NodeStylesheet: {fileID: 7433441132597879392, guid: 24cb8737533937e4a814473ef74e7f9e, type: 3}

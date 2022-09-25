@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/BehaviourAPI/UIBuilder/uss/node.uss?fileID=7433441132597879392&amp;guid=24cb8737533937e4a814473ef74e7f9e&amp;type=3#node" />
+    <ui:VisualElement name="node-state" />
+    <ui:VisualElement name="node-border">
+        <ui:VisualElement name="contents" class="node-rect">
+            <ui:VisualElement name="top" style="min-height: auto; min-width: auto; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px;">
+                <ui:VisualElement name="input" class="port-container" />
+                <ui:VisualElement name="divider" class="divider" />
+                <ui:VisualElement name="title" style="height: auto;">
+                    <ui:Label text="Label" display-tooltip-when-elided="true" name="title-label" />
+                    <ui:VisualElement name="title-button-container">
+                        <ui:VisualElement name="collapse-button">
+                            <ui:VisualElement name="icon" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label display-tooltip-when-elided="true" name="description" style="height: auto;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="extension" />
+                <ui:VisualElement name="divider" class="divider" />
+                <ui:VisualElement name="output" class="port-container" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="selection-border" picking-mode="Ignore" />
+</ui:UXML>
