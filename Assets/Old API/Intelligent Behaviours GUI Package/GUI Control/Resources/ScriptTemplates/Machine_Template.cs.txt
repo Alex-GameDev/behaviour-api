@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class #SCRIPTNAME# : MonoBehaviour {
+
+    #region variables
+
+    private #MACHINENAME#Engine #ELEMNAME#;
+    #SUBELEM_DECL#
+
+    #VAR_DECL#
+    //Place your variables here
+
+    #endregion variables
+
+    // Start is called before the first frame update
+    private void Start()
+    {
+        #MACHINE_INIT#
+
+        #SUBELEM_INIT#Create#MACHINENAME#();
+    }
+    #SUBELEM_CREATE#
+    #CREATE#
+
+    // Update is called once per frame
+    private void Update()
+    {
+        #ELEMNAME#.Update();#SUBELEM_UPDATE#
+    }
+
+    // Create your desired actions
+    #ACTIONS#
+}

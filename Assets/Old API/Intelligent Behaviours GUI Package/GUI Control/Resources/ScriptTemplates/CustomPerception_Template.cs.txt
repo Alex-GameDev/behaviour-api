@@ -1,0 +1,19 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class #CUSTOMNAME#Perception : Perception {
+
+    //Evaluates wether it should fire this perception or not
+    public override bool Check()
+    {
+        return false;
+    }
+
+    //Called when the transition launches to restore any variables (if you need to)
+    public override void Reset()
+    {
+        return;
+    }
+}
