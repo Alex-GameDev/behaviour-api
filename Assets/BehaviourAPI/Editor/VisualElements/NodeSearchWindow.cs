@@ -23,7 +23,6 @@ namespace BehaviourAPI.Editor
         {
             TypeNode rootTypeNode = TypeUtilities.GetHierarchyOfType(RootType);
             return CreateSubSearchTree(rootTypeNode, 0);
-
         }
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)

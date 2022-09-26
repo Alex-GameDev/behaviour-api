@@ -6,13 +6,27 @@ using System;
 
 namespace BehaviourAPI.Editor
 {
+    using Runtime.Core;
     public class BehaviourGraphEditorWindow : EditorWindow
     {
-        [MenuItem("BehaviourAPI/EditorWindow")]
-        public static void OpenGraph()
+        public static BehaviourEngine Graph;
+        /// <summary>
+        /// Edit an existing graph.
+        /// </summary>
+        public static void OpenGraph(BehaviourEngine graph)
         {
             BehaviourGraphEditorWindow wnd = GetWindow<BehaviourGraphEditorWindow>();
             wnd.titleContent = new GUIContent("BehaviourGraphEditorWindow");
+            Graph = graph;
+        }
+
+        /// <summary>
+        /// Create a new behaviour graph.
+        /// </summary>
+        [MenuItem("BehaviourAPI/EditorWindow")]
+        public static void CreateGraph()
+        {
+
         }
 
         public void CreateGUI()
@@ -21,15 +35,9 @@ namespace BehaviourAPI.Editor
             AddStyles();
         }
 
-        private void OnEnable()
-        {
-
-        }
-
-
         private void AddVisualElements()
         {
-            BehaviourGraphView behaviourGraphView = new BehaviourGraphView();
+            BehaviourGraphView behaviourGraphView = new BehaviourGraphView(Graph);
             behaviourGraphView.StretchToParentSize();
 
             rootVisualElement.Add(behaviourGraphView);

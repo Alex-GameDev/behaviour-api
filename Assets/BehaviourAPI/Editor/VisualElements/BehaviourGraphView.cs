@@ -13,8 +13,9 @@ namespace BehaviourAPI.Editor
         public BehaviourEngine BehaviourGraph { get; set; }
 
         NodeSearchWindow m_nodeSearchingWindow;
-        public BehaviourGraphView()
+        public BehaviourGraphView(BehaviourEngine graph)
         {
+            BehaviourGraph = graph;
             AddGridBackground();
             AddManipulators();
             AddStyles();
