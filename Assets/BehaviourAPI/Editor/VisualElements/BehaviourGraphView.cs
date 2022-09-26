@@ -7,8 +7,12 @@ using UnityEngine.UIElements;
 
 namespace BehaviourAPI.Editor
 {
+    using BehaviourAPI.Runtime.Core;
     public class BehaviourGraphView : GraphView
     {
+        public BehaviourEngine BehaviourGraph { get; set; }
+
+        NodeSearchWindow m_nodeSearchingWindow;
         public BehaviourGraphView()
         {
             AddGridBackground();
@@ -49,7 +53,7 @@ namespace BehaviourAPI.Editor
 
         private Action<ContextualMenuPopulateEvent> MenuBuilderProvider()
         {
-            return menuEvent => menuEvent.menu.AppendAction("AddNode", actionEvent => AddElement(CreateNode()));
+            return menuEvent => menuEvent.menu.AppendAction("AddNode", actionEvent => AddElement(CreateNode(null)));
         }
 
         private void AddStyles()
@@ -58,9 +62,10 @@ namespace BehaviourAPI.Editor
             styleSheets.Add(styleSheet);
         }
 
-        public NodeView CreateNode(Vector2 position = default)
+        public NodeView CreateNode(Type type, Vector2 position = default)
         {
             NodeView nodeView = new NodeView();
+            nodeView.SetPosition(new Rect(position, Vector2.zero));
             this.AddElement(nodeView);
             return nodeView;
         }
