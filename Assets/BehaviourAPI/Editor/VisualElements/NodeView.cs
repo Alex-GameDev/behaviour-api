@@ -29,14 +29,18 @@ namespace BehaviourAPI.Editor
             AddPort(Direction.Output);
         }
 
-        // TODO: Input port type is node type and output port type is node childs type
         private void AddPort(Direction direction)
         {
-            var port = InstantiatePort(Orientation.Vertical, direction, Port.Capacity.Single, typeof(bool));
+            Type portType = direction == Direction.Input ? node.GetType() : node.ChildType;
+            var port = InstantiatePort(Orientation.Vertical, direction, Port.Capacity.Single, portType);
             port.portName = "";
             port.style.flexDirection = direction == Direction.Input ? FlexDirection.Column : FlexDirection.ColumnReverse;
             var container = direction == Direction.Input ? inputContainer : outputContainer;
             container.Add(port);
         }
+
+        public void OnMoved(Vector2 newPosition) => node.Position = newPosition;
+        public void OnRemoved() => node.OnRemoved();
+
     }
 }

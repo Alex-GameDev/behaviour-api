@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
+    using System;
     using Core;
 
     /// <summary>
@@ -11,6 +12,8 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     {
         public override int MaxInputConnections => 1;
         public override int MaxOutputConnections => 0;
+
+        public override Type ChildType => typeof(BTNode);
 
         public BTNode()
         {

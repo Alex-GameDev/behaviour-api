@@ -47,6 +47,7 @@ namespace BehaviourAPI.Runtime.Core
             {
                 Node node = (Node)System.Activator.CreateInstance(type);
                 node.Position = pos;
+                node.BehaviourGraph = this;
 
                 if (Nodes.Count == 0)
                 {

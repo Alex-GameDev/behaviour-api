@@ -23,6 +23,11 @@ namespace BehaviourAPI.Utils
             List<Type> derivedTypes = allTypes.Where((type) => type.IsSubclassOf(rootType)).ToList();
             return derivedTypes;
         }
+
+        public static bool IsCorrelatedWith(this Type t1, Type t2)
+        {
+            return t1.IsSubclassOf(t2) || t2.IsSubclassOf(t1);
+        }
     }
 
     public class TypeNode

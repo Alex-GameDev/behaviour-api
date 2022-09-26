@@ -32,6 +32,7 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public Status Status { get; protected set; }
 
+        public virtual Type ChildType { get; } = typeof(Node);
 
         /// <summary>
         /// Maximum number of <see cref="Connection"/> elements in <see cref="InputConnections"/>.
@@ -42,6 +43,7 @@ namespace BehaviourAPI.Runtime.Core
         /// Maximum number of <see cref="Connection"/> elements in <see cref="OutputConnections"/>.
         /// </summary>
         public abstract int MaxOutputConnections { get; }
+
 
         /// <summary>
         /// List of connections with this node as target.
@@ -119,6 +121,11 @@ namespace BehaviourAPI.Runtime.Core
         public virtual void Entry()
         {
 
+        }
+
+        public void OnRemoved()
+        {
+            BehaviourGraph.RemoveNode(this);
         }
 
 

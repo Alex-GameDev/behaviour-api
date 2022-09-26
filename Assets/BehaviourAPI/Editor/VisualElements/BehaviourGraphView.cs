@@ -8,7 +8,8 @@ using UnityEditor;
 
 namespace BehaviourAPI.Editor
 {
-    using BehaviourAPI.Runtime.Core;
+    using Runtime.Core;
+    using Utils;
     public class BehaviourGraphView : GraphView
     {
         public BehaviourEngine BehaviourGraph { get; set; }
@@ -26,6 +27,7 @@ namespace BehaviourAPI.Editor
             AddManipulators();
             AddCreateNodeWindow();
             AddStyles();
+            graphViewChanged += OnGraphViewChanged;
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -35,8 +37,8 @@ namespace BehaviourAPI.Editor
             ports.ForEach(port =>
             {
                 if (port.direction == startPort.direction) return;
-                if (port.portType != startPort.portType) return;
                 if (port == startPort) return;
+                if (!port.portType.IsCorrelatedWith(startPort.portType)) return;
                 if (port.node == startPort.node) return;
 
                 compatiblePorts.Add(port);
@@ -46,11 +48,17 @@ namespace BehaviourAPI.Editor
 
         public NodeView CreateNode(Type type, Vector2 position = default)
         {
-            Node node = (Node)Activator.CreateInstance(type);
+            Node node = BehaviourGraph.AddNode(type, position);
             node.Position = position;
             return DrawNodeView(node);
         }
 
+        public Vector2 GetLocalMousePosition(Vector2 mousePosition)
+        {
+            return contentViewContainer.WorldToLocal(mousePosition - m_editorWindow.position.position);
+        }
+
+        #region Initialization
         private void AddGridBackground()
         {
             GridBackground gridBackground = new GridBackground();
@@ -82,17 +90,17 @@ namespace BehaviourAPI.Editor
                 new SearchWindowContext(context.screenMousePosition), m_nodeSearchingWindow);
         }
 
+        #endregion
+
+        #region Draw Elements
+
         private void DrawGraph()
         {
-
+            Debug.Log("GRAPH:");
+            BehaviourGraph.Nodes.ForEach(node => DrawNodeView(node));
         }
 
-        /// <summary>
-        /// Draw a new NodeView. 
-        /// </summary>
-        /// <param name="node">The Node data.</param>
-        /// <returns></returns>
-        public NodeView DrawNodeView(Node node)
+        private NodeView DrawNodeView(Node node)
         {
             NodeView nodeView = new NodeView(node);
             nodeView.SetPosition(new Rect(node.Position, Vector2.zero));
@@ -100,11 +108,62 @@ namespace BehaviourAPI.Editor
             return nodeView;
         }
 
-        public Vector2 GetLocalMousePosition(Vector2 mousePosition)
+        private Edge DrawConnectionEdge(Connection connection)
         {
-            return contentViewContainer.WorldToLocal(mousePosition - m_editorWindow.position.position);
+            return null;
         }
 
+
+        #endregion
+
+        #region GraphViewChanged Callbacks
+        // https://answers.unity.com/questions/1752747/how-can-i-detect-changes-to-graphview-nodes-and-ed.html
+        private GraphViewChange OnGraphViewChanged(GraphViewChange changes)
+        {
+
+            if (changes.edgesToCreate != null)
+            {
+                changes.edgesToCreate.ForEach(edge => OnEdgeCreated(edge));
+            }
+
+            if (changes.elementsToRemove != null)
+            {
+                changes.elementsToRemove.ForEach(elem => OnElementRemoved(elem));
+            }
+
+            if (changes.movedElements != null)
+            {
+                changes.movedElements.ForEach(elem => OnElementMoved(elem));
+            }
+            return changes;
+        }
+
+        private void OnElementMoved(GraphElement elem)
+        {
+            if (elem is NodeView nodeView)
+            {
+                nodeView.OnMoved(elem.GetPosition().position);
+            }
+        }
+
+        private void OnElementRemoved(GraphElement elem)
+        {
+            if (elem is NodeView nodeView)
+            {
+                nodeView.OnRemoved();
+            }
+            if (elem is Edge edge)
+            {
+                Debug.Log("Edge removed");
+            }
+        }
+
+        private void OnEdgeCreated(Edge edge)
+        {
+            Debug.Log("Edge created");
+        }
+
+        #endregion
 
     }
 }
