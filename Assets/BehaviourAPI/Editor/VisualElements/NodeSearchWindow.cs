@@ -25,7 +25,8 @@ namespace BehaviourAPI.Editor
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
-            graphView.CreateNode((Type)SearchTreeEntry.userData, context.screenMousePosition);
+            Vector2 position = graphView.GetLocalMousePosition(context.screenMousePosition);
+            graphView.CreateNode((Type)SearchTreeEntry.userData, position);
             return true;
         }
 

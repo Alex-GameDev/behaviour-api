@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor;
 
 namespace BehaviourAPI.Editor
 {
@@ -13,10 +14,15 @@ namespace BehaviourAPI.Editor
         public BehaviourEngine BehaviourGraph { get; set; }
 
         NodeSearchWindow m_nodeSearchingWindow;
-        public BehaviourGraphView(BehaviourEngine graph)
+        EditorWindow m_editorWindow;
+
+        public BehaviourGraphView(BehaviourEngine graph, EditorWindow window)
         {
             BehaviourGraph = graph;
+            m_editorWindow = window;
+
             AddGridBackground();
+            DrawGraph();
             AddManipulators();
             AddCreateNodeWindow();
             AddStyles();
@@ -41,10 +47,8 @@ namespace BehaviourAPI.Editor
         public NodeView CreateNode(Type type, Vector2 position = default)
         {
             Node node = (Node)Activator.CreateInstance(type);
-            NodeView nodeView = new NodeView(node);
-            nodeView.SetPosition(new Rect(position, Vector2.zero));
-            this.AddElement(nodeView);
-            return nodeView;
+            node.Position = position;
+            return DrawNodeView(node);
         }
 
         private void AddGridBackground()
@@ -59,12 +63,6 @@ namespace BehaviourAPI.Editor
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
-            this.AddManipulator(new ContextualMenuManipulator(MenuBuilderProvider()));
-        }
-
-        private Action<ContextualMenuPopulateEvent> MenuBuilderProvider()
-        {
-            return menuEvent => menuEvent.menu.AppendAction("AddNode", actionEvent => AddElement(CreateNode(null)));
         }
 
         private void AddStyles()
@@ -83,5 +81,30 @@ namespace BehaviourAPI.Editor
             nodeCreationRequest = context => SearchWindow.Open(
                 new SearchWindowContext(context.screenMousePosition), m_nodeSearchingWindow);
         }
+
+        private void DrawGraph()
+        {
+
+        }
+
+        /// <summary>
+        /// Draw a new NodeView. 
+        /// </summary>
+        /// <param name="node">The Node data.</param>
+        /// <returns></returns>
+        public NodeView DrawNodeView(Node node)
+        {
+            NodeView nodeView = new NodeView(node);
+            nodeView.SetPosition(new Rect(node.Position, Vector2.zero));
+            this.AddElement(nodeView);
+            return nodeView;
+        }
+
+        public Vector2 GetLocalMousePosition(Vector2 mousePosition)
+        {
+            return contentViewContainer.WorldToLocal(mousePosition - m_editorWindow.position.position);
+        }
+
+
     }
 }

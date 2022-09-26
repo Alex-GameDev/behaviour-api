@@ -35,7 +35,7 @@ namespace BehaviourAPI.Editor
 
         private void AddVisualElements()
         {
-            BehaviourGraphView behaviourGraphView = new BehaviourGraphView(Graph);
+            BehaviourGraphView behaviourGraphView = new BehaviourGraphView(Graph, this);
             behaviourGraphView.StretchToParentSize();
 
             rootVisualElement.Add(behaviourGraphView);
