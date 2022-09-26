@@ -18,6 +18,7 @@ namespace BehaviourAPI.Editor
             BehaviourGraph = graph;
             AddGridBackground();
             AddManipulators();
+            AddCreateNodeWindow();
             AddStyles();
         }
 
@@ -35,6 +36,15 @@ namespace BehaviourAPI.Editor
                 compatiblePorts.Add(port);
             });
             return compatiblePorts;
+        }
+
+        public NodeView CreateNode(Type type, Vector2 position = default)
+        {
+            Node node = (Node)Activator.CreateInstance(type);
+            NodeView nodeView = new NodeView(node);
+            nodeView.SetPosition(new Rect(position, Vector2.zero));
+            this.AddElement(nodeView);
+            return nodeView;
         }
 
         private void AddGridBackground()
@@ -63,12 +73,15 @@ namespace BehaviourAPI.Editor
             styleSheets.Add(styleSheet);
         }
 
-        public NodeView CreateNode(Type type, Vector2 position = default)
+        private void AddCreateNodeWindow()
         {
-            NodeView nodeView = new NodeView();
-            nodeView.SetPosition(new Rect(position, Vector2.zero));
-            this.AddElement(nodeView);
-            return nodeView;
+            if (m_nodeSearchingWindow == null)
+            {
+                m_nodeSearchingWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
+                m_nodeSearchingWindow.Initialize(this);
+            }
+            nodeCreationRequest = context => SearchWindow.Open(
+                new SearchWindowContext(context.screenMousePosition), m_nodeSearchingWindow);
         }
     }
 }

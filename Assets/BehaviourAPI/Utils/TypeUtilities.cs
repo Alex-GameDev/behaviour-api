@@ -33,11 +33,11 @@ namespace BehaviourAPI.Utils
         {
             Type = rootType;
             Childs = new List<TypeNode>();
+            var subclasses = derivedTypes.Where(t => t.BaseType == rootType);
 
-
-            foreach (var c in derivedTypes)
+            foreach (var c in subclasses)
             {
-                var derived = derivedTypes.Where(t => t.IsSubclassOf(rootType));
+                var derived = derivedTypes.Where(t => t.IsSubclassOf(rootType) && t != rootType);
                 Childs.Add(new TypeNode(c, derived.ToList()));
             }
         }

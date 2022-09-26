@@ -47,6 +47,12 @@ namespace BehaviourAPI.Runtime.Core
             {
                 Node node = (Node)System.Activator.CreateInstance(type);
                 node.Position = pos;
+
+                if (Nodes.Count == 0)
+                {
+                    StartNode = node;
+                }
+
                 Nodes.Add(node);
                 return node;
             }

@@ -1,8 +1,6 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
-using System;
 
 namespace BehaviourAPI.Editor
 {
@@ -15,9 +13,9 @@ namespace BehaviourAPI.Editor
         /// </summary>
         public static void OpenGraph(BehaviourEngine graph)
         {
-            BehaviourGraphEditorWindow wnd = GetWindow<BehaviourGraphEditorWindow>();
-            wnd.titleContent = new GUIContent("BehaviourGraphEditorWindow");
             Graph = graph;
+            BehaviourGraphEditorWindow wnd = GetWindow<BehaviourGraphEditorWindow>();
+            wnd.titleContent = new GUIContent($"GraphEditor ({graph.GetType().Name})");
         }
 
         /// <summary>

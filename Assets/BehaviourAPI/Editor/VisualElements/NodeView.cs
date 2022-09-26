@@ -8,10 +8,13 @@ using UnityEngine.UIElements;
 
 namespace BehaviourAPI.Editor
 {
+    using Runtime.Core;
     public class NodeView : UnityEditor.Experimental.GraphView.Node
     {
-        public NodeView() : base(AssetDatabase.GetAssetPath(VisualSettings.GetOrCreateSettings().NodeLayout))
+        Node node;
+        public NodeView(Node node) : base(AssetDatabase.GetAssetPath(VisualSettings.GetOrCreateSettings().NodeLayout))
         {
+            this.node = node;
             SetUp();
         }
 
