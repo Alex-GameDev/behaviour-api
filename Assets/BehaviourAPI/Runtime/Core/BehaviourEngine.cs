@@ -23,6 +23,11 @@ namespace BehaviourAPI.Runtime.Core
         public Node StartNode { get; set; }
 
         /// <summary>
+        /// The current executed node.
+        /// </summary>
+        public Node CurrentNode { get; private set; }
+
+        /// <summary>
         /// Empty constructor
         /// </summary>
         public BehaviourEngine()
@@ -60,5 +65,43 @@ namespace BehaviourAPI.Runtime.Core
         {
             Nodes.Remove(node);
         }
+
+        #region Execution Methods
+
+        /// <summary>
+        /// Initialize all nodes.
+        /// </summary>
+        public virtual void Initialize()
+        {
+            Nodes.ForEach((node) => node.Initialize());
+        }
+
+        /// <summary>
+        /// Enter this behavior graph from a subgraph node or a <see cref="BehaviourRunner"/>
+        /// </summary>
+        public virtual void Entry()
+        {
+            EntryNode(StartNode);
+        }
+
+        /// <summary>
+        /// Call every execution frame.
+        /// </summary>
+        public virtual void Update()
+        {
+            CurrentNode.Update();
+        }
+
+        /// <summary>
+        /// Entry in a node.
+        /// </summary>
+        /// <param name="node">The new Current Node</param>
+        public virtual void EntryNode(Node node)
+        {
+            CurrentNode = node;
+            CurrentNode.Entry();
+        }
+
+        #endregion
     }
 }

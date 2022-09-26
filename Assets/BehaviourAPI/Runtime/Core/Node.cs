@@ -58,16 +58,6 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public Node() { }
 
-
-        /// <summary>
-        /// Execute this node an get a <see cref="Status"/> value
-        /// </summary>
-        /// <returns>The status result of the execution.</returns>
-        public virtual Status Update(/*Context ctx*/)
-        {
-            return Status.None;
-        }
-
         /// <summary>
         /// Get all nodes connected with this as source.
         /// </summary>
@@ -105,6 +95,32 @@ namespace BehaviourAPI.Runtime.Core
         {
             return OutputConnections.Select((x) => x.TargetNode).Contains(node);
         }
+
+        /// <summary>
+        /// Initialize the node
+        /// </summary>
+        public virtual void Initialize()
+        {
+
+        }
+
+        /// <summary>
+        /// Execute this node an get a <see cref="Status"/> value
+        /// </summary>
+        /// <returns>The status result of the execution.</returns>
+        public virtual Status Update(/*Context ctx*/)
+        {
+            return Status.None;
+        }
+
+        /// <summary>
+        /// Entry in this node.
+        /// </summary>
+        public virtual void Entry()
+        {
+
+        }
+
 
         #region static methods
 
