@@ -39,8 +39,12 @@ namespace BehaviourAPI.Editor
             container.Add(port);
         }
 
+        private void InsertPort()
+        {
+
+        }
+
         public void OnMoved(Vector2 newPosition) => node.Position = newPosition;
         public void OnRemoved() => node.OnRemoved();
-
     }
 }

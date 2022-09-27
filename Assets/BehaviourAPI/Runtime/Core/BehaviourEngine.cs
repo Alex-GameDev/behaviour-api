@@ -18,6 +18,11 @@ namespace BehaviourAPI.Runtime.Core
         public List<Node> Nodes { get; }
 
         /// <summary>
+        /// The list of all <see cref="Connection"/> elements in ths <see cref="BehaviourEngine"/>
+        /// </summary>
+        public List<Connection> Connections { get; }
+
+        /// <summary>
         /// The default entry point of the graph
         /// </summary>
         public Node StartNode { get; set; }
@@ -33,15 +38,14 @@ namespace BehaviourAPI.Runtime.Core
         public BehaviourEngine()
         {
             Nodes = new List<Node>();
+            Connections = new List<Connection>();
         }
 
+        #region Create and remove elements
         /// <summary>
-        /// Create a new node in the graph
+        /// Create a new node in the graph. Nodes should only be created with this method.
         /// </summary>
-        /// <param name="type">The type</param>
-        /// <param name="pos"></param>
-        /// <returns></returns>
-        public Node AddNode(System.Type type, Vector2 pos = default)
+        public Node CreateNode(System.Type type, Vector2 pos = default)
         {
             if (type.IsSubclassOf(NodeType))
             {
@@ -49,19 +53,56 @@ namespace BehaviourAPI.Runtime.Core
                 node.Position = pos;
                 node.BehaviourGraph = this;
 
-                if (Nodes.Count == 0)
-                {
-                    StartNode = node;
-                }
+                AddNode(node);
 
-                Nodes.Add(node);
                 return node;
             }
             else
             {
                 return null;
             }
+        }
 
+        /// <summary>
+        /// Create a new Connection in the graph. Connections should only be created with this method.
+        /// </summary>
+        public Connection CreateConnection(System.Type type, Node source, Node target,
+            int sourceIndex = -1, int targetIndex = -1)
+        {
+            if (type.IsSubclassOf(NodeType) && Nodes.Contains(source) && Nodes.Contains(target))
+            {
+                Connection connection = (Connection)System.Activator.CreateInstance(type);
+                connection.SourceNode = source;
+                connection.TargetNode = target;
+                return connection;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Add a node to the graph
+        /// </summary>
+        /// <param name="node"></param>
+        protected virtual bool AddNode(Node node)
+        {
+            if (Nodes.Count == 0)
+                StartNode = node;
+
+            Nodes.Add(node);
+            return true;
+        }
+
+        /// <summary>
+        /// Add a connection to the graph
+        /// </summary>
+        /// <param name="node"></param>
+        protected virtual bool AddConnection(Connection connection)
+        {
+            Connections.Add(connection);
+            return true;
         }
 
         /// <summary>
@@ -72,6 +113,19 @@ namespace BehaviourAPI.Runtime.Core
         {
             Nodes.Remove(node);
         }
+
+        /// <summary>
+        /// Remove an specific connection from the graph.
+        /// </summary>
+        /// <param name="connection"></param>
+        public void RemoveConnection(Connection connection)
+        {
+            connection.Disconnect();
+            Connections.Remove(connection);
+
+        }
+
+        #endregion
 
         #region Execution Methods
 

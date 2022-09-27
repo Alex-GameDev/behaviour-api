@@ -107,15 +107,6 @@ namespace BehaviourAPI.Runtime.Core
         }
 
         /// <summary>
-        /// Execute this node an get a <see cref="Status"/> value
-        /// </summary>
-        /// <returns>The status result of the execution.</returns>
-        public virtual Status Update(/*Context ctx*/)
-        {
-            return Status.None;
-        }
-
-        /// <summary>
         /// Entry in this node.
         /// </summary>
         public virtual void Entry()
@@ -123,11 +114,20 @@ namespace BehaviourAPI.Runtime.Core
 
         }
 
+        /// <summary>
+        /// Execute this node an get a <see cref="Status"/> value
+        /// </summary>
+        /// <returns>The status result of the execution.</returns>
+        public virtual Status Update(/*Context ctx*/)
+        {
+            return Status;
+        }
+
+
         public void OnRemoved()
         {
             BehaviourGraph.RemoveNode(this);
         }
-
 
         #region static methods
 
@@ -140,14 +140,8 @@ namespace BehaviourAPI.Runtime.Core
         /// <returns></returns>
         public static Node CreateNode(BehaviourEngine graph, System.Type type, Vector2 pos)
         {
-            Node node = (Node)Activator.CreateInstance(type);
-            node.BehaviourGraph = graph;
-            node.Position = pos;
-            return node;
+            return graph.CreateNode(type, pos);
         }
-
-
-        public static Node CreateNode<T>(BehaviourEngine graph, Vector2 pos) => CreateNode(graph, typeof(T), pos);
 
         #endregion
     }

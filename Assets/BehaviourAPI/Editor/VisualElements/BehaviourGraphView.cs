@@ -14,6 +14,8 @@ namespace BehaviourAPI.Editor
     {
         public BehaviourEngine BehaviourGraph { get; set; }
 
+        Dictionary<Node, NodeView> nodeViews;
+
         NodeSearchWindow m_nodeSearchingWindow;
         EditorWindow m_editorWindow;
 
@@ -21,6 +23,7 @@ namespace BehaviourAPI.Editor
         {
             BehaviourGraph = graph;
             m_editorWindow = window;
+            nodeViews = new Dictionary<Node, NodeView>();
 
             AddGridBackground();
             DrawGraph();
@@ -48,7 +51,7 @@ namespace BehaviourAPI.Editor
 
         public NodeView CreateNode(Type type, Vector2 position = default)
         {
-            Node node = BehaviourGraph.AddNode(type, position);
+            Node node = BehaviourGraph.CreateNode(type, position);
             node.Position = position;
             return DrawNodeView(node);
         }
@@ -96,7 +99,6 @@ namespace BehaviourAPI.Editor
 
         private void DrawGraph()
         {
-            Debug.Log("GRAPH:");
             BehaviourGraph.Nodes.ForEach(node => DrawNodeView(node));
         }
 
@@ -105,6 +107,7 @@ namespace BehaviourAPI.Editor
             NodeView nodeView = new NodeView(node);
             nodeView.SetPosition(new Rect(node.Position, Vector2.zero));
             this.AddElement(nodeView);
+            nodeViews.Add(node, nodeView);
             return nodeView;
         }
 
@@ -117,6 +120,7 @@ namespace BehaviourAPI.Editor
         #endregion
 
         #region GraphViewChanged Callbacks
+
         // https://answers.unity.com/questions/1752747/how-can-i-detect-changes-to-graphview-nodes-and-ed.html
         private GraphViewChange OnGraphViewChanged(GraphViewChange changes)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,12 +15,12 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// The Node where this connection starts
         /// </summary>
-        public Node SourceNode { get; protected set; }
+        public Node SourceNode { get; set; }
 
         /// <summary>
         /// The node where this connection ends
         /// </summary>
-        public Node TargetNode { get; protected set; }
+        public Node TargetNode { get; set; }
 
         /// <summary>
         /// Empty constructor.
@@ -34,7 +35,18 @@ namespace BehaviourAPI.Runtime.Core
         /// <returns></returns>
         public virtual Status Execute(/*Context ctx*/)
         {
-            return Status.None;
+            return SourceNode.Status;
+        }
+
+        /// <summary>
+        /// Disconnect the connection
+        /// </summary>
+        public void Disconnect()
+        {
+            SourceNode.OutputConnections.Remove(this);
+            TargetNode.InputConnections.Remove(this);
+            SourceNode = null;
+            TargetNode = null;
         }
     }
 }
