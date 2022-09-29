@@ -25,8 +25,9 @@ namespace BehaviourAPI.Editor
 
         private void CreateInitialPorts()
         {
-            AddPort(Direction.Input);
-            AddPort(Direction.Output);
+
+            if (node.MaxInputConnections != 0) AddPort(Direction.Input);
+            if (node.MaxOutputConnections != 0) AddPort(Direction.Output);
         }
 
         private void AddPort(Direction direction)

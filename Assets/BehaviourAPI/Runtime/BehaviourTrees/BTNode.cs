@@ -8,10 +8,9 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     /// <summary>
     /// The base node in the <see cref="BehaviourTree"/>.
     /// </summary>
-    public class BTNode : Node
+    public abstract class BTNode : Node
     {
         public override int MaxInputConnections => 1;
-        public override int MaxOutputConnections => 0;
 
         public override Type ChildType => typeof(BTNode);
 

@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Perception {
+public abstract class Perception
+{
 
     #region variables
 

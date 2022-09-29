@@ -44,7 +44,6 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public abstract int MaxOutputConnections { get; }
 
-
         /// <summary>
         /// List of connections with this node as target.
         /// </summary>
