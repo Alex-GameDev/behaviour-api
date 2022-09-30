@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 
 namespace BehaviourAPI.Runtime.BehaviourTrees
@@ -5,15 +6,16 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     using Core;
 
     /// <summary>
-    /// A behaviour tree node that executes an <see cref="ActionTask"/>.
+    /// A behaviour tree node that executes an <see cref="Perception"/> and translate the boolean returned value in a Status value.
     /// </summary>
-    public class ActionBTNode : BTNode
+    public class ConditionalBTNode : BTNode
     {
         public sealed override int MaxOutputConnections => 0;
-        public ActionTask Action { get; set; }
+        public Perception Perception { get; set; }
+
         public override void Start()
         {
-            Action.Start();
+            Perception.Start();
         }
 
         public override void Initialize()
@@ -23,8 +25,8 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
 
         public override Status UpdateStatus()
         {
-            Action.Update();
-            return Action.ExecutionStatus;
+            var perceptionValue = Perception.Check();
+            return perceptionValue ? Status.Sucess : Status.Failure;
         }
     }
 }

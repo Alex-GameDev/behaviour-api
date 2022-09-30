@@ -100,6 +100,7 @@ namespace BehaviourAPI.Editor
         private void DrawGraph()
         {
             BehaviourGraph.Nodes.ForEach(node => DrawNodeView(node));
+            BehaviourGraph.Connections.ForEach(conn => DrawConnectionEdge(conn));
         }
 
         private NodeView DrawNodeView(Node node)
@@ -113,7 +114,18 @@ namespace BehaviourAPI.Editor
 
         private Edge DrawConnectionEdge(Connection connection)
         {
-            return null;
+            Edge edge = new Edge();
+
+            if (nodeViews.TryGetValue(connection.SourceNode, out NodeView sourceNode) &&
+                nodeViews.TryGetValue(connection.TargetNode, out NodeView targetNode))
+            {
+                edge.input = targetNode.InputPorts[0];
+                edge.output = sourceNode.OutputPorts[0];
+                Debug.Log("Edge drawed");
+            }
+            else Debug.Log("Error creating edge");
+            this.AddElement(edge);
+            return edge;
         }
 
 
@@ -165,6 +177,14 @@ namespace BehaviourAPI.Editor
         private void OnEdgeCreated(Edge edge)
         {
             Debug.Log("Edge created");
+            NodeView sourceNodeView = edge.output.node as NodeView;
+            NodeView targetNodeView = edge.input.node as NodeView;
+            Node source = sourceNodeView.node;
+            Node target = targetNodeView.node;
+            int outputPortIdx = sourceNodeView.GetIndexOfOutputPort(edge.output);
+            int inputPortIdx = targetNodeView.GetIndexOfInputPort(edge.input);
+            Debug.Log($"INDEX {outputPortIdx}, {inputPortIdx}");
+            Connection conn = BehaviourGraph.CreateConnection(source, target, outputPortIdx, inputPortIdx);
         }
 
         #endregion

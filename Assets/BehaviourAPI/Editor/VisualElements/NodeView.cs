@@ -11,7 +11,11 @@ namespace BehaviourAPI.Editor
     using Runtime.Core;
     public class NodeView : UnityEditor.Experimental.GraphView.Node
     {
-        Node node;
+        public Node node;
+
+        public List<Port> InputPorts = new List<Port>();
+        public List<Port> OutputPorts = new List<Port>();
+
         public NodeView(Node node) : base(AssetDatabase.GetAssetPath(VisualSettings.GetOrCreateSettings().NodeLayout))
         {
             this.node = node;
@@ -38,6 +42,8 @@ namespace BehaviourAPI.Editor
             port.style.flexDirection = direction == Direction.Input ? FlexDirection.Column : FlexDirection.ColumnReverse;
             var container = direction == Direction.Input ? inputContainer : outputContainer;
             container.Add(port);
+            if (direction == Direction.Input) InputPorts.Add(port);
+            else OutputPorts.Add(port);
         }
 
         private void InsertPort()
@@ -47,5 +53,9 @@ namespace BehaviourAPI.Editor
 
         public void OnMoved(Vector2 newPosition) => node.Position = newPosition;
         public void OnRemoved() => node.OnRemoved();
+
+        public int GetIndexOfInputPort(Port port) => inputContainer.IndexOf(port);
+        public int GetIndexOfOutputPort(Port port) => outputContainer.IndexOf(port);
+
     }
 }

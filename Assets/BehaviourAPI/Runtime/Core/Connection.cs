@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace BehaviourAPI.Runtime.Core
 {
+    /// <summary>
+    /// Reprsents a link between two nodes.
+    /// </summary>
     public abstract class Connection
     {
         /// <summary>
@@ -27,26 +30,6 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public Connection()
         {
-        }
-
-        /// <summary>
-        /// Executes the current connection
-        /// </summary>
-        /// <returns></returns>
-        public virtual Status Execute(/*Context ctx*/)
-        {
-            return SourceNode.Status;
-        }
-
-        /// <summary>
-        /// Disconnect the connection
-        /// </summary>
-        public void Disconnect()
-        {
-            SourceNode.OutputConnections.Remove(this);
-            TargetNode.InputConnections.Remove(this);
-            SourceNode = null;
-            TargetNode = null;
         }
     }
 }

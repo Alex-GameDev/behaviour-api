@@ -18,7 +18,7 @@ namespace BehaviourAPI.Runtime.Core
 
         private void Start()
         {
-            RootGraph.Entry();
+            RootGraph.Start();
         }
 
         private void Update()

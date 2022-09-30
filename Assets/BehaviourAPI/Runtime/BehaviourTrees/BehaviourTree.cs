@@ -12,7 +12,20 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     public class BehaviourTree : BehaviourEngine
     {
         public override Type NodeType => typeof(BTNode);
-        public Status RootStatus => StartNode.Status;
+        public override Type ConnectionType => typeof(BTConnection);
+
+        BTNode m_rootNode;
         public BehaviourTree() { }
+
+        public override void Start()
+        {
+            m_rootNode.Start();
+        }
+
+        public override void Update()
+        {
+            m_rootNode.Update();
+            Status = m_rootNode.Status;
+        }
     }
 }

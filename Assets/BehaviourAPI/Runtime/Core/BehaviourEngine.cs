@@ -4,13 +4,18 @@ using System;
 
 namespace BehaviourAPI.Runtime.Core
 {
-    public abstract class BehaviourEngine
+    public abstract class BehaviourEngine : IStatusHandler
     {
 
         /// <summary>
         /// The base type of the <see cref="Node"/> elements that this <see cref="BehaviourEngine"/> can contain.
         /// </summary>
         public abstract System.Type NodeType { get; }
+
+        /// <summary>
+        /// The base type of the <see cref="Connection"/> elements that this <see cref="BehaviourEngine"/> can contain.
+        /// </summary>
+        public abstract System.Type ConnectionType { get; }
 
         /// <summary>
         /// The list of all <see cref="Node"/> elements in this <see cref="BehaviourEngine"/>.
@@ -31,6 +36,11 @@ namespace BehaviourAPI.Runtime.Core
         /// The current executed node.
         /// </summary>
         public Node CurrentNode { get; private set; }
+
+        /// <summary>
+        /// The current execution status of the graph.
+        /// </summary>
+        public Status Status { get; protected set; }
 
         /// <summary>
         /// Empty constructor
@@ -66,14 +76,15 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// Create a new Connection in the graph. Connections should only be created with this method.
         /// </summary>
-        public Connection CreateConnection(System.Type type, Node source, Node target,
+        public Connection CreateConnection(Node source, Node target,
             int sourceIndex = -1, int targetIndex = -1)
         {
-            if (type.IsSubclassOf(NodeType) && Nodes.Contains(source) && Nodes.Contains(target))
+            if (Nodes.Contains(source) && Nodes.Contains(target))
             {
-                Connection connection = (Connection)System.Activator.CreateInstance(type);
+                Connection connection = (Connection)System.Activator.CreateInstance(ConnectionType);
                 connection.SourceNode = source;
                 connection.TargetNode = target;
+                AddConnection(connection, sourceIndex, targetIndex);
                 return connection;
             }
             else
@@ -86,31 +97,34 @@ namespace BehaviourAPI.Runtime.Core
         /// Add a node to the graph
         /// </summary>
         /// <param name="node"></param>
-        protected virtual bool AddNode(Node node)
+        protected virtual void AddNode(Node node)
         {
+            Debug.Log("Node added to graph");
             if (Nodes.Count == 0)
                 StartNode = node;
 
             Nodes.Add(node);
-            return true;
         }
 
         /// <summary>
         /// Add a connection to the graph
         /// </summary>
         /// <param name="node"></param>
-        protected virtual bool AddConnection(Connection connection)
+        protected virtual void AddConnection(Connection connection, int sourceIndex, int TargetIndex)
         {
+            Debug.Log("Connection added to graph");
             Connections.Add(connection);
-            return true;
+            connection.SourceNode.OnChildNodeConnected(connection, sourceIndex);
+            connection.TargetNode.OnParentNodeConnected(connection, TargetIndex);
         }
 
         /// <summary>
         /// Remove a specific node from the graph.
         /// </summary>
         /// <param name="node"></param>
-        public void RemoveNode(Node node)
+        public virtual void RemoveNode(Node node)
         {
+            Debug.Log("Node removed to graph");
             Nodes.Remove(node);
         }
 
@@ -118,9 +132,11 @@ namespace BehaviourAPI.Runtime.Core
         /// Remove an specific connection from the graph.
         /// </summary>
         /// <param name="connection"></param>
-        public void RemoveConnection(Connection connection)
+        public virtual void RemoveConnection(Connection connection)
         {
-            connection.Disconnect();
+            Debug.Log("Connection removed to graph");
+            connection.SourceNode.OnChildNodeDisconnected(connection);
+            connection.TargetNode.OnParentNodeDisconnected(connection);
             Connections.Remove(connection);
 
         }
@@ -137,31 +153,22 @@ namespace BehaviourAPI.Runtime.Core
             Nodes.ForEach((node) => node.Initialize());
         }
 
+        public virtual void SetCurrentNode(Node node)
+        {
+            CurrentNode = node;
+        }
+
         /// <summary>
         /// Enter this behavior graph from a subgraph node or a <see cref="BehaviourRunner"/>
         /// </summary>
-        public virtual void Entry()
-        {
-            EntryNode(StartNode);
-        }
+        public abstract void Start();
 
         /// <summary>
-        /// Call every execution frame.
+        /// Executes every frame and 
         /// </summary>
-        public virtual void Update()
-        {
-            CurrentNode.Update();
-        }
+        /// <returns></returns>
 
-        /// <summary>
-        /// Entry in a node.
-        /// </summary>
-        /// <param name="node">The new Current Node</param>
-        public virtual void EntryNode(Node node)
-        {
-            CurrentNode = node;
-            CurrentNode.Entry();
-        }
+        public abstract void Update();
 
         #endregion
     }

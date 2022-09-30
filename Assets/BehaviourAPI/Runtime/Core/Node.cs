@@ -27,11 +27,10 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public Vector2 Position { get; set; }
 
-        /// <summary>
-        /// The current execution status of the node
-        /// </summary>
-        public Status Status { get; protected set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual Type ChildType { get; } = typeof(Node);
 
         /// <summary>
@@ -47,12 +46,12 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// List of connections with this node as target.
         /// </summary>
-        public List<Connection> InputConnections;
+        public List<Connection> InputConnections = new List<Connection>();
 
         /// <summary>
         /// List of connections with this node as source.
         /// </summary>
-        public List<Connection> OutputConnections;
+        public List<Connection> OutputConnections = new List<Connection>();
 
         /// <summary>
         /// Empty constructor
@@ -97,6 +96,23 @@ namespace BehaviourAPI.Runtime.Core
             return OutputConnections.Select((x) => x.TargetNode).Contains(node);
         }
 
+        public virtual void OnChildNodeConnected(Connection connection, int index)
+        {
+            OutputConnections.Insert(index, connection);
+        }
+        public virtual void OnParentNodeConnected(Connection connection, int index)
+        {
+            InputConnections.Insert(index, connection);
+        }
+        public virtual void OnChildNodeDisconnected(Connection connection)
+        {
+            OutputConnections.Remove(connection);
+        }
+        public virtual void OnParentNodeDisconnected(Connection connection)
+        {
+            InputConnections.Remove(connection);
+        }
+
         /// <summary>
         /// Initialize the node
         /// </summary>
@@ -105,43 +121,9 @@ namespace BehaviourAPI.Runtime.Core
 
         }
 
-        /// <summary>
-        /// Entry in this node.
-        /// </summary>
-        public virtual void Entry()
-        {
-
-        }
-
-        /// <summary>
-        /// Execute this node an get a <see cref="Status"/> value
-        /// </summary>
-        /// <returns>The status result of the execution.</returns>
-        public virtual Status Update(/*Context ctx*/)
-        {
-            return Status;
-        }
-
-
         public void OnRemoved()
         {
             BehaviourGraph.RemoveNode(this);
         }
-
-        #region static methods
-
-        /// <summary>
-        /// Create a node by the type given.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <param name="type"></param>
-        /// <param name="pos"></param>
-        /// <returns></returns>
-        public static Node CreateNode(BehaviourEngine graph, System.Type type, Vector2 pos)
-        {
-            return graph.CreateNode(type, pos);
-        }
-
-        #endregion
     }
 }

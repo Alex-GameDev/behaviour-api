@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using BehaviourAPI.Runtime.Core;
 
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
@@ -9,6 +9,22 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     {
         public SequencerNode()
         {
+        }
+
+        protected override Status GetModifiedChildStatus(Status status)
+        {
+            if (status == Status.Sucess)
+            {
+                if (TryGoToNextChild())
+
+                    return Status.Running;
+                else
+                    return Status.Sucess;
+            }
+            else
+            {
+                return status;
+            }
         }
     }
 }
