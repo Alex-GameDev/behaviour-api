@@ -15,9 +15,9 @@ namespace BehaviourAPI.Editor
         public BehaviourEngine BehaviourGraph { get; set; }
 
         Dictionary<Node, NodeView> nodeViews;
-
         NodeSearchWindow m_nodeSearchingWindow;
         EditorWindow m_editorWindow;
+        Action<Node> m_onSelectNode;
 
         public BehaviourGraphView(BehaviourEngine graph, EditorWindow window)
         {
@@ -26,7 +26,6 @@ namespace BehaviourAPI.Editor
             nodeViews = new Dictionary<Node, NodeView>();
 
             AddGridBackground();
-            DrawGraph();
             AddManipulators();
             AddCreateNodeWindow();
             AddStyles();
@@ -39,10 +38,14 @@ namespace BehaviourAPI.Editor
 
             ports.ForEach(port =>
             {
+                Node startNode = (startPort.node as NodeView).node;
+                Node otherNode = (port.node as NodeView).node;
+
                 if (port.direction == startPort.direction) return;
                 if (port == startPort) return;
                 if (!port.portType.IsCorrelatedWith(startPort.portType)) return;
                 if (port.node == startPort.node) return;
+                if (otherNode.IsConnectedWith(startNode)) return;
 
                 compatiblePorts.Add(port);
             });
@@ -61,11 +64,17 @@ namespace BehaviourAPI.Editor
             return contentViewContainer.WorldToLocal(mousePosition - m_editorWindow.position.position);
         }
 
+        public void SetSelectionNodeCallback(Action<Node> eventCallback)
+        {
+            m_onSelectNode = eventCallback;
+        }
+
         #region Initialization
         private void AddGridBackground()
         {
             GridBackground gridBackground = new GridBackground();
             Insert(0, gridBackground);
+
         }
 
         private void AddManipulators()
@@ -74,6 +83,7 @@ namespace BehaviourAPI.Editor
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
+
         }
 
         private void AddStyles()
@@ -97,8 +107,9 @@ namespace BehaviourAPI.Editor
 
         #region Draw Elements
 
-        private void DrawGraph()
+        public void DrawGraph()
         {
+            if (BehaviourGraph == null) return;
             BehaviourGraph.Nodes.ForEach(node => DrawNodeView(node));
             BehaviourGraph.Connections.ForEach(conn => DrawConnectionEdge(conn));
         }
@@ -107,6 +118,7 @@ namespace BehaviourAPI.Editor
         {
             NodeView nodeView = new NodeView(node);
             nodeView.SetPosition(new Rect(node.Position, Vector2.zero));
+            nodeView.SetOnSelectedCallback(m_onSelectNode);
             this.AddElement(nodeView);
             nodeViews.Add(node, nodeView);
             return nodeView;
@@ -136,15 +148,14 @@ namespace BehaviourAPI.Editor
         // https://answers.unity.com/questions/1752747/how-can-i-detect-changes-to-graphview-nodes-and-ed.html
         private GraphViewChange OnGraphViewChanged(GraphViewChange changes)
         {
+            if (changes.elementsToRemove != null)
+            {
+                changes.elementsToRemove.ForEach(elem => OnElementRemoved(elem));
+            }
 
             if (changes.edgesToCreate != null)
             {
                 changes.edgesToCreate.ForEach(edge => OnEdgeCreated(edge));
-            }
-
-            if (changes.elementsToRemove != null)
-            {
-                changes.elementsToRemove.ForEach(elem => OnElementRemoved(elem));
             }
 
             if (changes.movedElements != null)
@@ -171,6 +182,14 @@ namespace BehaviourAPI.Editor
             if (elem is Edge edge)
             {
                 Debug.Log("Edge removed");
+                NodeView sourceNodeView = edge.output.node as NodeView;
+                NodeView targetNodeView = edge.input.node as NodeView;
+                Node source = sourceNodeView.node;
+                Node target = targetNodeView.node;
+                int outputPortIdx = sourceNodeView.GetIndexOfOutputPort(edge.output);
+                int inputPortIdx = targetNodeView.GetIndexOfInputPort(edge.input);
+                sourceNodeView.OnOutputConnectionRemoved(outputPortIdx);
+                targetNodeView.OnInputConnectionRemoved(inputPortIdx);
             }
         }
 
@@ -184,7 +203,9 @@ namespace BehaviourAPI.Editor
             int outputPortIdx = sourceNodeView.GetIndexOfOutputPort(edge.output);
             int inputPortIdx = targetNodeView.GetIndexOfInputPort(edge.input);
             Debug.Log($"INDEX {outputPortIdx}, {inputPortIdx}");
-            Connection conn = BehaviourGraph.CreateConnection(source, target, outputPortIdx, inputPortIdx);
+            Connection conn = BehaviourGraph.CreateConnection(source, target, outputPortIdx / 2, inputPortIdx / 2);
+            sourceNodeView.OnOutputConnectionCreated(outputPortIdx);
+            targetNodeView.OnInputConnectionCreated(inputPortIdx);
         }
 
         #endregion

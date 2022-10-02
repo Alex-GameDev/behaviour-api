@@ -5,7 +5,7 @@ using System;
 
 namespace BehaviourAPI.Runtime.Core
 {
-    public abstract class Node
+    public abstract class Node : ScriptableObject
     {
         /// <summary>
         /// Node Name.
@@ -53,6 +53,7 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public List<Connection> OutputConnections = new List<Connection>();
 
+
         /// <summary>
         /// Empty constructor
         /// </summary>
@@ -94,6 +95,11 @@ namespace BehaviourAPI.Runtime.Core
         public bool IsParentOf(Node node)
         {
             return OutputConnections.Select((x) => x.TargetNode).Contains(node);
+        }
+
+        public bool IsConnectedWith(Node node)
+        {
+            return IsParentOf(node) || IsChildOf(node);
         }
 
         public virtual void OnChildNodeConnected(Connection connection, int index)

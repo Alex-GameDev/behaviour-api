@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/BehaviourAPI/UIBuilder/uss/inspector.uss?fileID=7433441132597879392&amp;guid=b72c7ce7d6a97524fbee0b753c8b4f84&amp;type=3#inspector" />
+    <Style src="project://database/Assets/BehaviourAPI/Editor/UIBuilder/uss/inspector.uss?fileID=7433441132597879392&amp;guid=b72c7ce7d6a97524fbee0b753c8b4f84&amp;type=3#inspector" />
     <ui:VisualElement class="container">
         <ui:VisualElement name="header" class="header">
             <ui:Label text="INSPECTOR" display-tooltip-when-elided="true" class="element-title" />
         </ui:VisualElement>
         <ui:VisualElement name="body" class="body">
-            <ui:IMGUIContainer />
+            <ui:IMGUIContainer name="inspector-container" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -40,8 +40,11 @@ namespace BehaviourAPI.Editor
 
             rootVisualElement.Add(behaviourGraphView);
 
-            Inspector inspector = new Inspector();
+            ElementInspector inspector = new ElementInspector();
+            behaviourGraphView.SetSelectionNodeCallback(inspector.UpdateInspector);
             rootVisualElement.Add(inspector);
+
+            behaviourGraphView.DrawGraph();
         }
 
         private void AddStyles()

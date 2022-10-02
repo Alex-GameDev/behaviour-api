@@ -59,7 +59,7 @@ namespace BehaviourAPI.Runtime.Core
         {
             if (type.IsSubclassOf(NodeType))
             {
-                Node node = (Node)System.Activator.CreateInstance(type);
+                Node node = (Node)ScriptableObject.CreateInstance(type);
                 node.Position = pos;
                 node.BehaviourGraph = this;
 
