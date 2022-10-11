@@ -81,7 +81,7 @@ namespace BehaviourAPI.Runtime.Core
         {
             if (Nodes.Contains(source) && Nodes.Contains(target))
             {
-                Connection connection = (Connection)System.Activator.CreateInstance(ConnectionType);
+                Connection connection = (Connection)ScriptableObject.CreateInstance(ConnectionType);
                 connection.SourceNode = source;
                 connection.TargetNode = target;
                 AddConnection(connection, sourceIndex, targetIndex);
@@ -99,7 +99,6 @@ namespace BehaviourAPI.Runtime.Core
         /// <param name="node"></param>
         protected virtual void AddNode(Node node)
         {
-            Debug.Log("Node added to graph");
             if (Nodes.Count == 0)
                 StartNode = node;
 
@@ -112,7 +111,6 @@ namespace BehaviourAPI.Runtime.Core
         /// <param name="node"></param>
         protected virtual void AddConnection(Connection connection, int sourceIndex, int TargetIndex)
         {
-            Debug.Log("Connection added to graph");
             Connections.Add(connection);
             connection.SourceNode.OnChildNodeConnected(connection, sourceIndex);
             connection.TargetNode.OnParentNodeConnected(connection, TargetIndex);
@@ -124,7 +122,6 @@ namespace BehaviourAPI.Runtime.Core
         /// <param name="node"></param>
         public virtual void RemoveNode(Node node)
         {
-            Debug.Log("Node removed to graph");
             Nodes.Remove(node);
         }
 
@@ -134,7 +131,6 @@ namespace BehaviourAPI.Runtime.Core
         /// <param name="connection"></param>
         public virtual void RemoveConnection(Connection connection)
         {
-            Debug.Log("Connection removed to graph");
             connection.SourceNode.OnChildNodeDisconnected(connection);
             connection.TargetNode.OnParentNodeDisconnected(connection);
             Connections.Remove(connection);

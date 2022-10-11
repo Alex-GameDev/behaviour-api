@@ -1,0 +1,18 @@
+{
+    "name": "BehaviourAPI.Editor",
+    "rootNamespace": "BehaviourAPI",
+    "references": [
+        "GUID:7f2a2a46e87aa104cb57554615f57a68",
+        "GUID:1c69eb39eb94854458bf32207b295745",
+        "GUID:c7d67490af8b4dc4f9dbce76b7db5e60"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -125,7 +125,6 @@ namespace BehaviourAPI.Editor
             bool multiplePorts = (dir == Direction.Input && node.MaxInputConnections == -1) || (dir == Direction.Output && node.MaxOutputConnections == -1);
             if (!includeEmpty && multiplePorts) connectionIndex = connectionIndex * 2 + 1;
 
-            Debug.Log("Trying to conect at " + connectionIndex);
             var container = GetPortContainer(dir);
             return container[connectionIndex] as Port;
         }
