@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 //using Stateless;
 
-public class BehaviourTreeEngine : BehaviourEngine {
+public class BehaviourTreeEngine : BehaviourEngine
+{
 
     #region variables
 
@@ -59,7 +60,8 @@ public class BehaviourTreeEngine : BehaviourEngine {
         ActiveNode = rootNode;
         rootNodeBT = rootNode;
 
-        if(Active) {
+        if (Active)
+        {
             new Transition("Entry_transition", entryState, new PushPerception(this), rootNode.StateNode, this)
                 .FireTransition();
         }
@@ -80,20 +82,24 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// </summary>
     public void Update()
     {
-        if(!Active)
+        if (!Active)
             return;
 
-        if(ActiveNode != null && ActiveNode.ReturnValue == ReturnValues.Running) { // Node with NO submachine in it
+        if (ActiveNode != null && ActiveNode.ReturnValue == ReturnValues.Running)
+        { // Node with NO submachine in it
             //Console.WriteLine(ActiveNode.StateNode.Name + " " + ActiveNode.ReturnValue);
             ActiveNode.Update();
         }
-        else if(ActiveNode.HasSubmachine) { // Node with a submachine in it
+        else if (ActiveNode.HasSubmachine)
+        { // Node with a submachine in it
             ActiveNode.Update();
         }
-        else if(IsSubMachine) { // Behaviour tree submachine of another Behaviour tree
+        else if (IsSubMachine)
+        { // Behaviour tree submachine of another Behaviour tree
             transitions.TryGetValue("Exit_Transition", out Transition exitTransition);
 
-            if(exitTransition.Perception.Check()) {
+            if (exitTransition.Perception.Check())
+            {
                 Fire(exitTransition);
             }
         }
@@ -101,7 +107,8 @@ public class BehaviourTreeEngine : BehaviourEngine {
 
     public override void Reset()
     {
-        foreach(TreeNode node in BTnodes) {
+        foreach (TreeNode node in BTnodes)
+        {
             node.Reset();
         }
         ActiveNode = rootNodeBT;
@@ -117,14 +124,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public SequenceNode CreateSequenceNode(string name, bool isRandomSequence)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             SequenceNode sequenceNode = new SequenceNode(name, isRandomSequence, this);
             BTnodes.Add(sequenceNode);
             states.Add(name, sequenceNode.StateNode);
 
             return sequenceNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -136,14 +145,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public SelectorNode CreateSelectorNode(string name)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             SelectorNode selectorNode = new SelectorNode(name, this);
             BTnodes.Add(selectorNode);
             states.Add(name, selectorNode.StateNode);
 
             return selectorNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -161,14 +172,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public LoopDecoratorNode CreateLoopNode(string name, TreeNode child, int loopTimes)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             LoopDecoratorNode loopNode = new LoopDecoratorNode(name, child, loopTimes, this);
             BTnodes.Add(loopNode);
             states.Add(name, loopNode.StateNode);
 
             return loopNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -181,14 +194,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public LoopDecoratorNode CreateLoopNode(string name, TreeNode child)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             LoopDecoratorNode loopNode = new LoopDecoratorNode(name, child, this);
             BTnodes.Add(loopNode);
             states.Add(name, loopNode.StateNode);
 
             return loopNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -201,14 +216,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public LoopUntilFailDecoratorNode CreateLoopUntilFailNode(string name, TreeNode child)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             LoopUntilFailDecoratorNode loopUntilFailNode = new LoopUntilFailDecoratorNode(name, child, this);
             BTnodes.Add(loopUntilFailNode);
             states.Add(name, loopUntilFailNode.StateNode);
 
             return loopUntilFailNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -222,14 +239,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public TimerDecoratorNode CreateTimerNode(string name, TreeNode child, float time)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             TimerDecoratorNode timerNode = new TimerDecoratorNode(name, child, time, this);
             BTnodes.Add(timerNode);
             states.Add(name, timerNode.StateNode);
 
             return timerNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -242,14 +261,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public InverterDecoratorNode CreateInverterNode(string name, TreeNode child)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             InverterDecoratorNode inverterNode = new InverterDecoratorNode(name, child, this);
             BTnodes.Add(inverterNode);
             states.Add(name, inverterNode.StateNode);
 
             return inverterNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -262,14 +283,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public SucceederDecoratorNode CreateSucceederNode(string name, TreeNode child)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             SucceederDecoratorNode succeederNode = new SucceederDecoratorNode(name, child, this);
             BTnodes.Add(succeederNode);
             states.Add(name, succeederNode.StateNode);
 
             return succeederNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -283,14 +306,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public ConditionalDecoratorNode CreateConditionalNode(string name, TreeNode child, Perception conditionPerception)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             ConditionalDecoratorNode conditionalNode = new ConditionalDecoratorNode(name, child, conditionPerception, this);
             BTnodes.Add(conditionalNode);
             states.Add(name, conditionalNode.StateNode);
 
             return conditionalNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }
@@ -308,14 +333,16 @@ public class BehaviourTreeEngine : BehaviourEngine {
     /// <returns></returns>
     public LeafNode CreateLeafNode(string name, Action action, Func<ReturnValues> succeedCondition)
     {
-        if(!states.ContainsKey(name)) {
+        if (!states.ContainsKey(name))
+        {
             LeafNode leafNode = new LeafNode(name, action, succeedCondition, this);
             BTnodes.Add(leafNode);
             states.Add(name, leafNode.StateNode);
 
             return leafNode;
         }
-        else {
+        else
+        {
             throw new DuplicateWaitObjectException(name, "The node already exists in the behaviour tree");
         }
     }

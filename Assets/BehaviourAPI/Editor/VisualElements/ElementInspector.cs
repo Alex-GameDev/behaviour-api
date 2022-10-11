@@ -32,6 +32,21 @@ namespace BehaviourAPI.Editor
             inspectorContent.Add(container);
         }
 
+        public void UpdateInspector(Connection connection)
+        {
+            inspectorContent.Clear();
+            UnityEngine.Object.DestroyImmediate(editor);
+            editor = UnityEditor.Editor.CreateEditor(connection);
+            IMGUIContainer container = new IMGUIContainer(() =>
+            {
+                if (editor && editor.target)
+                {
+                    editor.OnInspectorGUI();
+                }
+            });
+            inspectorContent.Add(container);
+        }
+
         private void AddLayout()
         {
             var visualTree = VisualSettings.GetOrCreateSettings().InspectorLayout;

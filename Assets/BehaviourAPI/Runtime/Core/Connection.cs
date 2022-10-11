@@ -8,7 +8,7 @@ namespace BehaviourAPI.Runtime.Core
     /// <summary>
     /// Reprsents a link between two nodes.
     /// </summary>
-    public abstract class Connection
+    public abstract class Connection : ScriptableObject
     {
         /// <summary>
         /// The graph that contains this connection.

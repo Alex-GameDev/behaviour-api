@@ -17,7 +17,7 @@ namespace BehaviourAPI.Editor
         Dictionary<Node, NodeView> nodeViews;
         NodeSearchWindow m_nodeSearchingWindow;
         EditorWindow m_editorWindow;
-        Action<Node> m_onSelectNode;
+        ElementInspector m_elementInspector;
 
         public BehaviourGraphView(BehaviourEngine graph, EditorWindow window)
         {
@@ -52,11 +52,11 @@ namespace BehaviourAPI.Editor
             return compatiblePorts;
         }
 
-        public NodeView CreateNode(Type type, Vector2 position = default)
+        public void CreateNode(Type type, Vector2 position = default)
         {
             Node node = BehaviourGraph.CreateNode(type, position);
             node.Position = position;
-            return DrawNodeView(node);
+            DrawNodeView(node);
         }
 
         public Vector2 GetLocalMousePosition(Vector2 mousePosition)
@@ -64,9 +64,9 @@ namespace BehaviourAPI.Editor
             return contentViewContainer.WorldToLocal(mousePosition - m_editorWindow.position.position);
         }
 
-        public void SetSelectionNodeCallback(Action<Node> eventCallback)
+        public void SetElementInspector(ElementInspector inspector)
         {
-            m_onSelectNode = eventCallback;
+            m_elementInspector = inspector;
         }
 
         #region Initialization
@@ -114,30 +114,29 @@ namespace BehaviourAPI.Editor
             BehaviourGraph.Connections.ForEach(conn => DrawConnectionEdge(conn));
         }
 
-        private NodeView DrawNodeView(Node node)
+        private void DrawNodeView(Node node)
         {
             NodeView nodeView = new NodeView(node);
             nodeView.SetPosition(new Rect(node.Position, Vector2.zero));
-            nodeView.SetOnSelectedCallback(m_onSelectNode);
+            nodeView.SetInspector(m_elementInspector);
             this.AddElement(nodeView);
             nodeViews.Add(node, nodeView);
-            return nodeView;
         }
 
-        private Edge DrawConnectionEdge(Connection connection)
+        private void DrawConnectionEdge(Connection connection)
         {
-            Edge edge = new Edge();
+            ConnectionView connectionView = new ConnectionView();
 
             if (nodeViews.TryGetValue(connection.SourceNode, out NodeView sourceNode) &&
                 nodeViews.TryGetValue(connection.TargetNode, out NodeView targetNode))
             {
-                edge.input = targetNode.InputPorts[0];
-                edge.output = sourceNode.OutputPorts[0];
+                sourceNode.Connect(connectionView, Direction.Output);
+                targetNode.Connect(connectionView, Direction.Input);
                 Debug.Log("Edge drawed");
+                this.AddElement(connectionView);
+                connectionView.connection = connection;
             }
-            else Debug.Log("Error creating edge");
-            this.AddElement(edge);
-            return edge;
+            else throw new Exception("Connection port/s didn't found!");
         }
 
 
@@ -149,19 +148,14 @@ namespace BehaviourAPI.Editor
         private GraphViewChange OnGraphViewChanged(GraphViewChange changes)
         {
             if (changes.elementsToRemove != null)
-            {
                 changes.elementsToRemove.ForEach(elem => OnElementRemoved(elem));
-            }
 
             if (changes.edgesToCreate != null)
-            {
                 changes.edgesToCreate.ForEach(edge => OnEdgeCreated(edge));
-            }
 
             if (changes.movedElements != null)
-            {
                 changes.movedElements.ForEach(elem => OnElementMoved(elem));
-            }
+
             return changes;
         }
 
@@ -175,40 +169,29 @@ namespace BehaviourAPI.Editor
 
         private void OnElementRemoved(GraphElement elem)
         {
-            if (elem is NodeView nodeView)
+            if (elem is NodeView nodeView) BehaviourGraph.RemoveNode(nodeView.node);
+            if (elem is ConnectionView connectionView) BehaviourGraph.RemoveConnection(connectionView.connection);
+        }
+
+        private void OnEdgeCreated(Edge edge)
+        {
+            if (edge is ConnectionView connectionView)
             {
-                nodeView.OnRemoved();
-            }
-            if (elem is Edge edge)
-            {
-                Debug.Log("Edge removed");
                 NodeView sourceNodeView = edge.output.node as NodeView;
                 NodeView targetNodeView = edge.input.node as NodeView;
                 Node source = sourceNodeView.node;
                 Node target = targetNodeView.node;
                 int outputPortIdx = sourceNodeView.GetIndexOfOutputPort(edge.output);
                 int inputPortIdx = targetNodeView.GetIndexOfInputPort(edge.input);
-                sourceNodeView.OnOutputConnectionRemoved(outputPortIdx);
-                targetNodeView.OnInputConnectionRemoved(inputPortIdx);
+                Connection conn = BehaviourGraph.CreateConnection(source, target, outputPortIdx / 2, inputPortIdx / 2);
+                connectionView.connection = conn;
+                connectionView.SetInspector(m_elementInspector);
             }
-        }
-
-        private void OnEdgeCreated(Edge edge)
-        {
-            Debug.Log("Edge created");
-            NodeView sourceNodeView = edge.output.node as NodeView;
-            NodeView targetNodeView = edge.input.node as NodeView;
-            Node source = sourceNodeView.node;
-            Node target = targetNodeView.node;
-            int outputPortIdx = sourceNodeView.GetIndexOfOutputPort(edge.output);
-            int inputPortIdx = targetNodeView.GetIndexOfInputPort(edge.input);
-            Debug.Log($"INDEX {outputPortIdx}, {inputPortIdx}");
-            Connection conn = BehaviourGraph.CreateConnection(source, target, outputPortIdx / 2, inputPortIdx / 2);
-            sourceNodeView.OnOutputConnectionCreated(outputPortIdx);
-            targetNodeView.OnInputConnectionCreated(inputPortIdx);
+            else throw new Exception("Editor Error: Edge don't belong the correct type (ConnectionView)");
         }
 
         #endregion
 
     }
+
 }

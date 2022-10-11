@@ -41,7 +41,7 @@ namespace BehaviourAPI.Editor
             rootVisualElement.Add(behaviourGraphView);
 
             ElementInspector inspector = new ElementInspector();
-            behaviourGraphView.SetSelectionNodeCallback(inspector.UpdateInspector);
+            behaviourGraphView.SetElementInspector(inspector);
             rootVisualElement.Add(inspector);
 
             behaviourGraphView.DrawGraph();

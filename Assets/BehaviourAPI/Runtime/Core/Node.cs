@@ -29,7 +29,7 @@ namespace BehaviourAPI.Runtime.Core
 
 
         /// <summary>
-        /// 
+        /// The type of the nodes that this node can handle as a childs.
         /// </summary>
         public virtual Type ChildType { get; } = typeof(Node);
 
@@ -53,6 +53,12 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public List<Connection> OutputConnections = new List<Connection>();
 
+        #region Event
+        public Action<int> InputConnectionAdded;
+        public Action<int> OutputConnectionAdded;
+        public Action<int> InputConnectionRemoved;
+        public Action<int> OutputConnectionRemoved;
+        #endregion
 
         /// <summary>
         /// Empty constructor
@@ -102,21 +108,48 @@ namespace BehaviourAPI.Runtime.Core
             return IsParentOf(node) || IsChildOf(node);
         }
 
+        /// <summary>
+        /// Called when another node is connected as a child of this.
+        /// </summary>
+        /// <param name="connection">The added connection.</param>
+        /// <param name="index">The connection index.</param>
         public virtual void OnChildNodeConnected(Connection connection, int index)
         {
             OutputConnections.Insert(index, connection);
+            OutputConnectionAdded?.Invoke(index);
         }
+
+        /// <summary>
+        /// Called when another node is connected as a parent of this.
+        /// </summary>
+        /// <param name="connection">The added connection.</param>
+        /// <param name="index">The connection index.</param>
         public virtual void OnParentNodeConnected(Connection connection, int index)
         {
             InputConnections.Insert(index, connection);
+            InputConnectionAdded?.Invoke(index);
         }
+
+        /// <summary>
+        /// Called when a child node is disconnected from this.
+        /// </summary>
+        /// <param name="connection">The removed connection.</param>
         public virtual void OnChildNodeDisconnected(Connection connection)
         {
+            int idx = OutputConnections.IndexOf(connection);
             OutputConnections.Remove(connection);
+            OutputConnectionRemoved?.Invoke(idx);
         }
+
+        /// <summary>
+        /// Called when a parent node is disconnected from this.
+        /// </summary>
+        /// <param name="connection">The removed connection.</param>
         public virtual void OnParentNodeDisconnected(Connection connection)
         {
+            int idx = InputConnections.IndexOf(connection);
             InputConnections.Remove(connection);
+            InputConnectionRemoved?.Invoke(idx);
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     /// <summary>
     /// A behaviour tree node that executes an <see cref="Perception"/> and translate the boolean returned value in a Status value.
     /// </summary>
-    public class ConditionalBTNode : BTNode
+    public class PerceptionBTNode : BTNode
     {
         public sealed override int MaxOutputConnections => 0;
         public Perception Perception { get; set; }
