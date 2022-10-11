@@ -24,14 +24,8 @@ namespace BehaviourAPI.Editor
         public NodeView(Node node) : base(AssetDatabase.GetAssetPath(VisualSettings.GetOrCreateSettings().NodeLayout))
         {
             this.node = node;
-            if (node.MaxInputConnections != 0) InsertPort(Direction.Input, 0);
-            if (node.MaxOutputConnections != 0) InsertPort(Direction.Output, 0);
-
-            node.InputConnectionAdded += OnInputConnectionCreated;
-            node.OutputConnectionAdded += OnOutputConnectionCreated;
-            node.InputConnectionRemoved += OnInputConnectionRemoved;
-            node.OutputConnectionRemoved += OnOutputConnectionRemoved;
-
+            InitializePorts();
+            RegisterCallbacks();
         }
 
         /// <summary>
@@ -47,6 +41,9 @@ namespace BehaviourAPI.Editor
         {
             return Port.Create<ConnectionView>(orientation, direction, capacity, type);
         }
+
+        public int GetIndexOfInputPort(Port port) => inputContainer.IndexOf(port);
+        public int GetIndexOfOutputPort(Port port) => outputContainer.IndexOf(port);
 
         #region GUI event callbacks
 
@@ -67,38 +64,6 @@ namespace BehaviourAPI.Editor
         {
             node.Position = newPosition;
         }
-
-        /// <summary>
-        /// Connect an edge with this nodeview.
-        /// </summary>
-        public void Connect(ConnectionView connectionView, Direction direction)
-        {
-            var container = GetPortContainer(direction);
-            var connection = connectionView.connection;
-            int connectionIdx = direction == Direction.Input ?
-               connection.TargetNode.InputConnections.IndexOf(connection) :
-               connection.SourceNode.OutputConnections.IndexOf(connection);
-            int portIdx = connectionIdx * 2;
-
-            if (container.childCount < portIdx) // Si no hay puertos suficientes para conectar, se crean
-            {
-                for (int i = container.childCount; i < portIdx; i++)
-                {
-                    InsertPort(direction, i);
-                }
-            }
-
-            GetPort(direction, portIdx).Connect(connectionView);
-
-            var capacity = direction == Direction.Input ? node.MaxInputConnections : node.MaxOutputConnections;
-            if (capacity != -1) return;
-            InsertPort(direction, portIdx + 1);
-            InsertPort(direction, portIdx);
-        }
-
-        #endregion
-        public int GetIndexOfInputPort(Port port) => inputContainer.IndexOf(port);
-        public int GetIndexOfOutputPort(Port port) => outputContainer.IndexOf(port);
 
         public void OnOutputConnectionCreated(int idx)
         {
@@ -131,6 +96,23 @@ namespace BehaviourAPI.Editor
             DeletePort(Direction.Input, idx - 1);
             DeletePort(Direction.Input, idx);
         }
+        #endregion
+
+        private void InitializePorts()
+        {
+            int inputPorts = node.MaxInputConnections == -1 ? node.InputConnections.Count * 2 + 1 : node.MaxInputConnections;
+            int outputPorts = node.MaxOutputConnections == -1 ? node.OutputConnections.Count * 2 + 1 : node.MaxOutputConnections;
+            for (int i = 0; i < inputPorts; i++) InsertPort(Direction.Input, i);
+            for (int i = 0; i < outputPorts; i++) InsertPort(Direction.Output, i);
+        }
+
+        private void RegisterCallbacks()
+        {
+            node.InputConnectionAdded += OnInputConnectionCreated;
+            node.OutputConnectionAdded += OnOutputConnectionCreated;
+            node.InputConnectionRemoved += OnInputConnectionRemoved;
+            node.OutputConnectionRemoved += OnOutputConnectionRemoved;
+        }
 
         private void DeletePort(Direction direction, int idx)
         {
@@ -138,10 +120,14 @@ namespace BehaviourAPI.Editor
             container.RemoveAt(idx);
         }
 
-        private Port GetPort(Direction dir, int idx)
+        public Port GetPort(Direction dir, int connectionIndex, bool includeEmpty = false)
         {
+            bool multiplePorts = (dir == Direction.Input && node.MaxInputConnections == -1) || (dir == Direction.Output && node.MaxOutputConnections == -1);
+            if (!includeEmpty && multiplePorts) connectionIndex = connectionIndex * 2 + 1;
+
+            Debug.Log("Trying to conect at " + connectionIndex);
             var container = GetPortContainer(dir);
-            return container[idx] as Port;
+            return container[connectionIndex] as Port;
         }
 
         private VisualElement GetPortContainer(Direction direction)

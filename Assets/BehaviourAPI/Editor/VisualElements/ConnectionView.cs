@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace BehaviourAPI.Editor
 {
+    using System;
     using Runtime.Core;
 
     /// <summary>
@@ -28,6 +29,16 @@ namespace BehaviourAPI.Editor
         public void SetInspector(ElementInspector inspector)
         {
             m_inspector = inspector;
+        }
+
+        public void Connect(Port port)
+        {
+            if (port.direction == Direction.Input)
+                this.input = port;
+            else
+                this.output = port;
+
+            port.Connect(this);
         }
     }
 }

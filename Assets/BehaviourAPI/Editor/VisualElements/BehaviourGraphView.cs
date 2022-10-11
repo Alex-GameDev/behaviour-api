@@ -130,11 +130,14 @@ namespace BehaviourAPI.Editor
             if (nodeViews.TryGetValue(connection.SourceNode, out NodeView sourceNode) &&
                 nodeViews.TryGetValue(connection.TargetNode, out NodeView targetNode))
             {
-                sourceNode.Connect(connectionView, Direction.Output);
-                targetNode.Connect(connectionView, Direction.Input);
-                Debug.Log("Edge drawed");
+                int outputIdx = sourceNode.node.OutputConnections.IndexOf(connection);
+                int inputIdx = targetNode.node.InputConnections.IndexOf(connection);
+                connectionView.Connect(sourceNode.GetPort(Direction.Output, outputIdx));
+                connectionView.Connect(targetNode.GetPort(Direction.Input, inputIdx));
                 this.AddElement(connectionView);
                 connectionView.connection = connection;
+                connectionView.SetInspector(m_elementInspector);
+                connectionView.MarkDirtyRepaint();
             }
             else throw new Exception("Connection port/s didn't found!");
         }
