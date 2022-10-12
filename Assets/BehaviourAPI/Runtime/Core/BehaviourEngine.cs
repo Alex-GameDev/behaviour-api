@@ -135,10 +135,13 @@ namespace BehaviourAPI.Runtime.Core
         public virtual void RemoveNode(Node node)
         {
             Nodes.Remove(node);
-            if (node == StartNode)
-            {
-                StartNode = Nodes.Count > 0 ? Nodes[0] : null;
-            }
+            if (StartNode == node) StartNode = null;
+        }
+
+        public virtual void RecalculateStartNode()
+        {
+            if (StartNode != null) return;
+            StartNode = Nodes.Find(node => node.InputConnections.Count == 0);
         }
 
         /// <summary>

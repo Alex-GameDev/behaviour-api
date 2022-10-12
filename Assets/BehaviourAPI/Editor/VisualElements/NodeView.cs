@@ -26,8 +26,9 @@ namespace BehaviourAPI.Editor
             this.node = node;
             InitializePorts();
             RegisterCallbacks();
-            AddStyles();
+            AddLayout();
             AddManipulators();
+            OnConvertStartNode(node.IsStartNode);
         }
 
         /// <summary>
@@ -171,10 +172,10 @@ namespace BehaviourAPI.Editor
             }
         }
 
-        private void AddStyles()
+        private void AddLayout()
         {
-            VisualElement borderContainer = this.Q(name: "node-border");
-            OnConvertStartNode(node.IsStartNode);
+            Label titleText = this.Q<Label>(name: "title-label");
+            titleText.text = node.GetType().Name;
         }
 
         private void AddManipulators()
@@ -200,7 +201,7 @@ namespace BehaviourAPI.Editor
             );
         }
 
-        private void ConvertToStartNode()
+        public void ConvertToStartNode()
         {
             DisconnectAll(Direction.Input);
             node.ConvertToStartNode();

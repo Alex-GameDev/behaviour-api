@@ -30,7 +30,7 @@ namespace BehaviourAPI.Editor
             AddCreateNodeWindow();
             AddStyles();
             graphViewChanged += OnGraphViewChanged;
-            graph.StartNodeChanged += OnStartNodeChanged;
+
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -111,6 +111,7 @@ namespace BehaviourAPI.Editor
         public void DrawGraph()
         {
             if (BehaviourGraph == null) return;
+            BehaviourGraph.StartNodeChanged += OnStartNodeChanged;
             BehaviourGraph.Nodes.ForEach(node => DrawNodeView(node));
             BehaviourGraph.Connections.ForEach(conn => DrawConnectionEdge(conn));
         }
@@ -151,6 +152,7 @@ namespace BehaviourAPI.Editor
         // https://answers.unity.com/questions/1752747/how-can-i-detect-changes-to-graphview-nodes-and-ed.html
         private GraphViewChange OnGraphViewChanged(GraphViewChange changes)
         {
+            //PrecalculateStartNodeChange(changes.elementsToRemove);
             if (changes.elementsToRemove != null)
                 changes.elementsToRemove.ForEach(elem => OnElementRemoved(elem));
 
@@ -160,6 +162,7 @@ namespace BehaviourAPI.Editor
             if (changes.movedElements != null)
                 changes.movedElements.ForEach(elem => OnElementMoved(elem));
 
+            BehaviourGraph.RecalculateStartNode();
             return changes;
         }
 
