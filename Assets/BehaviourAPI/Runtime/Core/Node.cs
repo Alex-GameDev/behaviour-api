@@ -27,7 +27,6 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public Vector2 Position { get; set; }
 
-
         /// <summary>
         /// The type of the nodes that this node can handle as a childs.
         /// </summary>
@@ -52,6 +51,8 @@ namespace BehaviourAPI.Runtime.Core
         /// List of connections with this node as source.
         /// </summary>
         public List<Connection> OutputConnections = new List<Connection>();
+
+        public bool IsStartNode => BehaviourGraph.StartNode == this;
 
         #region Event
         public Action<int> InputConnectionAdded;
@@ -160,9 +161,6 @@ namespace BehaviourAPI.Runtime.Core
 
         }
 
-        public void OnRemoved()
-        {
-            BehaviourGraph.RemoveNode(this);
-        }
+        public void ConvertToStartNode() => BehaviourGraph.StartNode = this;
     }
 }

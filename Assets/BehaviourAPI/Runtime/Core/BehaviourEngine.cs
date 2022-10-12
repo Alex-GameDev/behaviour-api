@@ -30,18 +30,30 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// The default entry point of the graph
         /// </summary>
-        public Node StartNode { get; set; }
+        public Node StartNode
+        {
+            get => m_startNode;
+            set { if (m_startNode != value) { StartNodeChanged?.Invoke(m_startNode, value); m_startNode = value; } }
+        }
 
         /// <summary>
         /// The current executed node.
         /// </summary>
-        public Node CurrentNode { get; private set; }
+        public Node CurrentNode
+        {
+            get => m_currentNode;
+            set { if (m_currentNode != value) { CurrentNodeChanged?.Invoke(m_currentNode, value); m_currentNode = value; } }
+        }
 
         /// <summary>
         /// The current execution status of the graph.
         /// </summary>
         public Status Status { get; protected set; }
 
+        public Action<Node, Node> StartNodeChanged;
+        public Action<Node, Node> CurrentNodeChanged;
+
+        Node m_currentNode, m_startNode;
         /// <summary>
         /// Empty constructor
         /// </summary>
@@ -99,7 +111,7 @@ namespace BehaviourAPI.Runtime.Core
         /// <param name="node"></param>
         protected virtual void AddNode(Node node)
         {
-            if (Nodes.Count == 0)
+            if (StartNode == null)
                 StartNode = node;
 
             Nodes.Add(node);
@@ -123,6 +135,10 @@ namespace BehaviourAPI.Runtime.Core
         public virtual void RemoveNode(Node node)
         {
             Nodes.Remove(node);
+            if (node == StartNode)
+            {
+                StartNode = Nodes.Count > 0 ? Nodes[0] : null;
+            }
         }
 
         /// <summary>

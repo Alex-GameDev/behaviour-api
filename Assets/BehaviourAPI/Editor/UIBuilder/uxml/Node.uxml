@@ -4,20 +4,29 @@
     <ui:VisualElement name="node-border">
         <ui:VisualElement name="contents" class="node-rect">
             <ui:VisualElement name="top" style="min-height: auto; min-width: auto; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px;">
-                <ui:VisualElement name="input" class="port-container" style="flex-direction: row;" />
-                <ui:VisualElement name="divider" class="divider" />
-                <ui:VisualElement name="title" style="height: auto;">
-                    <ui:Label text="Label" display-tooltip-when-elided="true" name="title-label" />
-                    <ui:VisualElement name="title-button-container">
-                        <ui:VisualElement name="collapse-button">
-                            <ui:VisualElement name="icon" />
-                        </ui:VisualElement>
+                <ui:VisualElement name="node-input">
+                    <ui:VisualElement name="start-node-panel" class="start-node-panel">
+                        <ui:Label text="--- START ---" display-tooltip-when-elided="true" name="start-node-text" class="start-node-text" />
                     </ui:VisualElement>
-                    <ui:Label display-tooltip-when-elided="true" name="description" style="height: auto;" />
+                    <ui:VisualElement name="input" class="port-container" style="flex-direction: row;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="extension" />
                 <ui:VisualElement name="divider" class="divider" />
-                <ui:VisualElement name="output" class="port-container" />
+                <ui:VisualElement name="node-content">
+                    <ui:VisualElement name="title" style="height: auto;">
+                        <ui:Label text="Label" display-tooltip-when-elided="true" name="title-label" />
+                        <ui:VisualElement name="title-button-container">
+                            <ui:VisualElement name="collapse-button">
+                                <ui:VisualElement name="icon" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Label display-tooltip-when-elided="true" name="description" style="height: auto;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="extension" />
+                </ui:VisualElement>
+                <ui:VisualElement name="divider" class="divider" />
+                <ui:VisualElement name="node-output">
+                    <ui:VisualElement name="output" class="port-container" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

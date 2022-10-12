@@ -30,6 +30,7 @@ namespace BehaviourAPI.Editor
             AddCreateNodeWindow();
             AddStyles();
             graphViewChanged += OnGraphViewChanged;
+            graph.StartNodeChanged += OnStartNodeChanged;
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -191,6 +192,21 @@ namespace BehaviourAPI.Editor
                 connectionView.SetInspector(m_elementInspector);
             }
             else throw new Exception("Editor Error: Edge don't belong the correct type (ConnectionView)");
+        }
+
+
+        private void OnStartNodeChanged(Node oldStartNode, Node newStartNode)
+        {
+            if (oldStartNode != null)
+            {
+                if (nodeViews.TryGetValue(oldStartNode, out NodeView oldStartNodeView))
+                    oldStartNodeView.OnConvertStartNode(false);
+            }
+            if (newStartNode != null)
+            {
+                if (nodeViews.TryGetValue(newStartNode, out NodeView newStartNodeView))
+                    newStartNodeView.OnConvertStartNode(true);
+            }
         }
 
         #endregion

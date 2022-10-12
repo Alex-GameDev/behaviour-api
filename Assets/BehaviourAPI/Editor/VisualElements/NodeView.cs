@@ -26,6 +26,7 @@ namespace BehaviourAPI.Editor
             this.node = node;
             InitializePorts();
             RegisterCallbacks();
+            AddStyles();
             AddManipulators();
         }
 
@@ -97,6 +98,14 @@ namespace BehaviourAPI.Editor
             DeletePort(Direction.Input, idx - 1);
             DeletePort(Direction.Input, idx);
         }
+
+        public void OnConvertStartNode(bool isStart)
+        {
+            VisualElement borderContainer = this.Q(name: "start-node-panel");
+            VisualElement inputPortContainer = inputContainer;
+            borderContainer.style.display = isStart ? DisplayStyle.Flex : DisplayStyle.None;
+            inputPortContainer.style.display = isStart ? DisplayStyle.None : DisplayStyle.Flex;
+        }
         #endregion
 
         private void InitializePorts()
@@ -162,6 +171,12 @@ namespace BehaviourAPI.Editor
             }
         }
 
+        private void AddStyles()
+        {
+            VisualElement borderContainer = this.Q(name: "node-border");
+            OnConvertStartNode(node.IsStartNode);
+        }
+
         private void AddManipulators()
         {
             this.AddManipulator(CreateContextMenuManipulator());
@@ -179,8 +194,16 @@ namespace BehaviourAPI.Editor
                     });
                     menuEvt.menu.AppendAction("Disconnect inputs", ctx => DisconnectAll(Direction.Input));
                     menuEvt.menu.AppendAction("Disconnect outputs", ctx => DisconnectAll(Direction.Output));
+                    menuEvt.menu.AppendSeparator();
+                    menuEvt.menu.AppendAction("Convert to Start Node", ctx => ConvertToStartNode());
                 }
             );
+        }
+
+        private void ConvertToStartNode()
+        {
+            DisconnectAll(Direction.Input);
+            node.ConvertToStartNode();
         }
     }
 }
