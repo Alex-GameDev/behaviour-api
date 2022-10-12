@@ -26,6 +26,7 @@ namespace BehaviourAPI.Editor
             this.node = node;
             InitializePorts();
             RegisterCallbacks();
+            AddManipulators();
         }
 
         /// <summary>
@@ -143,6 +144,43 @@ namespace BehaviourAPI.Editor
             port.style.flexDirection = direction == Direction.Input ? FlexDirection.Column : FlexDirection.ColumnReverse;
             var container = direction == Direction.Input ? inputContainer : outputContainer;
             container.Insert(idx, port);
+        }
+
+        private void DisconnectAll(Direction direction)
+        {
+            var graphview = GetFirstAncestorOfType<GraphView>();
+            if (graphview != null)
+            {
+                var container = GetPortContainer(direction);
+                List<GraphElement> elementsToDelete = new List<GraphElement>();
+                container.Query<Port>().ForEach(elem =>
+                {
+                    if (elem.connected)
+                        foreach (Edge c in elem.connections) elementsToDelete.Add(c);
+                });
+                graphview.DeleteElements(elementsToDelete);
+            }
+        }
+
+        private void AddManipulators()
+        {
+            this.AddManipulator(CreateContextMenuManipulator());
+        }
+
+        private IManipulator CreateContextMenuManipulator()
+        {
+            return new ContextualMenuManipulator(
+                menuEvt =>
+                {
+                    menuEvt.menu.AppendAction("Disconnect all", ctx =>
+                    {
+                        DisconnectAll(Direction.Input);
+                        DisconnectAll(Direction.Output);
+                    });
+                    menuEvt.menu.AppendAction("Disconnect inputs", ctx => DisconnectAll(Direction.Input));
+                    menuEvt.menu.AppendAction("Disconnect outputs", ctx => DisconnectAll(Direction.Output));
+                }
+            );
         }
     }
 }
