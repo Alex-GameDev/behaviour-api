@@ -3,6 +3,7 @@ using System.Collections.Generic;
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
     using Core;
+    using UnityEngine.Events;
 
     /// <summary>
     /// A behaviour tree node that executes an <see cref="ActionTask"/>.
@@ -10,10 +11,12 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     public class ActionBTNode : BTNode
     {
         public sealed override int MaxOutputConnections => 0;
-        public ActionTask Action { get; set; }
+        public UnityEvent action;
+
+        //public ActionTask Action { get; set; }
         public override void Start()
         {
-            Action.Start();
+            //Action.Start();
         }
 
         public override void Initialize()
@@ -23,8 +26,9 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
 
         public override Status UpdateStatus()
         {
-            Action.Update();
-            return Action.ExecutionStatus;
+            // Action.Update();
+            // return Action.ExecutionStatus;
+            return Status.Failure;
         }
     }
 }

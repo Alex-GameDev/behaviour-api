@@ -4,7 +4,7 @@ using System;
 
 namespace BehaviourAPI.Runtime.Core
 {
-    public abstract class BehaviourEngine : IStatusHandler
+    public abstract class BehaviourEngine : ScriptableObject, IStatusHandler
     {
 
         /// <summary>
@@ -20,12 +20,12 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// The list of all <see cref="Node"/> elements in this <see cref="BehaviourEngine"/>.
         /// </summary>
-        public List<Node> Nodes { get; }
+        public List<Node> Nodes = new List<Node>();
 
         /// <summary>
         /// The list of all <see cref="Connection"/> elements in ths <see cref="BehaviourEngine"/>
         /// </summary>
-        public List<Connection> Connections { get; }
+        public List<Connection> Connections = new List<Connection>();
 
         /// <summary>
         /// The default entry point of the graph
@@ -53,15 +53,8 @@ namespace BehaviourAPI.Runtime.Core
         public Action<Node, Node> StartNodeChanged;
         public Action<Node, Node> CurrentNodeChanged;
 
-        Node m_currentNode, m_startNode;
-        /// <summary>
-        /// Empty constructor
-        /// </summary>
-        public BehaviourEngine()
-        {
-            Nodes = new List<Node>();
-            Connections = new List<Connection>();
-        }
+        [SerializeField] Node m_currentNode;
+        Node m_startNode;
 
         #region Create and remove elements
         /// <summary>

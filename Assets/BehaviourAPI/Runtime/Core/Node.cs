@@ -45,12 +45,12 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// List of connections with this node as target.
         /// </summary>
-        public List<Connection> InputConnections = new List<Connection>();
+        [HideInInspector] public List<Connection> InputConnections = new List<Connection>();
 
         /// <summary>
         /// List of connections with this node as source.
         /// </summary>
-        public List<Connection> OutputConnections = new List<Connection>();
+        [HideInInspector] public List<Connection> OutputConnections = new List<Connection>();
 
         public bool IsStartNode => BehaviourGraph.StartNode == this;
 

@@ -9,7 +9,7 @@ namespace BehaviourAPI.Runtime.Core
     /// </summary>
     public class BehaviourRunner : MonoBehaviour
     {
-        public BehaviourEngine RootGraph { get; set; }
+        public BehaviourEngine RootGraph;
 
         private void Awake()
         {

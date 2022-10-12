@@ -13,20 +13,35 @@ namespace BehaviourAPI.Editor
     {
         public override void OnInspectorGUI()
         {
-            BehaviourRunner behaviourRunner = target as BehaviourRunner;
-
+            base.OnInspectorGUI();
+            BehaviourRunner behaviourRunner = (BehaviourRunner)target;
             if (behaviourRunner.RootGraph != null)
             {
                 if (GUILayout.Button($"Edit Behaviour Graph ({behaviourRunner.RootGraph.GetType().Name})"))
                 {
                     BehaviourGraphEditorWindow.OpenGraph(behaviourRunner.RootGraph);
                 }
+                if (GUILayout.Button($"Remove Behaviour Graph"))
+                {
+                    behaviourRunner.RootGraph = null;
+                    EditorUtility.SetDirty(behaviourRunner);
+                }
             }
             else
             {
-                if (GUILayout.Button("Create Behaviour Graph"))
+                if (GUILayout.Button("Bind Behaviour Tree Graph"))
                 {
-                    behaviourRunner.RootGraph = new BehaviourTree();
+                    behaviourRunner.RootGraph = ScriptableObject.CreateInstance(typeof(BehaviourTree)) as BehaviourEngine;
+                    BehaviourGraphEditorWindow.OpenGraph(behaviourRunner.RootGraph);
+                }
+                if (GUILayout.Button("Bind Behaviour Tree Graph"))
+                {
+                    behaviourRunner.RootGraph = ScriptableObject.CreateInstance(typeof(BehaviourTree)) as BehaviourEngine;
+                    BehaviourGraphEditorWindow.OpenGraph(behaviourRunner.RootGraph);
+                }
+                if (GUILayout.Button("Bind Behaviour Tree Graph"))
+                {
+                    behaviourRunner.RootGraph = ScriptableObject.CreateInstance(typeof(BehaviourTree)) as BehaviourEngine;
                     BehaviourGraphEditorWindow.OpenGraph(behaviourRunner.RootGraph);
                 }
             }
