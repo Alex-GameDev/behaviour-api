@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
     using Core;
-    using UnityEngine.Events;
+
 
     /// <summary>
     /// A behaviour tree node that executes an <see cref="ActionTask"/>.
