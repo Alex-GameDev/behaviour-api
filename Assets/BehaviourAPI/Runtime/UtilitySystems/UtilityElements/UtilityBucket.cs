@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using BehaviourAPI.Runtime.Core;
 using UnityEngine;
 
 namespace BehaviourAPI.Runtime.UtilitySystems
@@ -17,6 +16,16 @@ namespace BehaviourAPI.Runtime.UtilitySystems
         [Range(0f, 1f)] public float UtilityThreshold = .3f;
         [Range(0f, 1f)] public float inertia = .3f;
         List<UtilityElement> m_utilityCandidates;
+        UtilityElement m_currentBestAction;
 
+        protected override float ComputeUtility()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update()
+        {
+            m_currentBestAction.Update();
+        }
     }
 }

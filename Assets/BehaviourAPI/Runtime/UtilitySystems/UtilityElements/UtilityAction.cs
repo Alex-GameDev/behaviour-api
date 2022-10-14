@@ -12,8 +12,20 @@ namespace BehaviourAPI.Runtime.UtilitySystems
     /// </summary>
     public class UtilityAction : UtilityElement
     {
-        public override Type ChildType => typeof(UtilityElement);
+        public override Type ChildType => typeof(Factor);
         public override int MaxOutputConnections => 1;
+        private Factor m_mainFactor;
 
+        protected override float ComputeUtility()
+        {
+            m_mainFactor.UpdateUtility();
+            Utility = m_mainFactor.Utility;
+            return Utility;
+        }
+
+        public override void Update()
+        {
+
+        }
     }
 }
