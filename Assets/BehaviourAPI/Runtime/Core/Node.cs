@@ -19,12 +19,12 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// List of connections with this node as target.
         /// </summary>
-        [HideInInspector] public List<Connection> InputConnections = new List<Connection>();
+        [HideInInspector] public List<Connection> InputConnections;
 
         /// <summary>
         /// List of connections with this node as source.
         /// </summary>
-        [HideInInspector] public List<Connection> OutputConnections = new List<Connection>();
+        [HideInInspector] public List<Connection> OutputConnections;
 
         /// <summary>
         /// The type of the nodes that this node can handle as a childs.
@@ -48,6 +48,7 @@ namespace BehaviourAPI.Runtime.Core
 
         #region Event
 
+
         public Action<int> InputConnectionAdded;
         public Action<int> OutputConnectionAdded;
         public Action<int> InputConnectionRemoved;
@@ -58,7 +59,11 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// Empty constructor
         /// </summary>
-        public Node() { }
+        public Node()
+        {
+            OutputConnections = new List<Connection>();
+            InputConnections = new List<Connection>();
+        }
 
         /// <summary>
         /// Get all nodes connected with this as source.
