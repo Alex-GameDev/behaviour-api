@@ -1,11 +1,8 @@
 {
-    "name": "BehaviourAPI.Editor",
-    "rootNamespace": "BehaviourAPI",
+    "name": "behaviourAPI.Runtime.UtilitySystems",
+    "rootNamespace": "",
     "references": [
-        "GUID:7f2a2a46e87aa104cb57554615f57a68",
-        "GUID:1c69eb39eb94854458bf32207b295745",
-        "GUID:c7d67490af8b4dc4f9dbce76b7db5e60",
-        "GUID:d15545cc13b0bd94ea4059a6d0dda3f0"
+        "GUID:7f2a2a46e87aa104cb57554615f57a68"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

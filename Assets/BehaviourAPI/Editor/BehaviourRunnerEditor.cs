@@ -7,6 +7,7 @@ namespace BehaviourAPI.Editor
 {
     using Runtime.Core;
     using Runtime.BehaviourTrees;
+    using Runtime.UtilitySystems;
 
     [CustomEditor(typeof(BehaviourRunner))]
     public class BehaviourRunnerEditor : UnityEditor.Editor
@@ -39,9 +40,9 @@ namespace BehaviourAPI.Editor
                     behaviourRunner.RootGraph = ScriptableObject.CreateInstance(typeof(BehaviourTree)) as BehaviourEngine;
                     BehaviourGraphEditorWindow.OpenGraph(behaviourRunner.RootGraph);
                 }
-                if (GUILayout.Button("Bind Behaviour Tree Graph"))
+                if (GUILayout.Button("Bind Utility System Graph"))
                 {
-                    behaviourRunner.RootGraph = ScriptableObject.CreateInstance(typeof(BehaviourTree)) as BehaviourEngine;
+                    behaviourRunner.RootGraph = ScriptableObject.CreateInstance(typeof(UtilitySystem)) as BehaviourEngine;
                     BehaviourGraphEditorWindow.OpenGraph(behaviourRunner.RootGraph);
                 }
             }
