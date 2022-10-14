@@ -8,24 +8,23 @@ namespace BehaviourAPI.Runtime.Core
     public abstract class Node : ScriptableObject
     {
         /// <summary>
-        /// Node Name.
-        /// </summary>
-        public virtual string Name { get; set; }
-
-        /// <summary>
-        /// Node description.
-        /// </summary>
-        public virtual string Desc { get; set; }
-
-        /// <summary>
         /// The graph that contains this node.
         /// </summary>
-        public BehaviourEngine BehaviourGraph { get; set; }
+        [HideInInspector] public BehaviourEngine BehaviourGraph;
 
         /// <summary>
         /// The Node visual position (Editor)
         /// </summary>
-        public Vector2 Position { get; set; }
+        [HideInInspector] public Vector2 Position;
+        /// <summary>
+        /// List of connections with this node as target.
+        /// </summary>
+        [HideInInspector] public List<Connection> InputConnections = new List<Connection>();
+
+        /// <summary>
+        /// List of connections with this node as source.
+        /// </summary>
+        [HideInInspector] public List<Connection> OutputConnections = new List<Connection>();
 
         /// <summary>
         /// The type of the nodes that this node can handle as a childs.
@@ -43,22 +42,17 @@ namespace BehaviourAPI.Runtime.Core
         public abstract int MaxOutputConnections { get; }
 
         /// <summary>
-        /// List of connections with this node as target.
+        /// Return true if this node is the start node of the graph.
         /// </summary>
-        [HideInInspector] public List<Connection> InputConnections = new List<Connection>();
-
-        /// <summary>
-        /// List of connections with this node as source.
-        /// </summary>
-        [HideInInspector] public List<Connection> OutputConnections = new List<Connection>();
-
         public bool IsStartNode => BehaviourGraph.StartNode == this;
 
         #region Event
+
         public Action<int> InputConnectionAdded;
         public Action<int> OutputConnectionAdded;
         public Action<int> InputConnectionRemoved;
         public Action<int> OutputConnectionRemoved;
+
         #endregion
 
         /// <summary>
@@ -161,6 +155,9 @@ namespace BehaviourAPI.Runtime.Core
 
         }
 
+        /// <summary>
+        /// Convert this node to the start node of the graph.
+        /// </summary>
         public void ConvertToStartNode() => BehaviourGraph.StartNode = this;
     }
 }

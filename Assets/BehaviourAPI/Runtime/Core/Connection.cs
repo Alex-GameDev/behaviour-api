@@ -13,17 +13,17 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// The graph that contains this connection.
         /// </summary>
-        public BehaviourEngine Graph { get; private set; }
+        [HideInInspector] public BehaviourEngine Graph;
 
         /// <summary>
         /// The Node where this connection starts
         /// </summary>
-        public Node SourceNode { get; set; }
+        [HideInInspector] public Node SourceNode;
 
         /// <summary>
         /// The node where this connection ends
         /// </summary>
-        public Node TargetNode { get; set; }
+        [HideInInspector] public Node TargetNode;
 
         /// <summary>
         /// Empty constructor.
