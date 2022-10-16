@@ -12,6 +12,7 @@ namespace BehaviourAPI.Runtime.UtilitySystems
     /// </summary>
     public class UtilityAction : UtilityElement
     {
+        public ActionTask Action;
         public override Type ChildType => typeof(Factor);
         public override int MaxOutputConnections => 1;
         private Factor m_mainFactor;

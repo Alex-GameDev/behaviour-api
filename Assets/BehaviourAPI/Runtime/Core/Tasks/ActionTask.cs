@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace BehaviourAPI.Runtime.Core
 {
+    [System.Serializable]
     public abstract class ActionTask : Task
     {
         public Status ExecutionStatus { get; private set; }
@@ -13,5 +14,6 @@ namespace BehaviourAPI.Runtime.Core
         public void Success() => ExecutionStatus = Status.Sucess;
         public void Failure() => ExecutionStatus = Status.Failure;
         public override void Reset() => ExecutionStatus = Status.None;
+        public void SetStatus(Status status) => ExecutionStatus = status;
     }
 }

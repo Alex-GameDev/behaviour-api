@@ -48,7 +48,6 @@ namespace BehaviourAPI.Runtime.Core
 
         #region Event
 
-
         public Action<int> InputConnectionAdded;
         public Action<int> OutputConnectionAdded;
         public Action<int> InputConnectionRemoved;
@@ -153,9 +152,10 @@ namespace BehaviourAPI.Runtime.Core
         }
 
         /// <summary>
-        /// Initialize the node
+        /// Initialize the node with the given context.
+        /// The context is only needed in the executable nodes, like Action or perception nodes.
         /// </summary>
-        public virtual void Initialize()
+        public virtual void Initialize(Context context)
         {
 
         }

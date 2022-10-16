@@ -12,24 +12,22 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     public class ActionBTNode : BTNode
     {
         public sealed override int MaxOutputConnections => 0;
-        public UnityEvent action;
+        public ActionTask Action;
 
-        //public ActionTask Action { get; set; }
-        public override void Start()
+        public override void Initialize(Context context)
         {
-            //Action.Start();
+            Action?.Initialize(context);
         }
 
-        public override void Initialize()
+        public override void Start()
         {
-            base.Initialize();
+            Action.Start();
         }
 
         public override Status UpdateStatus()
         {
-            // Action.Update();
-            // return Action.ExecutionStatus;
-            return Status.Failure;
+            Action.Update();
+            return Action.ExecutionStatus;
         }
     }
 }

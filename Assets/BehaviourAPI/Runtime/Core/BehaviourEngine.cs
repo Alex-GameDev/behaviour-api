@@ -156,9 +156,9 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// Initialize all nodes.
         /// </summary>
-        public virtual void Initialize()
+        public virtual void Initialize(Context context)
         {
-            Nodes.ForEach((node) => node.Initialize());
+            Nodes.ForEach((node) => node.Initialize(context));
         }
 
         public virtual void SetCurrentNode(Node node)

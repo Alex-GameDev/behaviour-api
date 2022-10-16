@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using UnityEngine;
 
@@ -12,10 +14,9 @@ namespace BehaviourAPI.Runtime.Core
     public class BehaviourRunner : MonoBehaviour
     {
         public BehaviourEngine RootGraph;
-
         private void Awake()
         {
-            RootGraph.Initialize();
+            RootGraph.Initialize(new Context(this));
         }
 
         private void Start()

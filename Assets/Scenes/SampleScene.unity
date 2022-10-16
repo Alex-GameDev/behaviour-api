@@ -123,6 +123,47 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &1817399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8757ef3717b444b951ecbe08eb52b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehaviourGraph: {fileID: 807982066}
+  Position: {x: 676, y: 712}
+  InputConnections:
+  - {fileID: 711455869}
+  OutputConnections: []
+  function:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.8827746
+      outSlope: 0.8827746
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.993103
+      value: 0.8766861
+      inSlope: 0.8827746
+      outSlope: 0.8827746
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &55096159
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,37 +286,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RootGraph: {fileID: 807982066}
---- !u!1 &556503860
-GameObject:
+--- !u!114 &631576933
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 556503861}
-  m_Layer: 0
-  m_Name: GameObject (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &556503861
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 556503860}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c52e1a1ea3a2bce45812fb375cb588eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehaviourGraph: {fileID: 807982066}
+  Position: {x: 547, y: 257}
+  InputConnections: []
+  OutputConnections:
+  - {fileID: 711455869}
 --- !u!1 &674611001
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,6 +473,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &711455869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a8ce0ea5937c24ca234153700d4899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Graph: {fileID: 0}
+  SourceNode: {fileID: 631576933}
+  TargetNode: {fileID: 1817399}
 --- !u!1 &790257208
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,8 +576,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a573829a68af34f8c5930dcc023c92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Nodes: []
-  Connections: []
+  Nodes:
+  - {fileID: 631576933}
+  - {fileID: 1817399}
+  - {fileID: 1786013076}
+  Connections:
+  - {fileID: 711455869}
   m_currentNode: {fileID: 0}
   Inertia: 1.3
 --- !u!1 &812230701
@@ -1174,6 +1220,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1786013076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b105ddf3d6272fa42ae4022a7a6114cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehaviourGraph: {fileID: 807982066}
+  Position: {x: 831, y: 258}
+  InputConnections: []
+  OutputConnections: []
+  action: {}
 --- !u!1 &1913732210
 GameObject:
   m_ObjectHideFlags: 0

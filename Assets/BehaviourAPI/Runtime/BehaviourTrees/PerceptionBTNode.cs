@@ -11,16 +11,15 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     public class PerceptionBTNode : BTNode
     {
         public sealed override int MaxOutputConnections => 0;
-        public Perception Perception { get; set; }
-
+        public Perception Perception;
         public override void Start()
         {
             Perception.Start();
         }
 
-        public override void Initialize()
+        public override void Initialize(Context context)
         {
-            base.Initialize();
+            Perception?.Initialize(context);
         }
 
         public override Status UpdateStatus()
