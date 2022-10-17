@@ -11,7 +11,10 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="divider" class="divider" />
                 <ui:IMGUIContainer name="inspector-container" />
-                <ui:VisualElement name="task-container" />
+                <ui:VisualElement name="task-container">
+                    <ui:Button text="Bind new Action" display-tooltip-when-elided="true" name="assign-task-button" style="-unity-font-style: bold;" />
+                    <ui:IMGUIContainer name="task-inspector-container" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

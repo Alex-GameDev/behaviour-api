@@ -6,27 +6,31 @@ using UnityEngine;
 
 namespace BehaviourAPI.Editor
 {
+    using Runtime.Core;
     using Utils;
-    public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
+    public class ActionSearchWindow : ScriptableObject, ISearchWindowProvider
     {
-        BehaviourGraphView graphView;
+        ElementInspector m_elementInspector;
 
-        public void Initialize(BehaviourGraphView graphView)
-        {
-            this.graphView = graphView;
-        }
-
+        public void Initialize(ElementInspector elementInspector) => m_elementInspector = elementInspector;
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
-            TypeNode rootTypeNode = TypeUtilities.GetHierarchyOfType(graphView.BehaviourGraph.NodeType);
-            return CreateSubSearchTree(rootTypeNode, 0);
+            TypeNode rootTypeAction = TypeUtilities.GetHierarchyOfType(typeof(ActionTask));
+            return CreateSubSearchTree(rootTypeAction, 0);
         }
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
-            Vector2 position = graphView.GetLocalMousePosition(context.screenMousePosition);
-            graphView.CreateNode((Type)SearchTreeEntry.userData, position);
-            return true;
+            if (m_elementInspector.IsSelectedElementAnActionAssignable())
+            {
+                m_elementInspector.BindActionToCurrentNode(SearchTreeEntry.userData as Type);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         private List<SearchTreeEntry> CreateSubSearchTree(TypeNode rootNode, int level)

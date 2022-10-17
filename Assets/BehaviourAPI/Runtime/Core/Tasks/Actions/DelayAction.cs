@@ -5,7 +5,7 @@ namespace BehaviourAPI.Runtime.Core
 {
     public class DelayAction : ActionTask
     {
-        public float DelayTime { get; set; }
+        public float DelayTime;
         public override void Start()
         {
             ExecutionTime = 0f;
