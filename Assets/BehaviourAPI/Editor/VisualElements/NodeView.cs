@@ -162,7 +162,7 @@ namespace BehaviourAPI.Editor
             if (graphview != null)
             {
                 var container = GetPortContainer(direction);
-                List<GraphElement> elementsToDelete = new List<GraphElement>();
+                List<UnityEditor.Experimental.GraphView.GraphElement> elementsToDelete = new List<UnityEditor.Experimental.GraphView.GraphElement>();
                 container.Query<Port>().ForEach(elem =>
                 {
                     if (elem.connected)

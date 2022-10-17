@@ -9,7 +9,9 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     /// </summary>
     public class LoopUntilNode : DecoratorNode
     {
-        public Status TargetStatus { get; set; }
+        public override string Name => "Loop Until";
+        public override string Description => "Decorator node that executes its child until it returns the desired value";
+        public Status TargetStatus;
 
         protected override Status GetModifiedChildStatus(Status childStatus)
         {

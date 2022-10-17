@@ -10,7 +10,9 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     /// </summary>
     public class PerceptionBTNode : BTNode
     {
-        public sealed override int MaxOutputConnections => 0;
+        public override string Name => "Perception Node";
+        public override string Description => "Behaviour Tree Node that returns Success or failure depending on a Perception";
+        public override int MaxOutputConnections => 0;
         public Perception Perception;
         public override void Start()
         {

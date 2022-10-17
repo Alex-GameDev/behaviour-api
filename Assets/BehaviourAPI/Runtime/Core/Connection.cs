@@ -8,12 +8,10 @@ namespace BehaviourAPI.Runtime.Core
     /// <summary>
     /// Reprsents a link between two nodes.
     /// </summary>
-    public abstract class Connection : ScriptableObject
+    public abstract class Connection : GraphElement
     {
-        /// <summary>
-        /// The graph that contains this connection.
-        /// </summary>
-        [HideInInspector] public BehaviourEngine Graph;
+        public override string Name => "Connection";
+        public override string Description => "-";
 
         /// <summary>
         /// The Node where this connection starts

@@ -12,6 +12,8 @@ namespace BehaviourAPI.Runtime.UtilitySystems
     /// </summary>
     public class UtilityAction : UtilityElement
     {
+        public override string Name => "Utility Action";
+        public override string Description => "Utility element that executes a given action.";
         public ActionTask Action;
         public override Type ChildType => typeof(Factor);
         public override int MaxOutputConnections => 1;

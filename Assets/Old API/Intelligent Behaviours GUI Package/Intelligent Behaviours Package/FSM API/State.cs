@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class State {
+public class State
+{
 
     #region variables
-
     public string Name { get; }
     public Perception StatePerception { get; }
     public BehaviourEngine BehaviourEngine { get; }
@@ -87,7 +87,7 @@ public class State {
 
     private void EntrySubmachine(State entrySubmachineState, State stateTo, BehaviourEngine subMachine, BehaviourEngine behaviourEngine)
     {
-        if(subMachine.actualState != subMachine.GetState("Entry_Machine"))
+        if (subMachine.actualState != subMachine.GetState("Entry_Machine"))
             return;
 
         new Transition("Entry_submachine state", subMachine.actualState, new PushPerception(subMachine), stateTo, subMachine)
@@ -97,8 +97,10 @@ public class State {
         subMachine.Active = true;
     }
 
-    public void Entry(){
-        if(this.configurator.stateType != StateConfigurator.STATE_TYPE.EMPTY){
+    public void Entry()
+    {
+        if (this.configurator.stateType != StateConfigurator.STATE_TYPE.EMPTY)
+        {
             configurator.entry();
         }
     }
@@ -111,11 +113,12 @@ public class State {
         }
     }
 
-    public void Exit(String tName) {
+    public void Exit(String tName)
+    {
         Action toExecute;
         if (configurator.exit.TryGetValue(tName, out toExecute))
         {
             toExecute.Invoke();
-        }              
+        }
     }
 }

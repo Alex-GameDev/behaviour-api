@@ -8,6 +8,8 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     /// </summary>
     public class SuccederNode : DecoratorNode
     {
+        public override string Name => "Succeder";
+        public override string Description => "Decorator node that returns always Success as a final value.";
 
         protected override Status GetModifiedChildStatus(Status childStatus)
         {

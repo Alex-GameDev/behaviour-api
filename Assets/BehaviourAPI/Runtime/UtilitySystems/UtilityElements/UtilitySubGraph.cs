@@ -7,6 +7,8 @@ namespace BehaviourAPI.Runtime.UtilitySystems
     using Core;
     public class UtilitySubGraph : UtilityElement, ISubGraphContainer
     {
+        public override string Name => "Utility Action";
+        public override string Description => "Utility element that enters in a subgraph when is selected.";
         private BehaviourEngine m_subGraph;
         private Factor m_mainFactor;
         public override int MaxOutputConnections => 1;

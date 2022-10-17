@@ -5,13 +5,8 @@ using System;
 
 namespace BehaviourAPI.Runtime.Core
 {
-    public abstract class Node : ScriptableObject
+    public abstract class Node : GraphElement
     {
-        /// <summary>
-        /// The graph that contains this node.
-        /// </summary>
-        [HideInInspector] public BehaviourEngine BehaviourGraph;
-
         /// <summary>
         /// The Node visual position (Editor)
         /// </summary>

@@ -10,6 +10,8 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
 
     public class InverterNode : DecoratorNode
     {
+        public override string Name => "Inverter";
+        public override string Description => "Decorator that returns the inverted status of its child.";
         protected override Status GetModifiedChildStatus(Status childStatus)
         {
             if (childStatus == Status.Sucess) return Status.Failure;

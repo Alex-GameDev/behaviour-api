@@ -10,6 +10,8 @@ namespace BehaviourAPI.Editor
     {
         UnityEditor.Editor editor;
         VisualElement inspectorContent;
+        Label nameLabel;
+        Label descLabel;
 
         public ElementInspector()
         {
@@ -17,26 +19,13 @@ namespace BehaviourAPI.Editor
             AddStyles();
         }
 
-        public void UpdateInspector(Node node)
+        public void UpdateInspector(GraphElement element)
         {
+            nameLabel.text = element.Name;
+            descLabel.text = element.Description;
             inspectorContent.Clear();
             UnityEngine.Object.DestroyImmediate(editor);
-            editor = UnityEditor.Editor.CreateEditor(node);
-            IMGUIContainer container = new IMGUIContainer(() =>
-            {
-                if (editor && editor.target)
-                {
-                    editor.OnInspectorGUI();
-                }
-            });
-            inspectorContent.Add(container);
-        }
-
-        public void UpdateInspector(Connection connection)
-        {
-            inspectorContent.Clear();
-            UnityEngine.Object.DestroyImmediate(editor);
-            editor = UnityEditor.Editor.CreateEditor(connection);
+            editor = UnityEditor.Editor.CreateEditor(element);
             IMGUIContainer container = new IMGUIContainer(() =>
             {
                 if (editor && editor.target)
@@ -52,7 +41,10 @@ namespace BehaviourAPI.Editor
             var visualTree = VisualSettings.GetOrCreateSettings().InspectorLayout;
             var inspectorFromUXML = visualTree.Instantiate();
             Add(inspectorFromUXML);
+
             inspectorContent = this.Q("inspector-container");
+            nameLabel = this.Q<Label>(name: "name-label");
+            descLabel = this.Q<Label>(name: "description-label");
         }
 
         private void AddStyles()

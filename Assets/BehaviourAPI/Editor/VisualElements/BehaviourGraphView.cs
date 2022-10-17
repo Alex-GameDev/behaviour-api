@@ -166,7 +166,7 @@ namespace BehaviourAPI.Editor
             return changes;
         }
 
-        private void OnElementMoved(GraphElement elem)
+        private void OnElementMoved(UnityEditor.Experimental.GraphView.GraphElement elem)
         {
             if (elem is NodeView nodeView)
             {
@@ -174,7 +174,7 @@ namespace BehaviourAPI.Editor
             }
         }
 
-        private void OnElementRemoved(GraphElement elem)
+        private void OnElementRemoved(UnityEditor.Experimental.GraphView.GraphElement elem)
         {
             if (elem is NodeView nodeView) BehaviourGraph.RemoveNode(nodeView.node);
             if (elem is ConnectionView connectionView) BehaviourGraph.RemoveConnection(connectionView.connection);

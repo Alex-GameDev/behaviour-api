@@ -11,6 +11,8 @@ namespace BehaviourAPI.Runtime.UtilitySystems
     /// </summary>
     public class UtilityBucket : UtilityElement
     {
+        public override string Name => "Utility Action";
+        public override string Description => "Utility element that choose between multiple Utility elements.";
         public override Type ChildType => typeof(UtilityElement);
         public override int MaxOutputConnections => -1;
         [Range(0f, 1f)] public float UtilityThreshold = .3f;

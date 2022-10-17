@@ -10,6 +10,8 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     /// </summary>
     public class SelectorNode : CompositeNode
     {
+        public override string Name => "Selector";
+        public override string Description => "Composite node that executes its childs until one of them returns Success.";
         public bool IsRandomOrder { get; set; }
         public SelectorNode()
         {

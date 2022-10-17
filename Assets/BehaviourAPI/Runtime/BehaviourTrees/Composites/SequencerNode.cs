@@ -7,6 +7,8 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
     /// </summary>
     public class SequencerNode : CompositeNode
     {
+        public override string Name => "Sequencer";
+        public override string Description => "Composite node that executes its childs until one of them returns Failure.";
         public SequencerNode()
         {
         }

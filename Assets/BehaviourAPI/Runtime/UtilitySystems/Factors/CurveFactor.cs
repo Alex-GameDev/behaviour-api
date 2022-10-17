@@ -9,10 +9,12 @@ namespace BehaviourAPI.Runtime.UtilitySystems
 
     /// <summary>
     /// Factor that modifies its child value with a function.
-    /// </summary>
+    /// </summary>  
     public class CurveFactor : Factor
     {
         public override int MaxOutputConnections => 1;
+        public override string Description => "Factor that modifies the child value with a curve function.";
+        public override string Name => "Curve Factor";
         public AnimationCurve function;
         Factor m_childFactor;
 
