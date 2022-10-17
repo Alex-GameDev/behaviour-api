@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace BehaviourAPI.Runtime.Core
 {
-    [System.Serializable]
-    public abstract class Task
+    public abstract class Task : ScriptableObject
     {
         public float ExecutionTime { get; protected set; }
         public Context ExecutionContext { get; protected set; }
