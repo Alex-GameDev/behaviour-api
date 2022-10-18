@@ -10,6 +10,7 @@ namespace BehaviourAPI.Runtime.UtilitySystems
     {
         public override int MaxInputConnections => -1;
         public float Utility { get; protected set; }
+        public Action<float> OnValueChanged { get; set; }
 
         /// <summary>
         /// Updates the current value of <see cref="Utility"/>
@@ -17,6 +18,7 @@ namespace BehaviourAPI.Runtime.UtilitySystems
         public void UpdateUtility()
         {
             Utility = ComputeUtility();
+            OnValueChanged?.Invoke(Utility);
         }
 
         protected abstract float ComputeUtility();

@@ -219,14 +219,14 @@ namespace BehaviourAPI.Editor
 
             var utilityBarContainer = new VisualElement();
             extensionContainer.Add(utilityBarContainer);
-            SerializedObject nodeObj = new SerializedObject(node);
             var utilityBar = new ProgressBar()
             {
                 title = " ",
                 lowValue = 0,
                 highValue = 1,
-                bindingPath = "Utility"
             };
+
+            utilityHandler.OnValueChanged += (value) => utilityBar.value = value;
 
             utilityBarContainer.Add(utilityBar);
         }
