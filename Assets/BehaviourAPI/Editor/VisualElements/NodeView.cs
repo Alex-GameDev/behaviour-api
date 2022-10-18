@@ -9,13 +9,15 @@ using UnityEngine.UIElements;
 namespace BehaviourAPI.Editor
 {
     using Runtime.Core;
+    using Runtime.UtilitySystems;
+    using UnityEditor.UIElements;
+
     public class NodeView : UnityEditor.Experimental.GraphView.Node
     {
         /// <summary>
         /// The represented node.
         /// </summary>
         public Node node;
-
         ElementInspector m_elementInspector;
 
         /// <summary>
@@ -174,9 +176,13 @@ namespace BehaviourAPI.Editor
 
         private void AddLayout()
         {
-            Label titleText = this.Q<Label>(name: "title-label");
-            titleText.text = node.GetType().Name;
+            var titleInputField = this.Q<TextField>(name: "title-input-field");
+            titleInputField.value = node.NodeName;
+            titleInputField.RegisterCallback<ChangeEvent<string>>((evt) => node.NodeName = titleInputField.value);
+            var extensionContainer = this.Q(name: "extension");
+            DisplayUtilityHandler(node as IUtilityHandler, extensionContainer);
         }
+
 
         private void AddManipulators()
         {
@@ -205,6 +211,24 @@ namespace BehaviourAPI.Editor
         {
             DisconnectAll(Direction.Input);
             node.ConvertToStartNode();
+        }
+
+        private void DisplayUtilityHandler(IUtilityHandler utilityHandler, VisualElement extensionContainer)
+        {
+            if (utilityHandler == null) return;
+
+            var utilityBarContainer = new VisualElement();
+            extensionContainer.Add(utilityBarContainer);
+            SerializedObject nodeObj = new SerializedObject(node);
+            var utilityBar = new ProgressBar()
+            {
+                title = " ",
+                lowValue = 0,
+                highValue = 1,
+                bindingPath = "Utility"
+            };
+
+            utilityBarContainer.Add(utilityBar);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace BehaviourAPI.Runtime.UtilitySystems
 {
     using System.Linq;
 
-    public class MaxFactor : FusionFactor
+    public class MaxFusionFactor : FusionFactor
     {
         public override string Name => "Max Fusion Factor";
         public override string Description => "Fusion factor that returns the maximum value of its childs";

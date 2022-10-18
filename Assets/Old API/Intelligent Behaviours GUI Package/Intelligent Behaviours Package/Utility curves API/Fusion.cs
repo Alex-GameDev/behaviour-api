@@ -6,7 +6,7 @@ public abstract class Fusion : Factor
     #region variables
 
     protected List<Factor> factors;
-    
+
     #endregion
 
     #region methods

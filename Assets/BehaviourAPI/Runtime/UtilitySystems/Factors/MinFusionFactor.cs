@@ -3,7 +3,7 @@ using System.Linq;
 namespace BehaviourAPI.Runtime.UtilitySystems
 {
 
-    public class MinFactor : FusionFactor
+    public class MinFusionFactor : FusionFactor
     {
         public override string Name => "Min Fusion Factor";
         public override string Description => "Fusion factor that returns the minimum value of its childs";

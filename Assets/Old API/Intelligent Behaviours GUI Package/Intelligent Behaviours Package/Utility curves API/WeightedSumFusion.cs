@@ -27,11 +27,11 @@ public class WeightedSumFusion : Fusion
 
     public override float getValue()
     {
-        if(weights == null) return factors.Sum(f => f.getValue()) / factors.Count;
+        if (weights == null) return factors.Sum(f => f.getValue()) / factors.Count;
 
 
         float sum = 0.0f;
-        for(int i = 0; i < factors.Count; i++)
+        for (int i = 0; i < factors.Count; i++)
         {
             float factor = factors[i].getValue();
 

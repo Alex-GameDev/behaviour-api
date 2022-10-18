@@ -5,6 +5,5 @@
     --bs-colors-grid-light-grey-3: rgba(51, 51, 51, 1);
 
     --bs-metrics-grid-25: 25;
-    --node-metrics-width-min: 100;
-    --node-metrics-width-max: 300;
+    --node-metrics-width-min: 150px;
 }  

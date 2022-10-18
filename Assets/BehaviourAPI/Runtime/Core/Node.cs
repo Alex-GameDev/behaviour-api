@@ -8,6 +8,10 @@ namespace BehaviourAPI.Runtime.Core
     public abstract class Node : GraphElement
     {
         /// <summary>
+        /// The node unique name.
+        /// </summary>
+        public string NodeName;
+        /// <summary>
         /// The Node visual position (Editor)
         /// </summary>
         [HideInInspector] public Vector2 Position;
@@ -55,6 +59,7 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public Node()
         {
+            NodeName = $"New {Name}";
             OutputConnections = new List<Connection>();
             InputConnections = new List<Connection>();
         }

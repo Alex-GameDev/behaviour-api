@@ -49,7 +49,6 @@ namespace BehaviourAPI.Editor
             if (m_selectedElement is IActionAsignable actionAsignable)
             {
                 actionAsignable.Action = ScriptableObject.CreateInstance(type) as ActionTask;
-                Debug.Log("New action assigned");
                 UpdateInspector(m_selectedElement);
                 EditorUtility.SetDirty(m_selectedElement);
             }
@@ -79,7 +78,6 @@ namespace BehaviourAPI.Editor
             {
                 if (actionAsignable.Action != null)
                 {
-                    Debug.Log("Current action removed");
                     actionAsignable.Action = null;
                     EditorUtility.SetDirty(m_selectedElement);
                     UpdateInspector(m_selectedElement);
@@ -102,13 +100,11 @@ namespace BehaviourAPI.Editor
         {
             if (actionAsignable != null)
             {
-                Debug.Log("Is action assignable...");
                 taskInspectorContent.Clear();
                 taskContainer.style.display = DisplayStyle.Flex;
                 UnityEngine.Object.DestroyImmediate(taskEditor);
                 if (actionAsignable.Action != null)
                 {
-                    Debug.Log("...and has an action assigned!");
                     assignTaskButton.text = "Remove current action";
                     taskEditor = UnityEditor.Editor.CreateEditor(actionAsignable.Action);
                     IMGUIContainer container = new IMGUIContainer(() =>
@@ -122,7 +118,6 @@ namespace BehaviourAPI.Editor
                 }
                 else
                 {
-                    Debug.Log("... but doesn't have action assigned");
                     assignTaskButton.text = "Bind new action";
                 }
             }
