@@ -49,6 +49,7 @@ namespace BehaviourAPI.Runtime.Core
         /// The current execution status of the graph.
         /// </summary>
         public Status Status { get; protected set; }
+        public Action<Status> OnValueChanged { get; set; }
 
         public Action<Node, Node> StartNodeChanged;
         public Action<Node, Node> CurrentNodeChanged;

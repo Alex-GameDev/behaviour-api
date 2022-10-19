@@ -15,6 +15,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         public override Type ChildType => typeof(BTNode);
 
         public Status Status { get; protected set; }
+        public Action<Status> OnValueChanged { get; set; }
 
         BTNode parentNode; //TODO: Set parent node in OnConnection
 
@@ -28,6 +29,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         public void Update()
         {
             Status = UpdateStatus();
+            OnValueChanged?.Invoke(Status);
         }
 
         public abstract Status UpdateStatus();

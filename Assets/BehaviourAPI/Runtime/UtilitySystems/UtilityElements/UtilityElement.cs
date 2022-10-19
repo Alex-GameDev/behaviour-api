@@ -11,6 +11,7 @@ namespace BehaviourAPI.Runtime.UtilitySystems
     public abstract class UtilityElement : UtilityNode, IStatusHandler
     {
         public Status Status { get; protected set; }
+        Action<Status> IValueHandler<Status>.OnValueChanged { get; set; }
 
         public abstract void Update();
     }

@@ -181,6 +181,8 @@ namespace BehaviourAPI.Editor
             titleInputField.RegisterCallback<ChangeEvent<string>>((evt) => node.NodeName = titleInputField.value);
             var extensionContainer = this.Q(name: "extension");
             DisplayUtilityHandler(node as IUtilityHandler, extensionContainer);
+            var border = this.Q(name: "node-border");
+            DisplayStatusHandler(node as IStatusHandler, border);
         }
 
 
@@ -229,6 +231,28 @@ namespace BehaviourAPI.Editor
             utilityHandler.OnValueChanged += (value) => utilityBar.value = value;
 
             utilityBarContainer.Add(utilityBar);
+        }
+
+        private void DisplayStatusHandler(IStatusHandler statusHandler, VisualElement border)
+        {
+            if (statusHandler == null) return;
+
+            statusHandler.OnValueChanged += (status) =>
+            {
+                switch (status)
+                {
+                    case Status.Running: border.style.backgroundColor = new StyleColor(Color.yellow); break;
+                    case Status.Failure: border.style.backgroundColor = new StyleColor(Color.red); break;
+                    case Status.Sucess: border.style.backgroundColor = new StyleColor(Color.green); break;
+                    default: border.style.backgroundColor = new StyleColor(new Color(0.5f, 0.5f, 0.5f, 0.5f)); break;
+                }
+            };
+            border.style.backgroundColor = new StyleColor(new Color(.5f, .5f, .5f, .2f));
+        }
+
+        private Color GetColorStatus(Status status)
+        {
+            return Color.red;
         }
     }
 }
