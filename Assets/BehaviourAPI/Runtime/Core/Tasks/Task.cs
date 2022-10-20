@@ -6,7 +6,6 @@ namespace BehaviourAPI.Runtime.Core
 {
     public abstract class Task : ScriptableObject
     {
-        public float ExecutionTime { get; protected set; }
         public Context ExecutionContext { get; protected set; }
 
         public virtual void Initialize(Context context)

@@ -183,6 +183,7 @@ namespace BehaviourAPI.Editor
             var border = this.Q(name: "node-border");
             DisplayUtilityHandler(node as IUtilityHandler, extensionContainer);
             DisplayStatusHandler(node as IStatusHandler, border);
+            DisplayActionAsignable(node as IActionAsignable, extensionContainer);
         }
 
         private void AddManipulators()
@@ -218,8 +219,6 @@ namespace BehaviourAPI.Editor
         {
             if (utilityHandler == null) return;
 
-            var utilityBarContainer = new VisualElement();
-            extensionContainer.Add(utilityBarContainer);
             var utilityBar = new ProgressBar()
             {
                 title = " ",
@@ -228,25 +227,39 @@ namespace BehaviourAPI.Editor
             };
 
             utilityHandler.OnValueChanged += (value) => utilityBar.value = value;
-
-            utilityBarContainer.Add(utilityBar);
+            extensionContainer.Add(utilityBar);
         }
 
         private void DisplayStatusHandler(IStatusHandler statusHandler, VisualElement border)
         {
             if (statusHandler == null) return;
 
-            statusHandler.OnValueChanged += (status) =>
+            statusHandler.OnValueChanged += (status) => SetColor(border, status);
+            SetColor(border, statusHandler.Status);
+        }
+
+        private void DisplayActionAsignable(IActionAsignable actionAsignable, VisualElement extensionContainer)
+        {
+            if (actionAsignable == null) return;
+            var timeTag = new Label()
             {
-                switch (status)
-                {
-                    case Status.Running: border.style.backgroundColor = new StyleColor(Color.yellow); break;
-                    case Status.Failure: border.style.backgroundColor = new StyleColor(Color.red); break;
-                    case Status.Sucess: border.style.backgroundColor = new StyleColor(Color.green); break;
-                    default: border.style.backgroundColor = new StyleColor(new Color(0.5f, 0.5f, 0.5f, 0.5f)); break;
-                }
+                text = $"{actionAsignable.Action.ExecutionTime.ToString("0.00")}s"
             };
-            border.style.backgroundColor = new StyleColor(new Color(.5f, .5f, .5f, .2f));
+            timeTag.style.alignSelf = new StyleEnum<Align>(Align.Center);
+
+            actionAsignable.Action.ExecutionTimeChanged += (time) => timeTag.text = $"{time.ToString("0.00")}s";
+            extensionContainer.Add(timeTag);
+        }
+
+        private void SetColor(VisualElement element, Status status)
+        {
+            switch (status)
+            {
+                case Status.Running: element.style.backgroundColor = new StyleColor(Color.yellow); break;
+                case Status.Failure: element.style.backgroundColor = new StyleColor(Color.red); break;
+                case Status.Sucess: element.style.backgroundColor = new StyleColor(Color.green); break;
+                default: element.style.backgroundColor = new StyleColor(new Color(0.5f, 0.5f, 0.5f, 0.5f)); break;
+            }
         }
     }
 }

@@ -34,6 +34,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
             Status = m_rootNode.Status;
             if (Status != Status.Running)
             {
+                Reset();
                 Start();
             }
         }

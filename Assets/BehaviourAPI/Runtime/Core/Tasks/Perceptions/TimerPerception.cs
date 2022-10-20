@@ -7,18 +7,21 @@ namespace BehaviourAPI.Runtime.Core
     public class TimerPerception : Perception
     {
         public float DelayTime { get; set; }
+
+        float m_time;
         public override void Start()
         {
-            ExecutionTime = 0f;
+            m_time = 0f;
         }
         public override bool Check()
         {
-            return DelayTime > ExecutionTime;
+            m_time += Time.deltaTime;
+            return DelayTime > m_time;
         }
 
         public override void Reset()
         {
-            ExecutionTime = 0f;
+            m_time = 0f;
         }
     }
 }

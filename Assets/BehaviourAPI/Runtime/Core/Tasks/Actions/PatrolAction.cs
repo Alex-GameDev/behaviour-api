@@ -20,6 +20,7 @@ namespace BehaviourAPI.Runtime.Core
 
         public override void Update()
         {
+            base.Update();
             if (positions.Count == 0) return;
 
             if (Vector3.Distance(ExecutionContext.Transform.position, positions[currentTargetPosId]) < distanceThreshold)

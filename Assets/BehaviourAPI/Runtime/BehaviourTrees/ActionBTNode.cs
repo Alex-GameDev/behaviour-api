@@ -19,7 +19,14 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
 
         public override void Initialize(Context context)
         {
+            base.Initialize(context);
             Action?.Initialize(context);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            Action.Reset();
         }
 
         public override void Start()
