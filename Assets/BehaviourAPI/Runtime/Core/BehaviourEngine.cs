@@ -54,8 +54,9 @@ namespace BehaviourAPI.Runtime.Core
         public Action<Node, Node> StartNodeChanged;
         public Action<Node, Node> CurrentNodeChanged;
 
-        [SerializeField] Node m_currentNode;
-        Node m_startNode;
+        Node m_currentNode;
+        [SerializeField] bool executeOnLoop = true;
+        [SerializeField] protected Node m_startNode;
 
         #region Create and remove elements
         /// <summary>
@@ -162,9 +163,12 @@ namespace BehaviourAPI.Runtime.Core
             Nodes.ForEach((node) => node.Initialize(context));
         }
 
-        public virtual void SetCurrentNode(Node node)
+        /// <summary>
+        /// Reset all nodes
+        /// </summary>
+        public virtual void Reset()
         {
-            CurrentNode = node;
+            Nodes.ForEach((node) => node.Reset());
         }
 
         /// <summary>
@@ -178,6 +182,8 @@ namespace BehaviourAPI.Runtime.Core
         /// <returns></returns>
 
         public abstract void Update();
+
+
 
         #endregion
     }

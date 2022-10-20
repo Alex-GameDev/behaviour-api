@@ -14,7 +14,7 @@ namespace BehaviourAPI.Runtime.Core
     public class BehaviourRunner : MonoBehaviour
     {
         public BehaviourEngine RootGraph;
-        private void Awake()
+        private void OnEnable()
         {
             RootGraph.Initialize(new Context(this));
         }
@@ -27,6 +27,12 @@ namespace BehaviourAPI.Runtime.Core
         private void Update()
         {
             RootGraph.Update();
+        }
+
+        private void OnDisable()
+        {
+            Debug.Log("Reseting");
+            RootGraph.Reset();
         }
     }
 }

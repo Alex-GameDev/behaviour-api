@@ -160,6 +160,11 @@ namespace BehaviourAPI.Runtime.Core
 
         }
 
+        public virtual void Reset()
+        {
+
+        }
+
         /// <summary>
         /// Convert this node to the start node of the graph.
         /// </summary>

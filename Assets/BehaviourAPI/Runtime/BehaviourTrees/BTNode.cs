@@ -4,6 +4,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
 {
     using System;
     using Core;
+    using UnityEngine;
 
     /// <summary>
     /// The base node in the <see cref="BehaviourTree"/>.
@@ -14,17 +15,41 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
 
         public override Type ChildType => typeof(BTNode);
 
-        public Status Status { get; protected set; }
+        public Status Status
+        {
+            get => m_status;
+            protected set
+            {
+                if (m_status != value)
+                {
+                    //Debug.Log($"Set status from {m_status} to {value}");
+                    m_status = value;
+                    OnValueChanged?.Invoke(m_status);
+                }
+            }
+        }
         public Action<Status> OnValueChanged { get; set; }
 
-        BTNode parentNode; //TODO: Set parent node in OnConnection
+        BTNode m_parentNode;
+        Status m_status;
 
-        public BTNode()
+        public BTNode() { }
+
+        public override void Initialize(Context context)
         {
-
+            base.Initialize(context);
+            Status = Status.None;
         }
 
-        public abstract void Start();
+        public override void Reset()
+        {
+            Status = Status.None;
+        }
+
+        public virtual void Start()
+        {
+            Status = Status.Running;
+        }
 
         public void Update()
         {

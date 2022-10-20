@@ -9,8 +9,8 @@ namespace BehaviourAPI.Runtime.Core
     {
         public Status ExecutionStatus { get; private set; }
 
+        public override void Start() => ExecutionStatus = Status.Running;
         public abstract void Update();
-
         public void Success() => ExecutionStatus = Status.Sucess;
         public void Failure() => ExecutionStatus = Status.Failure;
         public override void Reset() => ExecutionStatus = Status.None;

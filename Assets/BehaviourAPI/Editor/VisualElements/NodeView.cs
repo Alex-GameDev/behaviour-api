@@ -180,11 +180,10 @@ namespace BehaviourAPI.Editor
             titleInputField.value = node.NodeName;
             titleInputField.RegisterCallback<ChangeEvent<string>>((evt) => node.NodeName = titleInputField.value);
             var extensionContainer = this.Q(name: "extension");
-            DisplayUtilityHandler(node as IUtilityHandler, extensionContainer);
             var border = this.Q(name: "node-border");
+            DisplayUtilityHandler(node as IUtilityHandler, extensionContainer);
             DisplayStatusHandler(node as IStatusHandler, border);
         }
-
 
         private void AddManipulators()
         {
@@ -248,11 +247,6 @@ namespace BehaviourAPI.Editor
                 }
             };
             border.style.backgroundColor = new StyleColor(new Color(.5f, .5f, .5f, .2f));
-        }
-
-        private Color GetColorStatus(Status status)
-        {
-            return Color.red;
         }
     }
 }

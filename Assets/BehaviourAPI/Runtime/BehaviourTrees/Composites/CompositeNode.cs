@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BehaviourAPI.Runtime.Core;
+using UnityEngine;
 
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
@@ -14,8 +15,16 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         int m_currentChildIndex;
         bool m_newChildSelected;
 
+        public override void Initialize(Context context)
+        {
+            base.Initialize(context);
+            m_childNodes = new List<BTNode>();
+            OutputConnections.ForEach(conn => m_childNodes.Add(conn.TargetNode as BTNode));
+        }
+
         public override void Start()
         {
+            base.Start();
             InitializeList();
             m_currentChildNode.Start();
         }
@@ -29,12 +38,13 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
             }
             var status = m_currentChildNode.Status;
             m_currentChildNode.Update();
-            return GetModifiedChildStatus(status);
+            Status = GetModifiedChildStatus(status);
+            return Status;
         }
 
         protected bool TryGoToNextChild()
         {
-            m_currentChildIndex += 1;
+            m_currentChildIndex++;
             m_newChildSelected = true;
             return m_currentChildIndex < m_childNodes.Count;
         }

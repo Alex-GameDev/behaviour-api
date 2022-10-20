@@ -8,12 +8,14 @@ namespace BehaviourAPI.Runtime.Core
         public float DelayTime;
         public override void Start()
         {
+            base.Start();
             ExecutionTime = 0f;
         }
 
         public override void Update()
         {
-            if (DelayTime > ExecutionTime)
+            ExecutionTime += Time.deltaTime;
+            if (ExecutionTime > DelayTime)
             {
                 Success();
             }

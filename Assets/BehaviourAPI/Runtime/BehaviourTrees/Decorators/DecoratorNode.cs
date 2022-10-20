@@ -1,6 +1,8 @@
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
     using Core;
+    using UnityEngine;
+
     /// <summary>
     /// BTNode that alters the result returned by its child node or its execution.
     /// </summary>
@@ -10,7 +12,24 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         BTNode m_childNode;
         bool m_resetChildFlag;
 
-        public override void Start() => m_childNode.Start();
+        public override void Initialize(Context context)
+        {
+            base.Initialize(context);
+            if (OutputConnections.Count == 1)
+            {
+                m_childNode = OutputConnections[0].TargetNode as BTNode;
+            }
+            else
+            {
+                Debug.Log("ERROR: incorrect connection number");
+            }
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            m_childNode.Start();
+        }
 
         public override Status UpdateStatus()
         {

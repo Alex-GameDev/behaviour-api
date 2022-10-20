@@ -17,6 +17,12 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         BTNode m_rootNode;
         public BehaviourTree() { }
 
+        public override void Initialize(Context context)
+        {
+            m_rootNode = StartNode as BTNode;
+            base.Initialize(context);
+        }
+
         public override void Start()
         {
             m_rootNode.Start();
@@ -26,6 +32,10 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         {
             m_rootNode.Update();
             Status = m_rootNode.Status;
+            if (Status != Status.Running)
+            {
+                Start();
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
 
         public override void Start()
         {
+            base.Start();
             Action.Start();
         }
 
