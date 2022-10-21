@@ -1,7 +1,9 @@
+using UnityEngine;
+using System.Linq;
+
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
     using Core;
-    using UnityEngine;
 
     /// <summary>
     /// BTNode that alters the result returned by its child node or its execution.
@@ -17,12 +19,10 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
             base.Initialize(context);
             if (OutputConnections.Count == 1)
             {
-                m_childNode = OutputConnections[0].TargetNode as BTNode;
+                m_childNode = GetChildNodes().First() as BTNode;
             }
             else
-            {
                 Debug.Log("ERROR: incorrect connection number");
-            }
         }
 
         public override void Start()

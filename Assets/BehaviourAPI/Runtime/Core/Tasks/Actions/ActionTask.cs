@@ -3,11 +3,20 @@ using UnityEngine;
 
 namespace BehaviourAPI.Runtime.Core
 {
-    [System.Serializable]
+
+    /// <summary>
+    /// Task that executes along time and return a Status value.
+    /// </summary>
     public abstract class ActionTask : Task
     {
+        /// <summary>
+        /// The current status of the execution
+        /// </summary>
         public Status ExecutionStatus { get; private set; }
 
+        /// <summary>
+        /// The elapsed time of the execution
+        /// </summary>
         public float ExecutionTime
         {
             get => m_executionTime;
@@ -18,6 +27,9 @@ namespace BehaviourAPI.Runtime.Core
             }
         }
 
+        /// <summary>
+        /// Event triggered every execution frame
+        /// </summary>
         public Action<float> ExecutionTimeChanged { get; set; }
 
         float m_executionTime;
@@ -35,7 +47,6 @@ namespace BehaviourAPI.Runtime.Core
 
         public override void Reset()
         {
-            Debug.Log("Action reset");
             ExecutionTime = 0f;
             ExecutionStatus = Status.None;
         }

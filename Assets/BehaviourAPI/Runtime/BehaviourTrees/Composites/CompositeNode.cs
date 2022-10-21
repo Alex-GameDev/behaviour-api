@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using BehaviourAPI.Runtime.Core;
-using UnityEngine;
+using System.Linq;
 
 namespace BehaviourAPI.Runtime.BehaviourTrees
 {
@@ -20,6 +20,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
             base.Initialize(context);
             m_childNodes = new List<BTNode>();
             OutputConnections.ForEach(conn => m_childNodes.Add(conn.TargetNode as BTNode));
+            GetChildNodes().ToList().ForEach(node => m_childNodes.Add(node as BTNode));
         }
 
         public override void Start()

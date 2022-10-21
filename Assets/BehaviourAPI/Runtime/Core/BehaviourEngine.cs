@@ -6,6 +6,7 @@ namespace BehaviourAPI.Runtime.Core
 {
     public abstract class BehaviourEngine : ScriptableObject, IStatusHandler
     {
+        #region ------------------------------------------- Properties -------------------------------------------
 
         /// <summary>
         /// The base type of the <see cref="Node"/> elements that this <see cref="BehaviourEngine"/> can contain.
@@ -16,16 +17,6 @@ namespace BehaviourAPI.Runtime.Core
         /// The base type of the <see cref="Connection"/> elements that this <see cref="BehaviourEngine"/> can contain.
         /// </summary>
         public abstract System.Type ConnectionType { get; }
-
-        /// <summary>
-        /// The list of all <see cref="Node"/> elements in this <see cref="BehaviourEngine"/>.
-        /// </summary>
-        public List<Node> Nodes = new List<Node>();
-
-        /// <summary>
-        /// The list of all <see cref="Connection"/> elements in ths <see cref="BehaviourEngine"/>
-        /// </summary>
-        public List<Connection> Connections = new List<Connection>();
 
         /// <summary>
         /// The default entry point of the graph
@@ -49,16 +40,28 @@ namespace BehaviourAPI.Runtime.Core
         /// The current execution status of the graph.
         /// </summary>
         public Status Status { get; protected set; }
-        public Action<Status> OnValueChanged { get; set; }
 
+        #endregion
+
+        #region -------------------------------------------- Events --------------------------------------------
+
+        public Action<Status> OnValueChanged { get; set; }
         public Action<Node, Node> StartNodeChanged;
         public Action<Node, Node> CurrentNodeChanged;
 
-        Node m_currentNode;
+        #endregion
+
+        #region -------------------------------------------- Fields --------------------------------------------
+
+        public List<Node> Nodes = new List<Node>();
+        public List<Connection> Connections = new List<Connection>();
         [SerializeField] bool executeOnLoop = true;
         [SerializeField] protected Node m_startNode;
+        Node m_currentNode;
 
-        #region Create and remove elements
+        #endregion
+
+        #region ---------------------------------------- Editor methods ---------------------------------------
         /// <summary>
         /// Create a new node in the graph. Nodes should only be created with this method.
         /// </summary>
@@ -133,6 +136,9 @@ namespace BehaviourAPI.Runtime.Core
             if (StartNode == node) StartNode = null;
         }
 
+        /// <summary>
+        /// Recalculate start node
+        /// </summary>
         public virtual void RecalculateStartNode()
         {
             if (StartNode != null) return;
@@ -148,12 +154,11 @@ namespace BehaviourAPI.Runtime.Core
             connection.SourceNode.OnChildNodeDisconnected(connection);
             connection.TargetNode.OnParentNodeDisconnected(connection);
             Connections.Remove(connection);
-
         }
 
         #endregion
 
-        #region Execution Methods
+        #region --------------------------------------- Runtime Methods ----------------------------------------
 
         /// <summary>
         /// Initialize all nodes.
@@ -182,8 +187,6 @@ namespace BehaviourAPI.Runtime.Core
         /// <returns></returns>
 
         public abstract void Update();
-
-
 
         #endregion
     }

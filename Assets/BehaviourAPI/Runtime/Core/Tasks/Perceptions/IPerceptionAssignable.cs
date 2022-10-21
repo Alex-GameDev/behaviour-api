@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BehaviourAPI.Runtime.Core
 {
-    public abstract class Perception : Task
+    public interface IPerceptionAssignable
     {
-        public abstract bool Check();
+        public Perception Perception { get; set; }
     }
 }

@@ -7,7 +7,6 @@ namespace BehaviourAPI.Runtime.Core
     public class TimerPerception : Perception
     {
         public float DelayTime { get; set; }
-
         float m_time;
         public override void Start()
         {

@@ -10,7 +10,6 @@ namespace BehaviourAPI.Editor
 {
     using Runtime.Core;
     using Runtime.UtilitySystems;
-    using UnityEditor.UIElements;
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node
     {
@@ -70,37 +69,29 @@ namespace BehaviourAPI.Editor
             node.Position = newPosition;
         }
 
-        public void OnOutputConnectionCreated(int idx)
+        /// <summary>
+        /// Called when a connection is created or removed.
+        /// </summary>
+        /// <param name="args">The event args</param>
+        private void OnConnectionChanged(ConnectionChangedEventArgs args)
         {
-            if (node.MaxOutputConnections != -1) return;
-            idx = idx * 2;
-            InsertPort(Direction.Output, idx);
-            InsertPort(Direction.Output, idx + 2);
+            var dir = args.Direction == ConnectionDirection.INPUT ? Direction.Input : Direction.Output;
+            var maxConnection = dir == Direction.Input ? node.MaxInputConnections : node.MaxOutputConnections;
+            if (maxConnection != -1) return;
+
+            var idx = args.Index * 2;
+            if (args.EventType == ConnectionEventType.ADD)
+            {
+                InsertPort(dir, idx);
+                InsertPort(dir, idx + 2);
+            }
+            else
+            {
+                DeletePort(dir, idx);
+                DeletePort(dir, idx + 1);
+            }
         }
 
-        public void OnInputConnectionCreated(int idx)
-        {
-            if (node.MaxInputConnections != -1) return;
-            idx = idx * 2;
-            InsertPort(Direction.Input, idx);
-            InsertPort(Direction.Input, idx + 2);
-        }
-
-        public void OnOutputConnectionRemoved(int idx)
-        {
-            if (node.MaxOutputConnections != -1) return;
-            idx = idx * 2 + 1;
-            DeletePort(Direction.Output, idx - 1);
-            DeletePort(Direction.Output, idx);
-        }
-
-        public void OnInputConnectionRemoved(int idx)
-        {
-            if (node.MaxInputConnections != -1) return;
-            idx = idx * 2 + 1;
-            DeletePort(Direction.Input, idx - 1);
-            DeletePort(Direction.Input, idx);
-        }
 
         public void OnConvertStartNode(bool isStart)
         {
@@ -109,6 +100,16 @@ namespace BehaviourAPI.Editor
             borderContainer.style.display = isStart ? DisplayStyle.Flex : DisplayStyle.None;
             inputPortContainer.style.display = isStart ? DisplayStyle.None : DisplayStyle.Flex;
         }
+
+        public Port GetPort(Direction dir, int connectionIndex, bool includeEmpty = false)
+        {
+            bool multiplePorts = (dir == Direction.Input && node.MaxInputConnections == -1) || (dir == Direction.Output && node.MaxOutputConnections == -1);
+            if (!includeEmpty && multiplePorts) connectionIndex = connectionIndex * 2 + 1;
+
+            var container = GetPortContainer(dir);
+            return container[connectionIndex] as Port;
+        }
+
         #endregion
 
         private void InitializePorts()
@@ -121,25 +122,13 @@ namespace BehaviourAPI.Editor
 
         private void RegisterCallbacks()
         {
-            node.InputConnectionAdded += OnInputConnectionCreated;
-            node.OutputConnectionAdded += OnOutputConnectionCreated;
-            node.InputConnectionRemoved += OnInputConnectionRemoved;
-            node.OutputConnectionRemoved += OnOutputConnectionRemoved;
+            node.ConnectionChanged += (sender, args) => OnConnectionChanged(args);
         }
 
         private void DeletePort(Direction direction, int idx)
         {
             var container = direction == Direction.Input ? inputContainer : outputContainer;
             container.RemoveAt(idx);
-        }
-
-        public Port GetPort(Direction dir, int connectionIndex, bool includeEmpty = false)
-        {
-            bool multiplePorts = (dir == Direction.Input && node.MaxInputConnections == -1) || (dir == Direction.Output && node.MaxOutputConnections == -1);
-            if (!includeEmpty && multiplePorts) connectionIndex = connectionIndex * 2 + 1;
-
-            var container = GetPortContainer(dir);
-            return container[connectionIndex] as Port;
         }
 
         private VisualElement GetPortContainer(Direction direction)

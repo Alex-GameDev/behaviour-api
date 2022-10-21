@@ -22,7 +22,6 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
             {
                 if (m_status != value)
                 {
-                    //Debug.Log($"Set status from {m_status} to {value}");
                     m_status = value;
                     OnValueChanged?.Invoke(m_status);
                 }
@@ -30,7 +29,6 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         }
         public Action<Status> OnValueChanged { get; set; }
 
-        BTNode m_parentNode;
         Status m_status;
 
         public BTNode() { }

@@ -28,7 +28,7 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// The type of the nodes that this node can handle as a childs.
         /// </summary>
-        public virtual Type ChildType { get; } = typeof(Node);
+        public virtual Type ChildType => typeof(Node);
 
         /// <summary>
         /// Maximum number of <see cref="Connection"/> elements in <see cref="InputConnections"/>.
@@ -45,12 +45,8 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public bool IsStartNode => BehaviourGraph.StartNode == this;
 
-        #region Event
-
-        public Action<int> InputConnectionAdded;
-        public Action<int> OutputConnectionAdded;
-        public Action<int> InputConnectionRemoved;
-        public Action<int> OutputConnectionRemoved;
+        #region Events
+        public event EventHandler<ConnectionChangedEventArgs> ConnectionChanged;
 
         #endregion
 
@@ -68,18 +64,18 @@ namespace BehaviourAPI.Runtime.Core
         /// Get all nodes connected with this as source.
         /// </summary>
         /// <returns>List of parent nodes</returns>
-        public Node[] GetParentNodes()
+        public IEnumerable<Node> GetParentNodes()
         {
-            return InputConnections.Select((x) => x.SourceNode).Distinct().ToArray();
+            return InputConnections.Select((x) => x.SourceNode).Distinct();
         }
 
         /// <summary>
         /// Get all nodes connected with this as target.
         /// </summary>
         /// <returns>List of child nodes</returns>
-        public Node[] GetChildNodes()
+        public IEnumerable<Node> GetChildNodes()
         {
-            return OutputConnections.Select((x) => x.TargetNode).Distinct().ToArray();
+            return OutputConnections.Select((x) => x.TargetNode).Distinct();
         }
 
         /// <summary>
@@ -102,6 +98,11 @@ namespace BehaviourAPI.Runtime.Core
             return OutputConnections.Select((x) => x.TargetNode).Contains(node);
         }
 
+        /// <summary>
+        /// Check if this node is connected with other node
+        /// </summary>
+        /// <param name="node">The other node</param>
+        /// <returns></returns>
         public bool IsConnectedWith(Node node)
         {
             return IsParentOf(node) || IsChildOf(node);
@@ -115,7 +116,9 @@ namespace BehaviourAPI.Runtime.Core
         public virtual void OnChildNodeConnected(Connection connection, int index)
         {
             OutputConnections.Insert(index, connection);
-            OutputConnectionAdded?.Invoke(index);
+            ConnectionChanged?.Invoke(this, new ConnectionChangedEventArgs(
+                ConnectionEventType.ADD, ConnectionDirection.OUTPUT, index));
+
         }
 
         /// <summary>
@@ -126,7 +129,8 @@ namespace BehaviourAPI.Runtime.Core
         public virtual void OnParentNodeConnected(Connection connection, int index)
         {
             InputConnections.Insert(index, connection);
-            InputConnectionAdded?.Invoke(index);
+            ConnectionChanged?.Invoke(this, new ConnectionChangedEventArgs(
+                ConnectionEventType.ADD, ConnectionDirection.INPUT, index));
         }
 
         /// <summary>
@@ -137,7 +141,8 @@ namespace BehaviourAPI.Runtime.Core
         {
             int idx = OutputConnections.IndexOf(connection);
             OutputConnections.Remove(connection);
-            OutputConnectionRemoved?.Invoke(idx);
+            ConnectionChanged?.Invoke(this, new ConnectionChangedEventArgs(
+                ConnectionEventType.REMOVE, ConnectionDirection.OUTPUT, idx));
         }
 
         /// <summary>
@@ -148,8 +153,14 @@ namespace BehaviourAPI.Runtime.Core
         {
             int idx = InputConnections.IndexOf(connection);
             InputConnections.Remove(connection);
-            InputConnectionRemoved?.Invoke(idx);
+            ConnectionChanged?.Invoke(this, new ConnectionChangedEventArgs(
+                ConnectionEventType.REMOVE, ConnectionDirection.INPUT, idx));
         }
+
+        /// <summary>
+        /// Convert this node to the start node of the graph.
+        /// </summary>
+        public void ConvertToStartNode() => BehaviourGraph.StartNode = this;
 
         /// <summary>
         /// Initialize the node with the given context.
@@ -160,14 +171,12 @@ namespace BehaviourAPI.Runtime.Core
 
         }
 
+        /// <summary>
+        /// Reset the node internal values.
+        /// </summary>
         public virtual void Reset()
         {
 
         }
-
-        /// <summary>
-        /// Convert this node to the start node of the graph.
-        /// </summary>
-        public void ConvertToStartNode() => BehaviourGraph.StartNode = this;
     }
 }

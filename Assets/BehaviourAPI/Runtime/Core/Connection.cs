@@ -22,12 +22,5 @@ namespace BehaviourAPI.Runtime.Core
         /// The node where this connection ends
         /// </summary>
         [HideInInspector] public Node TargetNode;
-
-        /// <summary>
-        /// Empty constructor.
-        /// </summary>
-        public Connection()
-        {
-        }
     }
 }
