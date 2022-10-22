@@ -3,11 +3,11 @@
     <ui:VisualElement name="layout" class="layout">
         <ui:VisualElement name="container" class="container">
             <ui:VisualElement name="header" class="header">
-                <ui:Label text="Node (Class)" display-tooltip-when-elided="true" name="name-label" class="element-title" />
+                <ui:Label text="---" display-tooltip-when-elided="true" name="name-label" class="element-title" />
             </ui:VisualElement>
             <ui:VisualElement name="body" class="body">
                 <ui:VisualElement name="description-container" class="description-container">
-                    <ui:Label text="Label" display-tooltip-when-elided="true" name="description-label" class="description-text" />
+                    <ui:Label text="-" display-tooltip-when-elided="true" name="description-label" class="description-text" />
                 </ui:VisualElement>
                 <ui:VisualElement name="divider" class="divider" />
                 <ui:IMGUIContainer name="inspector-container" />

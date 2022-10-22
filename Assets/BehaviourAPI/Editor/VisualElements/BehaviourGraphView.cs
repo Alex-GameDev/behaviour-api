@@ -176,8 +176,21 @@ namespace BehaviourAPI.Editor
 
         private void OnElementRemoved(UnityEditor.Experimental.GraphView.GraphElement elem)
         {
-            if (elem is NodeView nodeView) BehaviourGraph.RemoveNode(nodeView.node);
-            if (elem is ConnectionView connectionView) BehaviourGraph.RemoveConnection(connectionView.connection);
+            if (elem is NodeView nodeView)
+            {
+                if (m_elementInspector.SelectedElement == nodeView.node) m_elementInspector.ClearInspector();
+                BehaviourGraph.RemoveNode(nodeView.node);
+
+            }
+            if (elem is ConnectionView connectionView)
+            {
+                if (m_elementInspector.SelectedElement == connectionView.connection) m_elementInspector.ClearInspector();
+                BehaviourGraph.RemoveConnection(connectionView.connection);
+
+            }
+
+
+
         }
 
         private void OnEdgeCreated(Edge edge)

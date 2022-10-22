@@ -26,7 +26,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         public override void Reset()
         {
             base.Reset();
-            Action.Reset();
+            Action?.Reset();
         }
 
         public override void Start()

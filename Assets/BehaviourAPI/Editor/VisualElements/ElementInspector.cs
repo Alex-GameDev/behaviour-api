@@ -16,7 +16,7 @@ namespace BehaviourAPI.Editor
         Label nameLabel, descLabel;
         Button assignTaskButton;
         ActionSearchWindow m_actionSearchWindow;
-        GraphElement m_selectedElement;
+        public GraphElement SelectedElement { get; private set; }
         public ElementInspector()
         {
             AddLayout();
@@ -26,35 +26,55 @@ namespace BehaviourAPI.Editor
 
         public void UpdateInspector(GraphElement element)
         {
-            m_selectedElement = element;
-            nameLabel.text = element.Name;
-            descLabel.text = element.Description;
-            elementInspectorContent.Clear();
-            UnityEngine.Object.DestroyImmediate(elementEditor);
-            elementEditor = UnityEditor.Editor.CreateEditor(element);
-            IMGUIContainer container = new IMGUIContainer(() =>
-            {
-                if (elementEditor && elementEditor.target)
-                {
-                    elementEditor.OnInspectorGUI();
-                }
-            });
-            elementInspectorContent.Add(container);
+            if (element == SelectedElement) return;
 
-            DisplayActionEditor(element as IActionAsignable);
+            elementInspectorContent.Clear();
+
+            if (element != null)
+            {
+                SelectedElement = element;
+                nameLabel.text = element.Name;
+                descLabel.text = element.Description;
+
+                UnityEngine.Object.DestroyImmediate(elementEditor);
+                elementEditor = UnityEditor.Editor.CreateEditor(element);
+                IMGUIContainer container = new IMGUIContainer(() =>
+                {
+                    if (elementEditor && elementEditor.target)
+                    {
+                        elementEditor.OnInspectorGUI();
+                    }
+                });
+                elementInspectorContent.Add(container);
+
+                DisplayActionEditor(element as IActionAsignable);
+            }
+            else
+            {
+                ClearInspector();
+            }
+        }
+
+        public void ClearInspector()
+        {
+            elementInspectorContent.Clear();
+            nameLabel.text = "---";
+            descLabel.text = "";
+            taskInspectorContent.Clear();
+            taskContainer.style.display = DisplayStyle.None;
         }
 
         public void BindActionToCurrentNode(Type type)
         {
-            if (m_selectedElement is IActionAsignable actionAsignable)
+            if (SelectedElement is IActionAsignable actionAsignable)
             {
                 actionAsignable.Action = ScriptableObject.CreateInstance(type) as ActionTask;
-                UpdateInspector(m_selectedElement);
-                EditorUtility.SetDirty(m_selectedElement);
+                UpdateInspector(SelectedElement);
+                EditorUtility.SetDirty(SelectedElement);
             }
         }
 
-        public bool IsSelectedElementAnActionAssignable() => (m_selectedElement as IActionAsignable) != null;
+        public bool IsSelectedElementAnActionAssignable() => (SelectedElement as IActionAsignable) != null;
         private void AddLayout()
         {
             var visualTree = VisualSettings.GetOrCreateSettings().InspectorLayout;
@@ -74,13 +94,13 @@ namespace BehaviourAPI.Editor
 
         private void OnAssignTaskButtonClicked()
         {
-            if (m_selectedElement is IActionAsignable actionAsignable)
+            if (SelectedElement is IActionAsignable actionAsignable)
             {
                 if (actionAsignable.Action != null)
                 {
                     actionAsignable.Action = null;
-                    EditorUtility.SetDirty(m_selectedElement);
-                    UpdateInspector(m_selectedElement);
+                    EditorUtility.SetDirty(SelectedElement);
+                    UpdateInspector(SelectedElement);
                 }
                 else
                 {
