@@ -10,6 +10,7 @@ namespace BehaviourAPI.Editor
 {
     using Runtime.Core;
     using Runtime.UtilitySystems;
+    using UnityEditor.UIElements;
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node
     {
@@ -28,6 +29,7 @@ namespace BehaviourAPI.Editor
             InitializePorts();
             RegisterCallbacks();
             AddLayout();
+            SetupDataBinding();
             AddManipulators();
             OnConvertStartNode(node.IsStartNode);
         }
@@ -165,9 +167,7 @@ namespace BehaviourAPI.Editor
 
         private void AddLayout()
         {
-            var titleInputField = this.Q<TextField>(name: "title-input-field");
-            titleInputField.value = node.NodeName;
-            titleInputField.RegisterCallback<ChangeEvent<string>>((evt) => node.NodeName = titleInputField.value);
+            //titleInputField.RegisterCallback<ChangeEvent<string>>((evt) => node.NodeName = titleInputField.value);
             var extensionContainer = this.Q(name: "extension");
             var border = this.Q(name: "node-border");
             DisplayUtilityHandler(node as IUtilityHandler, extensionContainer);
@@ -249,6 +249,14 @@ namespace BehaviourAPI.Editor
                 case Status.Sucess: element.style.backgroundColor = new StyleColor(Color.green); break;
                 default: element.style.backgroundColor = new StyleColor(new Color(0.5f, 0.5f, 0.5f, 0.5f)); break;
             }
+        }
+
+        private void SetupDataBinding()
+        {
+            // Bindear nodename
+            var titleInputField = this.Q<TextField>(name: "title-input-field");
+            titleInputField.bindingPath = "NodeName";
+            titleInputField.Bind(new SerializedObject(node));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace BehaviourAPI.Runtime.Core
         /// <summary>
         /// The node unique name.
         /// </summary>
-        [HideInInspector] public string NodeName;
+        public string NodeName;
         /// <summary>
         /// The Node visual position (Editor)
         /// </summary>
