@@ -24,9 +24,9 @@ namespace BehaviourAPI.Editor
             AddBindActionWindow();
         }
 
-        public void UpdateInspector(GraphElement element)
+        public void UpdateInspector(GraphElement element, bool refresh = false)
         {
-            if (element == SelectedElement) return;
+            if (element == SelectedElement && !refresh) return;
 
             elementInspectorContent.Clear();
 
@@ -69,7 +69,7 @@ namespace BehaviourAPI.Editor
             if (SelectedElement is IActionAsignable actionAsignable)
             {
                 actionAsignable.Action = ScriptableObject.CreateInstance(type) as ActionTask;
-                UpdateInspector(SelectedElement);
+                UpdateInspector(SelectedElement, true);
                 EditorUtility.SetDirty(SelectedElement);
             }
         }
@@ -100,7 +100,7 @@ namespace BehaviourAPI.Editor
                 {
                     actionAsignable.Action = null;
                     EditorUtility.SetDirty(SelectedElement);
-                    UpdateInspector(SelectedElement);
+                    UpdateInspector(SelectedElement, true);
                 }
                 else
                 {

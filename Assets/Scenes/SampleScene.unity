@@ -236,37 +236,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &139783762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e7a0abaeaafb4d8b2b3457d7c94e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DelayTime: 10
---- !u!114 &205425631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BehaviourGraph: {fileID: 709174293}
-  NodeName: New Action Node
-  Position: {x: 916, y: 649}
-  InputConnections: []
-  OutputConnections: []
-  m_action: {fileID: 1013809588}
 --- !u!114 &371610486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,39 +251,6 @@ MonoBehaviour:
   BehaviourGraph: {fileID: 0}
   SourceNode: {fileID: 1299689602}
   TargetNode: {fileID: 2022738182}
---- !u!114 &525708035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BehaviourGraph: {fileID: 709174293}
-  NodeName: New Action Node
-  Position: {x: 1121, y: 750}
-  InputConnections: []
-  OutputConnections: []
-  m_action: {fileID: 0}
---- !u!114 &607690904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 568f2500c170def4ba8de9e9f8134504, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BehaviourGraph: {fileID: 0}
-  SourceNode: {fileID: 1299689602}
-  TargetNode: {fileID: 778580271}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,34 +361,13 @@ MonoBehaviour:
   - {fileID: 2022738182}
   - {fileID: 2061994538}
   - {fileID: 1299689602}
-  - {fileID: 778580271}
-  - {fileID: 205425631}
-  - {fileID: 525708035}
+  - {fileID: 1041705944}
   Connections:
   - {fileID: 12963497}
   - {fileID: 371610486}
-  - {fileID: 607690904}
+  - {fileID: 1306168882}
   executeOnLoop: 1
   m_startNode: {fileID: 2061994538}
---- !u!114 &778580271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BehaviourGraph: {fileID: 709174293}
-  NodeName: Action 1
-  Position: {x: 599, y: 655}
-  InputConnections:
-  - {fileID: 607690904}
-  OutputConnections: []
-  m_action: {fileID: 139783762}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,7 +452,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1013809588
+--- !u!114 &1041705944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -546,10 +461,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e7a0abaeaafb4d8b2b3457d7c94e6, type: 3}
+  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DelayTime: 0
+  BehaviourGraph: {fileID: 709174293}
+  NodeName: New Action Node
+  Position: {x: 546, y: 877}
+  InputConnections:
+  - {fileID: 1306168882}
+  OutputConnections: []
+  m_action: {fileID: 0}
 --- !u!114 &1299689602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,12 +485,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: New Sequencer
-  Position: {x: 483, y: 419}
+  Position: {x: 521, y: 475}
   InputConnections:
   - {fileID: 12963497}
   OutputConnections:
   - {fileID: 371610486}
-  - {fileID: 607690904}
+  - {fileID: 1306168882}
+--- !u!114 &1306168882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 568f2500c170def4ba8de9e9f8134504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehaviourGraph: {fileID: 0}
+  SourceNode: {fileID: 1299689602}
+  TargetNode: {fileID: 1041705944}
 --- !u!1 &1474409450
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: New Action Node
-  Position: {x: 355, y: 648}
+  Position: {x: 249, y: 822}
   InputConnections:
   - {fileID: 371610486}
   OutputConnections: []
@@ -670,7 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: A new name
-  Position: {x: 483, y: 270}
+  Position: {x: 521, y: 289}
   InputConnections: []
   OutputConnections:
   - {fileID: 12963497}
