@@ -230,14 +230,14 @@ namespace BehaviourAPI.Editor
         private void DisplayActionAsignable(IActionAsignable actionAsignable, VisualElement extensionContainer)
         {
             if (actionAsignable == null) return;
-            var timeTag = new Label()
-            {
-                text = $"{actionAsignable.Action.ExecutionTime.ToString("0.00")}s"
-            };
-            timeTag.style.alignSelf = new StyleEnum<Align>(Align.Center);
+            // var timeTag = new Label()
+            // {
+            //     text = $"{actionAsignable.Action.ExecutionTime.ToString("0.00")}s"
+            // };
+            // timeTag.style.alignSelf = new StyleEnum<Align>(Align.Center);
 
-            actionAsignable.Action.ExecutionTimeChanged += (time) => timeTag.text = $"{time.ToString("0.00")}s";
-            extensionContainer.Add(timeTag);
+            // actionAsignable.Action.ExecutionTimeChanged += (time) => timeTag.text = $"{time.ToString("0.00")}s";
+            // extensionContainer.Add(timeTag);
         }
 
         private void SetColor(VisualElement element, Status status)

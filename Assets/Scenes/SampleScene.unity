@@ -263,10 +263,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: New Action Node
-  Position: {x: 910, y: 624}
+  Position: {x: 916, y: 649}
   InputConnections: []
   OutputConnections: []
-  m_action: {fileID: 1673235717}
+  m_action: {fileID: 1013809588}
 --- !u!114 &371610486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,6 +282,24 @@ MonoBehaviour:
   BehaviourGraph: {fileID: 0}
   SourceNode: {fileID: 1299689602}
   TargetNode: {fileID: 2022738182}
+--- !u!114 &525708035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehaviourGraph: {fileID: 709174293}
+  NodeName: New Action Node
+  Position: {x: 1121, y: 750}
+  InputConnections: []
+  OutputConnections: []
+  m_action: {fileID: 0}
 --- !u!114 &607690904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,6 +427,7 @@ MonoBehaviour:
   - {fileID: 1299689602}
   - {fileID: 778580271}
   - {fileID: 205425631}
+  - {fileID: 525708035}
   Connections:
   - {fileID: 12963497}
   - {fileID: 371610486}
@@ -428,8 +447,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
-  NodeName: New Action Node
-  Position: {x: 402, y: 633}
+  NodeName: Action 1
+  Position: {x: 599, y: 655}
   InputConnections:
   - {fileID: 607690904}
   OutputConnections: []
@@ -518,6 +537,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1013809588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e7a0abaeaafb4d8b2b3457d7c94e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DelayTime: 0
 --- !u!114 &1299689602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,19 +637,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1673235717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e7a0abaeaafb4d8b2b3457d7c94e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DelayTime: 0
 --- !u!114 &2022738182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,7 +651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: New Action Node
-  Position: {x: 645, y: 649}
+  Position: {x: 355, y: 648}
   InputConnections:
   - {fileID: 371610486}
   OutputConnections: []
@@ -650,7 +669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
-  NodeName: The old name
+  NodeName: A new name
   Position: {x: 483, y: 270}
   InputConnections: []
   OutputConnections:
