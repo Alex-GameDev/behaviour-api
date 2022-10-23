@@ -20,7 +20,7 @@ namespace BehaviourAPI.Runtime.Core
 
         public override void Reset()
         {
-            Childs.ForEach(child => child.Reset());
+            Childs?.ForEach(child => child.Reset());
         }
 
         public override void Start()

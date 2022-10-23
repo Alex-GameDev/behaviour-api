@@ -15,8 +15,9 @@ namespace BehaviourAPI.Editor
         VisualElement elementInspectorContent, taskInspectorContent, taskContainer;
         Label nameLabel, descLabel;
         Button assignTaskButton;
-        ActionSearchWindow m_actionSearchWindow;
+        TaskSearchWindow m_taskSearchWindow;
         public GraphElement SelectedElement { get; private set; }
+
         public ElementInspector()
         {
             AddLayout();
@@ -65,56 +66,49 @@ namespace BehaviourAPI.Editor
             taskContainer.style.display = DisplayStyle.None;
         }
 
+        /// <summary>
+        /// Called
+        /// </summary>
+        /// <param name="type"></param>
         public void BindActionToCurrentNode(Type type)
         {
-            if (SelectedElement is ITaskHandler<ActionTask> actionAsignable)
+            if (SelectedElement is ITaskHandler<ActionTask> actionHandler)
             {
-                actionAsignable.Task = ScriptableObject.CreateInstance(type) as ActionTask;
-                UpdateInspector(SelectedElement, true);
-                EditorUtility.SetDirty(SelectedElement);
+                actionHandler.Task = ScriptableObject.CreateInstance(type) as ActionTask;
             }
-        }
-
-        public bool IsSelectedElementAnActionAssignable() => (SelectedElement as ITaskHandler<ActionTask>) != null;
-        private void AddLayout()
-        {
-            var visualTree = VisualSettings.GetOrCreateSettings().InspectorLayout;
-            var inspectorFromUXML = visualTree.Instantiate();
-            Add(inspectorFromUXML);
-
-            elementInspectorContent = this.Q("inspector-container");
-            nameLabel = this.Q<Label>(name: "name-label");
-            descLabel = this.Q<Label>(name: "description-label");
-
-            taskContainer = this.Q("task-container");
-            taskInspectorContent = this.Q("task-inspector-container");
-            assignTaskButton = this.Q<Button>("assign-task-button");
-            taskContainer.style.display = DisplayStyle.None;
-            assignTaskButton.clicked += OnAssignTaskButtonClicked;
+            else if (SelectedElement is ITaskHandler<Perception> perceptionHandler)
+            {
+                perceptionHandler.Task = ScriptableObject.CreateInstance(type) as Perception;
+            }
+            UpdateInspector(SelectedElement, true);
+            EditorUtility.SetDirty(SelectedElement);
         }
 
         private void OnAssignTaskButtonClicked()
         {
-            if (SelectedElement is ITaskHandler<ActionTask> actionAsignable)
+            if (SelectedElement is ITaskHandler<Perception> perceptionHandler)
             {
-                if (actionAsignable.Task != null)
-                {
-                    actionAsignable.Task = null;
-                    EditorUtility.SetDirty(SelectedElement);
-                    UpdateInspector(SelectedElement, true);
-                }
-                else
-                {
-                    SearchWindow.Open(new SearchWindowContext(), m_actionSearchWindow);
-                }
+                BindOrUnbindTask(perceptionHandler);
             }
-
+            else if (SelectedElement is ITaskHandler<ActionTask> actionHandler)
+            {
+                BindOrUnbindTask(actionHandler);
+            }
         }
 
-        private void AddStyles()
+        private void BindOrUnbindTask<T>(ITaskHandler<T> taskHandler) where T : Task
         {
-            var styleSheet = VisualSettings.GetOrCreateSettings().InspectorStylesheet;
-            styleSheets.Add(styleSheet);
+            if (taskHandler.Task != null)
+            {
+                taskHandler.Task = null;
+                EditorUtility.SetDirty(SelectedElement);
+                UpdateInspector(SelectedElement, true);
+            }
+            else
+            {
+                m_taskSearchWindow.taskType = typeof(T);
+                SearchWindow.Open(new SearchWindowContext(), m_taskSearchWindow);
+            }
         }
 
         private bool DisplayTaskEditor<T>(ITaskHandler<T> actionAsignable) where T : Task
@@ -152,11 +146,34 @@ namespace BehaviourAPI.Editor
 
         private void AddBindActionWindow()
         {
-            if (m_actionSearchWindow == null)
+            if (m_taskSearchWindow == null)
             {
-                m_actionSearchWindow = ScriptableObject.CreateInstance<ActionSearchWindow>();
-                m_actionSearchWindow.Initialize(this);
+                m_taskSearchWindow = ScriptableObject.CreateInstance<TaskSearchWindow>();
+                m_taskSearchWindow.Initialize(this);
             }
+        }
+
+        private void AddStyles()
+        {
+            var styleSheet = VisualSettings.GetOrCreateSettings().InspectorStylesheet;
+            styleSheets.Add(styleSheet);
+        }
+
+        private void AddLayout()
+        {
+            var visualTree = VisualSettings.GetOrCreateSettings().InspectorLayout;
+            var inspectorFromUXML = visualTree.Instantiate();
+            Add(inspectorFromUXML);
+
+            elementInspectorContent = this.Q("inspector-container");
+            nameLabel = this.Q<Label>(name: "name-label");
+            descLabel = this.Q<Label>(name: "description-label");
+
+            taskContainer = this.Q("task-container");
+            taskInspectorContent = this.Q("task-inspector-container");
+            assignTaskButton = this.Q<Button>("assign-task-button");
+            taskContainer.style.display = DisplayStyle.None;
+            assignTaskButton.clicked += OnAssignTaskButtonClicked;
         }
     }
 }

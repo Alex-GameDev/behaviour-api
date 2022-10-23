@@ -6,31 +6,24 @@ using UnityEngine;
 
 namespace BehaviourAPI.Editor
 {
-    using Runtime.Core;
     using Utils;
-    public class ActionSearchWindow : ScriptableObject, ISearchWindowProvider
+    public class TaskSearchWindow : ScriptableObject, ISearchWindowProvider
     {
         ElementInspector m_elementInspector;
+
+        public Type taskType;
 
         public void Initialize(ElementInspector elementInspector) => m_elementInspector = elementInspector;
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
-            TypeNode rootTypeAction = TypeUtilities.GetHierarchyOfType(typeof(ActionTask));
+            TypeNode rootTypeAction = TypeUtilities.GetHierarchyOfType(taskType);
             return CreateSubSearchTree(rootTypeAction, 0);
         }
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
-            if (m_elementInspector.IsSelectedElementAnActionAssignable())
-            {
-                m_elementInspector.BindActionToCurrentNode(SearchTreeEntry.userData as Type);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
+            m_elementInspector.BindActionToCurrentNode(SearchTreeEntry.userData as Type);
+            return true;
         }
 
         private List<SearchTreeEntry> CreateSubSearchTree(TypeNode rootNode, int level)
@@ -51,7 +44,6 @@ namespace BehaviourAPI.Editor
                 {
                     list.AddRange(CreateSubSearchTree(child, level + 1));
                 }
-
             }
             return list;
         }

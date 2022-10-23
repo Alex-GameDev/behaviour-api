@@ -16,7 +16,7 @@ namespace BehaviourAPI.Runtime.BehaviourTrees
         public override int MaxOutputConnections => 0;
         public ActionTask Task { get => m_action; set => m_action = value; }
 
-        [SerializeField] ActionTask m_action;
+        [HideInInspector][SerializeField] ActionTask m_action;
 
         public override void Initialize(Context context)
         {

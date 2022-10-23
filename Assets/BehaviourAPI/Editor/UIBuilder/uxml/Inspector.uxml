@@ -11,9 +11,13 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="divider" class="divider" />
                 <ui:IMGUIContainer name="inspector-container" />
-                <ui:VisualElement name="task-container">
-                    <ui:Button text="Bind new Action" display-tooltip-when-elided="true" name="assign-task-button" style="-unity-font-style: bold;" />
-                    <ui:IMGUIContainer name="task-inspector-container" />
+                <ui:VisualElement name="task-container" style="margin-left: 0; margin-right: 0; margin-top: 5px; margin-bottom: 0;">
+                    <ui:VisualElement name="divider" class="divider" />
+                    <ui:Label text="Task" display-tooltip-when-elided="true" name="task-title" class="element-title element-subtitle" />
+                    <ui:VisualElement name="task" class="task-container">
+                        <ui:IMGUIContainer name="task-inspector-container" />
+                        <ui:Button text="Bind new Action" display-tooltip-when-elided="true" name="assign-task-button" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

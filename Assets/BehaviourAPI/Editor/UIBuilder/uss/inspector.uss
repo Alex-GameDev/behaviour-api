@@ -70,10 +70,10 @@ VisualElement {
 }
 
 .description-container {
-    border-left-color: rgba(106, 106, 106, 255);
-    border-right-color: rgba(106, 106, 106, 255);
-    border-top-color: rgba(106, 106, 106, 255);
-    border-bottom-color: rgba(106, 106, 106, 255);
+    border-left-color: rgb(106, 106, 106);
+    border-right-color: rgb(106, 106, 106);
+    border-top-color: rgb(106, 106, 106);
+    border-bottom-color: rgb(106, 106, 106);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -82,7 +82,7 @@ VisualElement {
     border-bottom-left-radius: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-    background-color: rgba(65, 65, 65, 255);
+    background-color: rgb(65, 65, 65);
     padding-left: 2px;
     padding-right: 2px;
     padding-top: 2px;
@@ -111,4 +111,21 @@ VisualElement {
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.task-container {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: rgb(39, 39, 39);
+    margin-top: 5px;
+}
+
+.element-subtitle {
+    font-size: 12px;
 }
