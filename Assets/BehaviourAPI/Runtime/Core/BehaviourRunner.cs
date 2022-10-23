@@ -34,5 +34,29 @@ namespace BehaviourAPI.Runtime.Core
             Debug.Log("Reseting");
             RootGraph.Reset();
         }
+
+        [TaskMethod]
+        public Status ActionStatus()
+        {
+            return Status.Sucess;
+        }
+
+        [TaskMethod]
+        public float ActionStatus1()
+        {
+            return 2f;
+        }
+
+        [TaskMethod]
+        public void ActionStatus2()
+        {
+            var t = Status.Failure;
+        }
+
+        [TaskMethod]
+        public Status ActionStatus3(float b, float c)
+        {
+            return Status.Failure;
+        }
     }
 }

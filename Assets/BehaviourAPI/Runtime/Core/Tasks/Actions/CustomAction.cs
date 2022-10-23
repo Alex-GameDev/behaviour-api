@@ -1,10 +1,12 @@
 using System;
+using UnityEngine;
 
 namespace BehaviourAPI.Runtime.Core
 {
     [System.Serializable]
     public class CustomAction : ActionTask
     {
+        [SerializeField] ActionFunction _function;
         Func<Status> ExecutionFunction;
         public override void Start()
         {
@@ -14,6 +16,8 @@ namespace BehaviourAPI.Runtime.Core
         public override void Initialize(Context context)
         {
             base.Initialize(context);
+            // TODO: Bind Function
+            ExecutionFunction = _function.Build();
         }
 
         public override void Update()

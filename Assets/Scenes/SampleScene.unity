@@ -236,7 +236,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &371610486
+--- !u!114 &200149928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -245,12 +245,49 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 568f2500c170def4ba8de9e9f8134504, type: 3}
+  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BehaviourGraph: {fileID: 0}
-  SourceNode: {fileID: 1299689602}
-  TargetNode: {fileID: 2022738182}
+  BehaviourGraph: {fileID: 709174293}
+  NodeName: New Action Node
+  Position: {x: 657, y: 888}
+  InputConnections:
+  - {fileID: 1844695476}
+  OutputConnections: []
+  m_action: {fileID: 375646286}
+--- !u!114 &375646286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dba47c09ebb0f2849aa3c762b9a06445, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 20, z: 0}
+  - {x: 0, y: 0, z: 0}
+  speed: 5
+  distanceThreshold: 0.1
+--- !u!114 &525079671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd41a8a940943346af6e44671e85871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _function:
+    component: {fileID: 97621565}
+    methodName: ActionStatus
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,16 +395,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Nodes:
-  - {fileID: 2022738182}
   - {fileID: 2061994538}
   - {fileID: 1299689602}
   - {fileID: 1041705944}
+  - {fileID: 1191408481}
+  - {fileID: 200149928}
   Connections:
   - {fileID: 12963497}
-  - {fileID: 371610486}
-  - {fileID: 1306168882}
+  - {fileID: 2079072511}
+  - {fileID: 1844695476}
+  - {fileID: 772568969}
   executeOnLoop: 1
   m_startNode: {fileID: 2061994538}
+--- !u!114 &772568969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 568f2500c170def4ba8de9e9f8134504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehaviourGraph: {fileID: 0}
+  SourceNode: {fileID: 1299689602}
+  TargetNode: {fileID: 1191408481}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,11 +520,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: New Action Node
-  Position: {x: 546, y: 877}
+  Position: {x: 426, y: 859}
   InputConnections:
-  - {fileID: 1306168882}
+  - {fileID: 2079072511}
   OutputConnections: []
-  m_action: {fileID: 0}
+  m_action: {fileID: 525079671}
+--- !u!114 &1191408481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BehaviourGraph: {fileID: 709174293}
+  NodeName: New Action Node
+  Position: {x: 952, y: 875}
+  InputConnections:
+  - {fileID: 772568969}
+  OutputConnections: []
+  m_action: {fileID: 2086301724}
 --- !u!114 &1299689602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,27 +558,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: New Sequencer
-  Position: {x: 521, y: 475}
+  Position: {x: 613, y: 537}
   InputConnections:
   - {fileID: 12963497}
   OutputConnections:
-  - {fileID: 371610486}
-  - {fileID: 1306168882}
---- !u!114 &1306168882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 568f2500c170def4ba8de9e9f8134504, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BehaviourGraph: {fileID: 0}
-  SourceNode: {fileID: 1299689602}
-  TargetNode: {fileID: 1041705944}
+  - {fileID: 2079072511}
+  - {fileID: 1844695476}
+  - {fileID: 772568969}
 --- !u!1 &1474409450
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,7 +632,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2022738182
+--- !u!114 &1844695476
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -582,16 +641,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1556b780df529e41beb2c830bbf0297, type: 3}
+  m_Script: {fileID: 11500000, guid: 568f2500c170def4ba8de9e9f8134504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BehaviourGraph: {fileID: 709174293}
-  NodeName: New Action Node
-  Position: {x: 249, y: 822}
-  InputConnections:
-  - {fileID: 371610486}
-  OutputConnections: []
-  m_action: {fileID: 2071359373}
+  BehaviourGraph: {fileID: 0}
+  SourceNode: {fileID: 1299689602}
+  TargetNode: {fileID: 200149928}
 --- !u!114 &2061994538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,12 +661,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BehaviourGraph: {fileID: 709174293}
   NodeName: A new name
-  Position: {x: 521, y: 289}
+  Position: {x: 651, y: 333}
   InputConnections: []
   OutputConnections:
   - {fileID: 12963497}
   TargetStatus: 2
---- !u!114 &2071359373
+--- !u!114 &2079072511
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -620,11 +675,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dba47c09ebb0f2849aa3c762b9a06445, type: 3}
+  m_Script: {fileID: 11500000, guid: 568f2500c170def4ba8de9e9f8134504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positions:
-  - {x: 10, y: 0, z: 0}
-  - {x: 0, y: 10, z: 0}
-  speed: 5
-  distanceThreshold: 0.1
+  BehaviourGraph: {fileID: 0}
+  SourceNode: {fileID: 1299689602}
+  TargetNode: {fileID: 1041705944}
+--- !u!114 &2086301724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e7a0abaeaafb4d8b2b3457d7c94e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DelayTime: 5
