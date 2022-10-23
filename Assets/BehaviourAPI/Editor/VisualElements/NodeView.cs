@@ -172,7 +172,7 @@ namespace BehaviourAPI.Editor
             var border = this.Q(name: "node-border");
             DisplayUtilityHandler(node as IUtilityHandler, extensionContainer);
             DisplayStatusHandler(node as IStatusHandler, border);
-            DisplayActionAsignable(node as IActionAsignable, extensionContainer);
+            DisplayActionAsignable(node as ITaskHandler<ActionTask>, extensionContainer);
         }
 
         private void AddManipulators()
@@ -227,7 +227,7 @@ namespace BehaviourAPI.Editor
             SetColor(border, statusHandler.Status);
         }
 
-        private void DisplayActionAsignable(IActionAsignable actionAsignable, VisualElement extensionContainer)
+        private void DisplayActionAsignable(ITaskHandler<ActionTask> actionAsignable, VisualElement extensionContainer)
         {
             if (actionAsignable == null) return;
             // var timeTag = new Label()

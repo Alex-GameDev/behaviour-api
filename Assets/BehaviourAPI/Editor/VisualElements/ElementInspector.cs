@@ -47,7 +47,8 @@ namespace BehaviourAPI.Editor
                 });
                 elementInspectorContent.Add(container);
 
-                DisplayActionEditor(element as IActionAsignable);
+                if (DisplayTaskEditor(element as ITaskHandler<ActionTask>)) return;
+                if (DisplayTaskEditor(element as ITaskHandler<Perception>)) return;
             }
             else
             {
@@ -66,15 +67,15 @@ namespace BehaviourAPI.Editor
 
         public void BindActionToCurrentNode(Type type)
         {
-            if (SelectedElement is IActionAsignable actionAsignable)
+            if (SelectedElement is ITaskHandler<ActionTask> actionAsignable)
             {
-                actionAsignable.Action = ScriptableObject.CreateInstance(type) as ActionTask;
+                actionAsignable.Task = ScriptableObject.CreateInstance(type) as ActionTask;
                 UpdateInspector(SelectedElement, true);
                 EditorUtility.SetDirty(SelectedElement);
             }
         }
 
-        public bool IsSelectedElementAnActionAssignable() => (SelectedElement as IActionAsignable) != null;
+        public bool IsSelectedElementAnActionAssignable() => (SelectedElement as ITaskHandler<ActionTask>) != null;
         private void AddLayout()
         {
             var visualTree = VisualSettings.GetOrCreateSettings().InspectorLayout;
@@ -94,11 +95,11 @@ namespace BehaviourAPI.Editor
 
         private void OnAssignTaskButtonClicked()
         {
-            if (SelectedElement is IActionAsignable actionAsignable)
+            if (SelectedElement is ITaskHandler<ActionTask> actionAsignable)
             {
-                if (actionAsignable.Action != null)
+                if (actionAsignable.Task != null)
                 {
-                    actionAsignable.Action = null;
+                    actionAsignable.Task = null;
                     EditorUtility.SetDirty(SelectedElement);
                     UpdateInspector(SelectedElement, true);
                 }
@@ -116,17 +117,17 @@ namespace BehaviourAPI.Editor
             styleSheets.Add(styleSheet);
         }
 
-        private void DisplayActionEditor(IActionAsignable actionAsignable)
+        private bool DisplayTaskEditor<T>(ITaskHandler<T> actionAsignable) where T : Task
         {
             if (actionAsignable != null)
             {
                 taskInspectorContent.Clear();
                 taskContainer.style.display = DisplayStyle.Flex;
                 UnityEngine.Object.DestroyImmediate(taskEditor);
-                if (actionAsignable.Action != null)
+                if (actionAsignable.Task != null)
                 {
-                    assignTaskButton.text = "Remove current action";
-                    taskEditor = UnityEditor.Editor.CreateEditor(actionAsignable.Action);
+                    assignTaskButton.text = $"Remove current {typeof(T).Name}";
+                    taskEditor = UnityEditor.Editor.CreateEditor(actionAsignable.Task);
                     IMGUIContainer container = new IMGUIContainer(() =>
                     {
                         if (taskEditor && taskEditor.target)
@@ -138,12 +139,14 @@ namespace BehaviourAPI.Editor
                 }
                 else
                 {
-                    assignTaskButton.text = "Bind new action";
+                    assignTaskButton.text = $"Bind new {typeof(T).Name}";
                 }
+                return true;
             }
             else
             {
                 taskContainer.style.display = DisplayStyle.None;
+                return false;
             }
         }
 
