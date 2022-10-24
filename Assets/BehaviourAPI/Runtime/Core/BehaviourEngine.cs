@@ -24,7 +24,19 @@ namespace BehaviourAPI.Runtime.Core
         public Node StartNode
         {
             get => m_startNode;
-            set { if (m_startNode != value) { StartNodeChanged?.Invoke(m_startNode, value); m_startNode = value; } }
+            set
+            {
+                if (m_startNode != value)
+                {
+                    if (value != null)
+                    {
+                        Nodes.Remove(value);
+                        Nodes.Insert(0, value);
+                    }
+                    StartNodeChanged?.Invoke(m_startNode, value);
+                    m_startNode = value;
+                }
+            }
         }
 
         /// <summary>
@@ -33,7 +45,13 @@ namespace BehaviourAPI.Runtime.Core
         public Node CurrentNode
         {
             get => m_currentNode;
-            set { if (m_currentNode != value) { CurrentNodeChanged?.Invoke(m_currentNode, value); m_currentNode = value; } }
+            set
+            {
+                if (m_currentNode != value)
+                {
+                    CurrentNodeChanged?.Invoke(m_currentNode, value); m_currentNode = value;
+                }
+            }
         }
 
         /// <summary>
