@@ -162,7 +162,9 @@ namespace BehaviourAPI.Editor
             if (changes.movedElements != null)
                 changes.movedElements.ForEach(elem => OnElementMoved(elem));
 
-            BehaviourGraph.RecalculateStartNode();
+            if (changes.elementsToRemove != null && changes.elementsToRemove.Count > 0)
+                BehaviourGraph.RecalculateStartNode();
+
             return changes;
         }
 

@@ -23,19 +23,18 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public Node StartNode
         {
-            get => m_startNode;
+            get => Nodes.Count > 0 ? Nodes[0] : null;
             set
             {
-                if (m_startNode != value)
+                if (Nodes.Count == 0) return;
+                var oldStartNode = Nodes[0];
+                if (value != null)
                 {
-                    if (value != null)
-                    {
-                        Nodes.Remove(value);
-                        Nodes.Insert(0, value);
-                    }
-                    StartNodeChanged?.Invoke(m_startNode, value);
-                    m_startNode = value;
+                    Nodes.Remove(value);
+                    Nodes.Insert(0, value);
                 }
+                StartNodeChanged?.Invoke(oldStartNode, value);
+
             }
         }
 
@@ -74,7 +73,6 @@ namespace BehaviourAPI.Runtime.Core
         public List<Node> Nodes = new List<Node>();
         public List<Connection> Connections = new List<Connection>();
         [SerializeField] bool executeOnLoop = true;
-        [SerializeField] protected Node m_startNode;
         Node m_currentNode;
 
         #endregion
@@ -150,7 +148,6 @@ namespace BehaviourAPI.Runtime.Core
         public virtual void RemoveNode(Node node)
         {
             Nodes.Remove(node);
-            if (StartNode == node) StartNode = null;
         }
 
         /// <summary>
@@ -158,7 +155,7 @@ namespace BehaviourAPI.Runtime.Core
         /// </summary>
         public virtual void RecalculateStartNode()
         {
-            if (StartNode != null) return;
+            if (Nodes.Count == 0) return;
             StartNode = Nodes.Find(node => node.InputConnections.Count == 0);
         }
 
