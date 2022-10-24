@@ -127,10 +127,9 @@ namespace BehaviourAPI.Runtime.Core
         /// <param name="node"></param>
         protected virtual void AddNode(Node node)
         {
+            Nodes.Add(node);
             if (StartNode == null)
                 StartNode = node;
-
-            Nodes.Add(node);
         }
 
         /// <summary>
