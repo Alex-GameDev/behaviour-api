@@ -11,9 +11,11 @@
 
         #endregion
 
-        #region ------------------------------------------ Properties ----------------------------------------
+        #region -------------------------------------------- Fields ------------------------------------------
 
         List<Transition?> _transitions;
+
+        private FSM? _fSM;
 
         #endregion
 
@@ -25,6 +27,8 @@
         }
 
         public void AddTransition(Transition transition) => _transitions.Add(transition);
+
+        public void SetFSM(FSM fsm) => _fSM = fsm;
         
         public override void Initialize()
         {
@@ -61,7 +65,7 @@
                 bool check = _transitions[i]?.Check() ?? false;
                 if(check)
                 {
-                    BehaviourGraph?.SetCurrentNode(_transitions[i]?.TargetNode);
+                    _fSM?.SetCurrentState(_transitions[i]?.GetTargetState());
                     return true;
                 }
             }

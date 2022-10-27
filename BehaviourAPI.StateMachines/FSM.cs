@@ -23,12 +23,14 @@
         public T CreateState<T>(string name) where T : State
         {
             T state = CreateState<T>(name);
+            state.SetFSM(this);
             return state;
         }
 
         public Transition CreateTransition(State from, State to)
         {
             Transition transition = CreateConnection<Transition>(from, to);
+            transition.SetTargetState(to);
             from.AddTransition(transition);
             return transition;
         }
@@ -60,10 +62,10 @@
             _currentState?.Stop();
         }
 
-        public override void SetCurrentNode(Node? node)
+        public void SetCurrentState(State? state)
         {
             _currentState?.Stop();
-            _currentState = node as State;
+            _currentState = state;
             _currentState?.Start();
         }
 

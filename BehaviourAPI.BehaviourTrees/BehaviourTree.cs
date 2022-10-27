@@ -86,8 +86,6 @@ namespace BehaviourAPI.BehaviourTrees
             m_rootNode?.Stop();
         }
 
-        public override void SetCurrentNode(Node? node) { }
-
         #endregion
     }
 }

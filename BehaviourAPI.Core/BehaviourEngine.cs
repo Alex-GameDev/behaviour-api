@@ -2,7 +2,7 @@ namespace BehaviourAPI.Core
 {
     public abstract class BehaviourEngine : IStatusHandler
     {
-        #region ------------------------------------------- Properties -------------------------------------------
+        #region ----------------------------------------- Properties -------------------------------------------
 
         /// <summary>
         /// The base type of the <see cref="Node"/> elements that this <see cref="BehaviourEngine"/> can contain.
@@ -20,27 +20,21 @@ namespace BehaviourAPI.Core
         public Node? StartNode => Nodes[0];
 
         /// <summary>
-        /// The current executed node.
-        /// </summary>
-        public Node? CurrentNode { get; set; }
-
-        /// <summary>
         /// The current execution status of the graph.
         /// </summary>
         public Status Status { get; protected set; }
 
         #endregion
 
-        #region -------------------------------------------- Fields --------------------------------------------
+        #region ------------------------------------------- Fields ---------------------------------------------
 
         public List<Node> Nodes = new List<Node>();
         public List<Connection> Connections = new List<Connection>();
         public bool ExecuteOnLoop = true;
-        Node? m_currentNode;
 
         #endregion
 
-        #region ---------------------------------------- Build methods ---------------------------------------
+        #region ---------------------------------------- Build methods -----------------------------------------
 
         protected T CreateNode<T>(string name) where T : Node, new()
         {
@@ -80,8 +74,7 @@ namespace BehaviourAPI.Core
         {
             if (!Nodes.Contains(node) || node == StartNode) return false;
 
-            Nodes.Remove(node);
-            Nodes.Insert(0, node);
+            Nodes.MoveAtFirst(node);
             return true;
         }
 
@@ -104,11 +97,6 @@ namespace BehaviourAPI.Core
         /// Executes the last execution frame
         /// </summary>
         public abstract void Stop();
-
-        /// <summary>
-        /// Change the current node
-        /// </summary>
-        public abstract void SetCurrentNode(Node? node);
 
         #endregion
     }

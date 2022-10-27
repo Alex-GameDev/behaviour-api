@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BehaviourAPI.Testing", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BehaviourAPI.StateMachines", "..\BehaviourAPI.StateMachines\BehaviourAPI.StateMachines.csproj", "{3F49DD5E-2DD5-4410-83BA-B7A3EEF4F501}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BehaviourAPI.UtilitySystems", "..\BehaviourAPI.UtilitySystems\BehaviourAPI.UtilitySystems.csproj", "{EEDF5ED3-6159-47EB-A6D2-0FB72FADF8B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3F49DD5E-2DD5-4410-83BA-B7A3EEF4F501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F49DD5E-2DD5-4410-83BA-B7A3EEF4F501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F49DD5E-2DD5-4410-83BA-B7A3EEF4F501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEDF5ED3-6159-47EB-A6D2-0FB72FADF8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEDF5ED3-6159-47EB-A6D2-0FB72FADF8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEDF5ED3-6159-47EB-A6D2-0FB72FADF8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEDF5ED3-6159-47EB-A6D2-0FB72FADF8B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

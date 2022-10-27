@@ -28,6 +28,9 @@ namespace BehaviourAPITesting
 
             Assert.AreEqual(true, action_2.IsChildOf(composite));
             Assert.AreEqual(true, composite.IsParentOf(action_2));
+
+            float f = float.MaxValue * 1.3f;
+            Assert.AreEqual(true, f >  float.MaxValue);
         }
 
         [TestMethod("Decorator node connections")]
