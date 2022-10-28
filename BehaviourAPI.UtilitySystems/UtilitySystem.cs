@@ -52,10 +52,11 @@ namespace BehaviourAPI.UtilitySystems
             return variableFactor;
         }
 
-        public FunctionFactor CreateCurveFactor(string name, UtilityFunction curve)
+        public FunctionFactor CreateCurveFactor(string name, Factor child, UtilityFunction curve)
         {
             FunctionFactor curveFactor = CreateNode<FunctionFactor>(name);
             curveFactor.function = curve;
+            curveFactor.SetChild(child);
             return curveFactor;
         }
 

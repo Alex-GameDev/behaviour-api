@@ -11,5 +11,11 @@ namespace BehaviourAPI.UtilitySystems
             m_childFactors.ForEach(f => f.UpdateUtility());
             return m_childFactors.Zip(Weights, (a, b) => a.Utility * b).Sum();
         }
+
+        public Factor SetWeights(params float[] weights)
+        {
+            Weights = weights;
+            return this;
+        }
     }
 }

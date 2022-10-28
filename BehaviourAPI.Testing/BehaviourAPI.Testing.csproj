@@ -18,6 +18,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BehaviourAPI.BehaviourTrees\BehaviourAPI.BehaviourTrees.csproj" />
     <ProjectReference Include="..\BehaviourAPI.Core\BehaviourAPI.Core.csproj" />
+    <ProjectReference Include="..\BehaviourAPI.StateMachines\BehaviourAPI.StateMachines.csproj" />
+    <ProjectReference Include="..\BehaviourAPI.UtilitySystems\BehaviourAPI.UtilitySystems.csproj" />
   </ItemGroup>
 
 </Project>

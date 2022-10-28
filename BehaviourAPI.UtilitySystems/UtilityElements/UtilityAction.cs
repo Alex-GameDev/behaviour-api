@@ -15,6 +15,12 @@ namespace BehaviourAPI.UtilitySystems
 
         #endregion
 
+
+        public UtilityAction SetAction(Action action)
+        {
+            Action = action;
+            return this;
+        }
         #region --------------------------------------- Runtime methods --------------------------------------
 
         public override void Start()

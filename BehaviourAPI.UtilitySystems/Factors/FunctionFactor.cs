@@ -22,6 +22,16 @@ namespace BehaviourAPI.UtilitySystems
 
         #endregion
 
+        #region ---------------------------------------- Build methods ---------------------------------------
+
+        public FunctionFactor SetChild(Factor factor)
+        {
+            m_childFactor = factor;
+            return this;
+        }          
+
+        #endregion
+
         #region --------------------------------------- Runtime methods --------------------------------------
 
         protected override float ComputeUtility()
