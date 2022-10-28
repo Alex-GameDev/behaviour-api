@@ -1,5 +1,6 @@
 namespace BehaviourAPI.UtilitySystems
 {
+    using BehaviourAPI.Core.Actions;
     using Core;
     /// <summary>
     /// Utility element that handle multiple <see cref="UtilitySelectableNode"/> itself and
@@ -10,7 +11,7 @@ namespace BehaviourAPI.UtilitySystems
         #region ------------------------------------------ Properties ----------------------------------------
 
         public override string Description => "Utility element that executes an action.";
-        public Func<ExecutionPhase, Status>? Action { get; set; }
+        public Action? Action { get; set; }
 
         #endregion
 
@@ -18,18 +19,18 @@ namespace BehaviourAPI.UtilitySystems
 
         public override void Start()
         {
-            Action?.Invoke(ExecutionPhase.START);
+            Action?.Start();
         }
 
         protected override Status UpdateStatus()
         {
-            Status = Action?.Invoke(ExecutionPhase.UPDATE) ?? Status.Error;
+            Status = Action?.Update() ?? Status.Error;
             return Status;
         }
 
         public override void Stop()
         {
-            Action?.Invoke(ExecutionPhase.STOP);
+            Action?.Stop();
         }
         #endregion
     }

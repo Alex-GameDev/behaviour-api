@@ -1,12 +1,13 @@
 ﻿namespace BehaviourAPI.BehaviourTrees
 {
+    using BehaviourAPI.Core.Perceptions;
     using Core;
     public class PerceptionBTNode : LeafNode, IPerceptionHandler
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override string Description => "Behaviour Tree Node that executes a perception";
-        public Func<ExecutionPhase, bool>? Perception { get; set; }
+        public Perception? Perception { get; set; }
 
         #endregion
 
@@ -15,18 +16,18 @@
         public override void Start()
         {
             base.Start();
-            Perception?.Invoke(ExecutionPhase.START);
+            Perception?.Start();
         }
 
         protected override Status UpdateStatus()
         {
-            bool check = Perception?.Invoke(ExecutionPhase.UPDATE) ?? false;
+            bool check = Perception?.Check() ?? false;
             return check.ToStatus();
         }
         public override void Stop()
         {
             base.Stop();
-            Perception?.Invoke(ExecutionPhase.STOP);
+            Perception?.Stop();
         }
 
         #endregion

@@ -1,4 +1,4 @@
-namespace BehaviourAPI.Core
+namespace BehaviourAPI.Core.Actions
 {
     using Core;
     /// <summary>
@@ -6,6 +6,6 @@ namespace BehaviourAPI.Core
     /// </summary>
     public interface IActionHandler
     {
-        public Func<ExecutionPhase, Status>? Action { get; set; }
+        public Action? Action { get; set; }
     }
 }

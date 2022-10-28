@@ -11,7 +11,7 @@ namespace BehaviourAPI.UtilitySystems
 
         public FusionFactor()
         {
-            m_childFactors = new List<Factor?>();
+            m_childFactors = new List<Factor>();
         }
 
         public void AddFactor(Factor factor) => m_childFactors.Add(factor);
@@ -19,13 +19,15 @@ namespace BehaviourAPI.UtilitySystems
         public override void Initialize()
         {
             base.Initialize();
-            GetChildNodes().ToList().ForEach(node => m_childFactors.Add(node as Factor));
+            GetChildNodes().ToList().ForEach(node => {
+                if (node is Factor f) m_childFactors.Add(f); 
+            });
         }
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        protected List<Factor?> m_childFactors;
+        protected List<Factor> m_childFactors;
 
         #endregion
     }

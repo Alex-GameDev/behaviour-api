@@ -1,5 +1,6 @@
 ﻿namespace BehaviourAPI.StateMachines
 {
+    using BehaviourAPI.Core.Actions;
     using Core;
 
     /// <summary>
@@ -10,13 +11,13 @@
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override string Description => "State Node that executes an Action";
-        public Func<ExecutionPhase, Status>? Action { get; set; }
+        public Action? Action { get; set; }
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public State SetAction(Func<ExecutionPhase, Status> action)
+        public State SetAction(Action action)
         {
             Action = action;
             return this;
@@ -29,19 +30,19 @@
         public override void Start()
         {
             base.Start();
-            Action?.Invoke(ExecutionPhase.START);
+            Action?.Start();
         }
 
         protected override Status UpdateStatus()
         {
-            Status = Action?.Invoke(ExecutionPhase.UPDATE) ?? Status.Error;
+            Status = Action?.Update() ?? Status.Error;
             return Status;
         }
 
         public override void Stop()
         {
             base.Stop();
-            Action?.Invoke(ExecutionPhase.STOP);
+            Action?.Stop();
         }
 
         #endregion

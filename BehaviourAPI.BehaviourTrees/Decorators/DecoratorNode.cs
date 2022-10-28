@@ -10,6 +10,7 @@ namespace BehaviourAPI.BehaviourTrees
         #region ------------------------------------------ Properties -----------------------------------------
 
         public sealed override int MaxOutputConnections => 1;
+
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
