@@ -52,7 +52,7 @@ namespace BehaviourAPI.UtilitySystems
             return variableFactor;
         }
 
-        public FunctionFactor CreateCurveFactor(string name, Factor child, UtilityFunction curve)
+        public FunctionFactor CreateFunctionFactor(string name, Factor child, UtilityFunction curve)
         {
             FunctionFactor curveFactor = CreateNode<FunctionFactor>(name);
             curveFactor.function = curve;
@@ -99,9 +99,10 @@ namespace BehaviourAPI.UtilitySystems
             return bucket;
         }
 
-        public UtilityBucket CreateUtilityBucket(string name, params UtilitySelectableNode[] elements)
+        public UtilityBucket CreateUtilityBucket(string name, float utilityThreshold = .3f, 
+            float inertia = 1.3f, float bucketThreshold = 0f, params UtilitySelectableNode[] elements)
         {
-            return CreateUtilityBucket(name, elements.ToList());
+            return CreateUtilityBucket(name, elements.ToList(), utilityThreshold, inertia, bucketThreshold);
         }
 
         public override bool SetStartNode(Node node)
