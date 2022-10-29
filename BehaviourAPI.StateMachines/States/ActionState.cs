@@ -6,7 +6,7 @@
     /// <summary>
     /// A State node that executes an Action.
     /// </summary>
-    public abstract class ActionState : State, IActionHandler
+    public class ActionState : State, IActionHandler
     {
         #region ------------------------------------------ Properties -----------------------------------------
 

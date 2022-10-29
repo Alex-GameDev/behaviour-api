@@ -1,16 +1,16 @@
 namespace BehaviourAPI.Core
 {
-    public abstract class behaviourGraph : IStatusHandler
+    public abstract class BehaviourGraph : IStatusHandler
     {
         #region ----------------------------------------- Properties -------------------------------------------
 
         /// <summary>
-        /// The base type of the <see cref="Node"/> elements that this <see cref="behaviourGraph"/> can contain.
+        /// The base type of the <see cref="Node"/> elements that this <see cref="BehaviourGraph"/> can contain.
         /// </summary>
         public abstract System.Type NodeType { get; }
 
         /// <summary>
-        /// The base type of the <see cref="Connection"/> elements that this <see cref="behaviourGraph"/> can contain.
+        /// The base type of the <see cref="Connection"/> elements that this <see cref="BehaviourGraph"/> can contain.
         /// </summary>
         public abstract System.Type ConnectionType { get; }
 
@@ -85,7 +85,7 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// Enter this behavior graph from a subgraph node or a <see cref="BehaviourRunner"/>
         /// </summary>
-        public abstract void Start();
+        public virtual void Start() => Status = Status.Running;
 
         /// <summary>
         /// Executes every frame
@@ -96,7 +96,13 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// Executes the last execution frame
         /// </summary>
-        public abstract void Stop();
+        public virtual void Stop() => Status = Status.None;
+
+        /// <summary>
+        /// Finish the execution status giving 
+        /// </summary>
+        /// <param name="executionResult"></param>
+        public void Finish(Status executionResult) => Status = executionResult;
 
         #endregion
     }

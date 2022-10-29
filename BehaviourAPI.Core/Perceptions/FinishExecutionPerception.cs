@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviourAPI.Core.Perceptions
+﻿namespace BehaviourAPI.Core.Perceptions
 {
     /// <summary>
     /// Perception used to check the IStatusHandler's finish execution status.

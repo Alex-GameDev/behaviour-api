@@ -2,6 +2,6 @@
 {
     public interface ISubgraphHandler
     {
-        public behaviourGraph? Subgraph { get; set; }
+        public BehaviourGraph? Subgraph { get; set; }
     }
 }

@@ -5,18 +5,18 @@
     /// <summary>
     /// A State node that executes an Action.
     /// </summary>
-    public abstract class SubgraphState : State, ISubgraphHandler
+    public class SubgraphState : State, ISubgraphHandler
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override string Description => "State Node that executes a subgraph";
-        public behaviourGraph? Subgraph { get; set; }
+        public BehaviourGraph? Subgraph { get; set; }
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public SubgraphState SetSubgraph(behaviourGraph behaviourEngine)
+        public SubgraphState SetSubgraph(BehaviourGraph behaviourEngine)
         {
             Subgraph = behaviourEngine;
             return this;

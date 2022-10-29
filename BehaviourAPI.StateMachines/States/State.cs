@@ -5,6 +5,8 @@
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
+        public override int MaxInputConnections => -1;
+        public override int MaxOutputConnections => -1;
         public override Type ChildType => typeof(State);
 
         public Status Status { get; set; }
@@ -15,7 +17,7 @@
 
         List<Transition?> _transitions;
 
-        private FSM? _fSM;
+        protected FSM? _fsm;
 
         #endregion
 
@@ -28,7 +30,7 @@
 
         public void AddTransition(Transition transition) => _transitions.Add(transition);
 
-        public void SetFSM(FSM fsm) => _fSM = fsm;
+        public void SetFSM(FSM fsm) => _fsm = fsm;
         
         public override void Initialize()
         {
@@ -65,7 +67,7 @@
                 bool check = _transitions[i]?.Check() ?? false;
                 if(check)
                 {
-                    _fSM?.SetCurrentState(_transitions[i]?.GetTargetState());
+                    _fsm?.SetCurrentState(_transitions[i]?.GetTargetState());
                     return true;
                 }
             }

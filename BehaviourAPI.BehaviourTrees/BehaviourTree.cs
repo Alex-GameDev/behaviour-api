@@ -5,7 +5,7 @@ namespace BehaviourAPI.BehaviourTrees
     /// Decision system that consists of traversing a tree in depth depending on the result returned by its nodes.
     /// The execution methods are propagated along the tree from the root node.
     /// </summary>
-    public class BehaviourTree : behaviourGraph
+    public class BehaviourTree : BehaviourGraph
     {
         #region ------------------------------------------ Properties -----------------------------------------
 

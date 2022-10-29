@@ -10,13 +10,13 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ------------------------------------------ Properties -----------------------------------------
         public override string Description => "Utility element that executes a subgraph.";
-        public behaviourGraph? Subgraph { get; set; }
+        public BehaviourGraph? Subgraph { get; set; }
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public UtilitySubgraph SetSubgraph(behaviourGraph behaviourEngine)
+        public UtilitySubgraph SetSubgraph(BehaviourGraph behaviourEngine)
         {
             Subgraph = behaviourEngine;
             return this;

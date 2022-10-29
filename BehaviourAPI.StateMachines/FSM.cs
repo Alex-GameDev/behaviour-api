@@ -2,7 +2,7 @@
 {
     using Core.Perceptions;
     using Core;
-    public class FSM : behaviourGraph
+    public class FSM : BehaviourGraph
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
