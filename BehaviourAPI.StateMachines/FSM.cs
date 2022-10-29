@@ -1,5 +1,6 @@
 ﻿namespace BehaviourAPI.StateMachines
 {
+    using Core.Perceptions;
     using Core;
     public class FSM : behaviourGraph
     {
@@ -27,12 +28,19 @@
             return state;
         }
 
-        public Transition  CreateTransition(State from, State to)
+        public T CreateTransition<T>(State from, State to, Perception perception) where T : Transition, new()
         {
-            Transition transition = CreateConnection<Transition>(from, to);
+            T transition = CreateConnection<T>(from, to);
+            transition.Perception = perception;
             transition.SetTargetState(to);
             from.AddTransition(transition);
             return transition;
+        }
+
+        public T CreateFinishStateTransition<T>(State from, State to, bool triggerOnSuccess, bool triggerOnFailure) where T : Transition, new()
+        {
+            Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure); 
+            return CreateTransition<T>(from, to, finishStatePerception);
         }
 
         public override bool SetStartNode(Node node)

@@ -8,8 +8,8 @@ namespace BehaviourAPI.Core.Perceptions
 {
     public abstract class Perception
     {
-        public abstract void Start();
+        public virtual void Start() { }
         public abstract bool Check();
-        public abstract void Stop();
+        public virtual void Stop() { }
     }
 }

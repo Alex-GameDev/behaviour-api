@@ -27,7 +27,7 @@
 
         public void Start() => Perception?.Start();
         public void Stop() => Perception?.Stop();
-        public bool Check() => Perception?.Check() ?? false;
+        public virtual bool Check() => Perception?.Check() ?? false;
 
         public State? GetTargetState() => _targetState;
 
