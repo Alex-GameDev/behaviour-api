@@ -5,7 +5,7 @@ namespace BehaviourAPI.UtilitySystems
     /// <summary>
     /// Behaviour graph that choose between diferent <see cref="UtilitySelectableNode"/> items and executes.
     /// </summary>
-    public class UtilitySystem : BehaviourEngine
+    public class UtilitySystem : behaviourGraph
     {
         #region ------------------------------------------ Properties -----------------------------------------
 

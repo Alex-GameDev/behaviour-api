@@ -1,7 +1,7 @@
 ﻿namespace BehaviourAPI.StateMachines
 {
     using Core;
-    public class FSM : BehaviourEngine
+    public class FSM : behaviourGraph
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
@@ -27,7 +27,7 @@
             return state;
         }
 
-        public Transition CreateTransition(State from, State to)
+        public Transition  CreateTransition(State from, State to)
         {
             Transition transition = CreateConnection<Transition>(from, to);
             transition.SetTargetState(to);

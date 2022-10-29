@@ -6,13 +6,13 @@
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override string Description => "Behaviour Tree Node that executes a subgraph";
-        public BehaviourEngine? Subgraph { get; set; }
+        public behaviourGraph? Subgraph { get; set; }
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public SubgraphNode SetSubgraph(BehaviourEngine behaviourEngine)
+        public SubgraphNode SetSubgraph(behaviourGraph behaviourEngine)
         {
             Subgraph = behaviourEngine;
             return this;

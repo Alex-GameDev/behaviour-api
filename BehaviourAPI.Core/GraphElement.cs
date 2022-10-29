@@ -14,7 +14,7 @@
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public BehaviourEngine? BehaviourGraph;
+        public behaviourGraph? BehaviourGraph;
 
         public string Name = string.Empty;
 

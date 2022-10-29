@@ -1,16 +1,16 @@
 namespace BehaviourAPI.Core
 {
-    public abstract class BehaviourEngine : IStatusHandler
+    public abstract class behaviourGraph : IStatusHandler
     {
         #region ----------------------------------------- Properties -------------------------------------------
 
         /// <summary>
-        /// The base type of the <see cref="Node"/> elements that this <see cref="BehaviourEngine"/> can contain.
+        /// The base type of the <see cref="Node"/> elements that this <see cref="behaviourGraph"/> can contain.
         /// </summary>
         public abstract System.Type NodeType { get; }
 
         /// <summary>
-        /// The base type of the <see cref="Connection"/> elements that this <see cref="BehaviourEngine"/> can contain.
+        /// The base type of the <see cref="Connection"/> elements that this <see cref="behaviourGraph"/> can contain.
         /// </summary>
         public abstract System.Type ConnectionType { get; }
 

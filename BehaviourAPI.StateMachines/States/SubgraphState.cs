@@ -10,13 +10,13 @@
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override string Description => "State Node that executes a subgraph";
-        public BehaviourEngine? Subgraph { get; set; }
+        public behaviourGraph? Subgraph { get; set; }
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public SubgraphState SetSubgraph(BehaviourEngine behaviourEngine)
+        public SubgraphState SetSubgraph(behaviourGraph behaviourEngine)
         {
             Subgraph = behaviourEngine;
             return this;
