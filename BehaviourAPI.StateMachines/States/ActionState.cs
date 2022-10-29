@@ -17,7 +17,7 @@
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public State SetAction(Action action)
+        public ActionState SetAction(Action action)
         {
             Action = action;
             return this;

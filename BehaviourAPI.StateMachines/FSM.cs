@@ -13,17 +13,15 @@
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        State? _entryState;
-
         State? _currentState;        
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public T CreateState<T>(string name) where T : State
+        public T CreateState<T>(string name) where T : State, new()
         {
-            T state = CreateState<T>(name);
+            T state = CreateNode<T>(name);
             state.SetFSM(this);
             return state;
         }
@@ -43,12 +41,6 @@
             return CreateTransition<T>(from, to, finishStatePerception);
         }
 
-        public override bool SetStartNode(Node node)
-        {
-            bool starNodeUpdated = base.SetStartNode(node);
-            if (starNodeUpdated) _entryState = node as State;
-            return starNodeUpdated;
-        }
 
         #endregion
 
@@ -56,7 +48,8 @@
 
         public override void Start()
         {
-            _currentState = _entryState;
+            base.Start();
+            _currentState = StartNode as State;
             _currentState?.Start();
         }
 
@@ -67,6 +60,7 @@
 
         public override void Stop()
         {
+            base.Stop();
             _currentState?.Stop();
         }
 

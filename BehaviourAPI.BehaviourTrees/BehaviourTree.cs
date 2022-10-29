@@ -72,6 +72,7 @@ namespace BehaviourAPI.BehaviourTrees
 
         public override void Start()
         {
+            m_rootNode = StartNode as BTNode;
             m_rootNode?.Start();
         }
 

@@ -1,11 +1,13 @@
-﻿namespace BehaviourAPITesting
+namespace BehaviourAPITesting
 {
     using BehaviourAPI.Core;
     using BehaviourAPI.BehaviourTrees;
     using BehaviourAPI.Core.Actions;
+    using BehaviourAPI.Core.Perceptions;
+    using BehaviourAPI.StateMachines;
 
     [TestClass]
-    public class BehaviourTreeExecutionTest
+    public class BehaviourTreeExecutionTests
     {
         [TestMethod("Sequencer Execution Sucess")]
         public void TestSequencerExecutionSucess()

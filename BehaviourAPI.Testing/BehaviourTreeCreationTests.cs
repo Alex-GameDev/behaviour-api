@@ -1,13 +1,14 @@
-using BehaviourAPI.Core;
+﻿using BehaviourAPI.Core;
 using BehaviourAPI.Core.Actions;
 using BehaviourAPI.BehaviourTrees;
 using BehaviourAPI.StateMachines;
 using BehaviourAPI.UtilitySystems;
+using BehaviourAPI.Core.Perceptions;
 
 namespace BehaviourAPITesting
 {
     [TestClass]
-    public class GraphCreation
+    public class BehaviourTreeCreationTests
     {
         [TestMethod("Composite node connections")]
         public void TestCompositeNodeConntections()
@@ -33,7 +34,7 @@ namespace BehaviourAPITesting
             Assert.AreEqual(true, composite.IsParentOf(action_2));
 
             float f = float.MaxValue * 1.3f;
-            Assert.AreEqual(true, f >  float.MaxValue);
+            Assert.AreEqual(true, f > float.MaxValue);
         }
 
         [TestMethod("Decorator node connections")]

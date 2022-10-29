@@ -30,7 +30,7 @@
 
         public void AddTransition(Transition transition) => _transitions.Add(transition);
 
-        public void SetFSM(FSM fsm) => _fsm = fsm;
+        internal void SetFSM(FSM fsm) => _fsm = fsm;
         
         public override void Initialize()
         {
