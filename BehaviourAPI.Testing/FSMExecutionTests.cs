@@ -152,5 +152,52 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.None, s5.Status);
 
         }
+
+        [TestMethod("FSM mealy transition execution")]
+        public void FSMMealyTransition()
+        {
+            // S1 -> i = -1 -> s2 -> i = 0 -> s3 -> i = 1 -> s2 -> i = 0 -> s1
+
+            var i = 0;
+            FSM fsm = new FSM();
+            var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Sucess));
+            var s2 = fsm.CreateState<ActionState>("st2").SetAction(new FunctionalAction(() => Status.Sucess));
+            var s3 = fsm.CreateState<ActionState>("st3").SetAction(new FunctionalAction(() => Status.Sucess));
+            var t1_2 = fsm.CreateTransition<MealyTransition>(s1, s2, new ConditionalPerception(() => true)).SetOnPerformAction(() => i--);
+            var t2_3 = fsm.CreateTransition<MealyTransition>(s2, s3, new ConditionalPerception(() => i < 0)).SetOnPerformAction(() => i++); 
+            var t3_2 = fsm.CreateTransition<MealyTransition>(s3, s2, new ConditionalPerception(() => true)).SetOnPerformAction(() => i++); 
+            var t2_1 = fsm.CreateTransition<MealyTransition>(s2, s1, new ConditionalPerception(() => i > 0)).SetOnPerformAction(() => i--);
+
+            fsm.Start();
+            Assert.AreEqual(0, i);
+            Assert.AreEqual(Status.Running, s1.Status);
+            Assert.AreEqual(Status.None, s2.Status);
+            Assert.AreEqual(Status.None, s3.Status);
+
+            fsm.Update();
+            Assert.AreEqual(-1, i);
+            Assert.AreEqual(Status.None, s1.Status);
+            Assert.AreEqual(Status.Running, s2.Status);
+            Assert.AreEqual(Status.None, s3.Status);
+
+            fsm.Update();
+            Assert.AreEqual(0, i);
+            Assert.AreEqual(Status.None, s1.Status);
+            Assert.AreEqual(Status.None, s2.Status);
+            Assert.AreEqual(Status.Running, s3.Status);
+
+            fsm.Update();
+            Assert.AreEqual(1, i);
+            Assert.AreEqual(Status.None, s1.Status);
+            Assert.AreEqual(Status.Running, s2.Status);
+            Assert.AreEqual(Status.None, s3.Status);
+
+
+            fsm.Update();
+            Assert.AreEqual(0, i);
+            Assert.AreEqual(Status.Running, s1.Status);
+            Assert.AreEqual(Status.None, s2.Status);
+            Assert.AreEqual(Status.None, s3.Status);
+        }
     }
 }

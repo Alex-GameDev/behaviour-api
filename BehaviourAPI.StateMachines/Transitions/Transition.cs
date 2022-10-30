@@ -13,13 +13,15 @@
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        State? _targetState;
+        protected FSM? _fsm;
+        protected State? _targetState;
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public void SetTargetState(State target) => _targetState = target;
+        internal void SetFSM(FSM fsm) => _fsm = fsm;
+        internal void SetTargetState(State target) => _targetState = target;
 
         #endregion
 
@@ -29,7 +31,7 @@
         public void Stop() => Perception?.Stop();
         public virtual bool Check() => Perception?.Check() ?? false;
 
-        public State? GetTargetState() => _targetState;
+        public virtual void Perform() => _fsm?.SetCurrentState(_targetState);
 
         #endregion
     }

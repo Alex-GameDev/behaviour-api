@@ -17,8 +17,6 @@
 
         List<Transition?> _transitions;
 
-        protected FSM? _fsm;
-
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
@@ -29,9 +27,7 @@
         }
 
         public void AddTransition(Transition transition) => _transitions.Add(transition);
-
-        internal void SetFSM(FSM fsm) => _fsm = fsm;
-        
+       
         public override void Initialize()
         {
             base.Initialize();
@@ -67,7 +63,7 @@
                 bool check = _transitions[i]?.Check() ?? false;
                 if(check)
                 {
-                    _fsm?.SetCurrentState(_transitions[i]?.GetTargetState());
+                    _transitions[i]?.Perform();
                     return true;
                 }
             }

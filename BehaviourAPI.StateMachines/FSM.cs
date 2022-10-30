@@ -13,7 +13,7 @@
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        State? _currentState;        
+        protected State? _currentState;        
 
         #endregion
 
@@ -22,7 +22,6 @@
         public T CreateState<T>(string name) where T : State, new()
         {
             T state = CreateNode<T>(name);
-            state.SetFSM(this);
             return state;
         }
 
@@ -30,6 +29,7 @@
         {
             T transition = CreateConnection<T>(from, to);
             transition.Perception = perception;
+            transition.SetFSM(this);
             transition.SetTargetState(to);
             from.AddTransition(transition);
             return transition;
@@ -40,7 +40,6 @@
             Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure); 
             return CreateTransition<T>(from, to, finishStatePerception);
         }
-
 
         #endregion
 
@@ -64,7 +63,7 @@
             _currentState?.Stop();
         }
 
-        public void SetCurrentState(State? state)
+        public virtual void SetCurrentState(State? state)
         {
             _currentState?.Stop();
             _currentState = state;
