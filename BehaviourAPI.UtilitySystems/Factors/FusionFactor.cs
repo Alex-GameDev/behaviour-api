@@ -7,6 +7,12 @@ namespace BehaviourAPI.UtilitySystems
 
         #endregion
 
+        #region ------------------------------------------- Fields -------------------------------------------
+
+        protected List<Factor> m_childFactors;
+
+        #endregion
+
         #region ---------------------------------------- Build methods ---------------------------------------
 
         public FusionFactor()
@@ -23,11 +29,6 @@ namespace BehaviourAPI.UtilitySystems
                 if (node is Factor f) m_childFactors.Add(f); 
             });
         }
-        #endregion
-
-        #region ------------------------------------------- Fields -------------------------------------------
-
-        protected List<Factor> m_childFactors;
 
         #endregion
     }

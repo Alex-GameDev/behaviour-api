@@ -28,7 +28,20 @@ namespace BehaviourAPI.UtilitySystems
         {
             m_childFactor = factor;
             return this;
-        }          
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            if (OutputConnections.Count == 1)
+            {
+                m_childFactor = GetChildNodes().First() as Factor;
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
 
         #endregion
 

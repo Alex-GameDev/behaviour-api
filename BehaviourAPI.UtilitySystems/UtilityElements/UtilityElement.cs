@@ -1,4 +1,5 @@
 using BehaviourAPI.Core;
+using System.Xml.Linq;
 
 namespace BehaviourAPI.UtilitySystems
 {
@@ -22,6 +23,19 @@ namespace BehaviourAPI.UtilitySystems
         public void SetFactor(Factor factor)
         {
             _factor = factor;
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            if(OutputConnections.Count == 1)
+            {
+                _factor = GetChildNodes().First() as Factor;
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
 
         #endregion

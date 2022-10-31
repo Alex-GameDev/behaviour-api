@@ -98,7 +98,9 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// Build the node internal references
         /// </summary>
-        public virtual void Initialize() { }
+        public virtual void Initialize() 
+        { 
+        }
         #endregion
     }
 }

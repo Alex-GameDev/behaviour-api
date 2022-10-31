@@ -69,6 +69,63 @@ namespace BehaviourAPI.Core
             }            
         }
 
+        public Node? CreateNode(Type type)
+        {
+            if (!type.IsSubclassOf(NodeType)) return null;
+
+            Node? node = (Node?)Activator.CreateInstance(type);
+            if(node!= null)
+            {
+                node.BehaviourGraph = this;
+            }
+            return node;
+        }
+
+        public Connection? CreateConnection(Type type, Node source, Node target,
+            int sourceIndex = -1, int targetIndex = -1)
+        {
+            if (Nodes.Contains(source) && Nodes.Contains(target) && type.IsSubclassOf(type))
+            {
+                Connection? connection = (Connection?)Activator.CreateInstance(type);
+                if(connection != null)
+                {
+                    connection.BehaviourGraph = this;
+                    connection.SourceNode = source;
+                    connection.TargetNode = target;
+
+                    if (sourceIndex == -1) source.OutputConnections.Add(connection);
+                    else source.OutputConnections.Insert(sourceIndex, connection);
+                    if (targetIndex == -1) target.InputConnections.Add(connection);
+                    else target.InputConnections.Insert(targetIndex, connection);
+
+                    Connections.Add(connection);
+                }
+                return connection;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void RemoveNode(Node node)
+        {
+            Nodes.Remove(node);
+        }
+
+        public void RemoveConnection(Connection connection)
+        {
+            connection.SourceNode?.OutputConnections.Remove(connection);
+            connection.TargetNode?.InputConnections.Remove(connection);
+            Connections.Remove(connection);
+        }
+
+        public virtual void Initialize()
+        {
+            Nodes.ForEach(node => node.Initialize());
+            Connections.ForEach(conn => conn.Initialize());
+        }
+
         /// <summary>
         /// For serialization reasons, start node must be always the first node in the list
         /// </summary>

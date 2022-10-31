@@ -20,5 +20,9 @@ namespace BehaviourAPI.Core
         /// The node where this connection ends
         /// </summary>
         public Node? TargetNode;
+
+        public virtual void Initialize() 
+        { 
+        }
     }
 }

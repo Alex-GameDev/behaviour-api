@@ -25,8 +25,8 @@ namespace BehaviourAPI.UtilitySystems
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        float UtilityThreshold = 0f;
-        float Inertia = 1.3f;        
+        public float UtilityThreshold = 0f;
+        public float Inertia = 1.3f;        
 
         List<UtilitySelectableNode?> _utilityCandidates;
 
@@ -115,10 +115,16 @@ namespace BehaviourAPI.UtilitySystems
             return defaultUtilityElementUpdated;
         }
 
-        public UtilitySystem SetInertia(float inertia)
+        public override void Initialize()
         {
-            Inertia = inertia;
-            return this;
+            base.Initialize();
+            Nodes.ForEach(node =>
+            {
+                if(node.InputConnections.Count == 0)
+                {
+                    _utilityCandidates.Add(node as UtilitySelectableNode);
+                }
+            });
         }
 
         #endregion

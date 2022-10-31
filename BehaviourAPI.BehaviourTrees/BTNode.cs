@@ -18,8 +18,6 @@ namespace BehaviourAPI.BehaviourTrees
 
         #region --------------------------------------- Runtime methods --------------------------------------
 
-
-
         public virtual void Start()
         {
             Status = Status.Running;

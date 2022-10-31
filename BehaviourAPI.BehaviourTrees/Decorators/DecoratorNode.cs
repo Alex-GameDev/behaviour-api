@@ -30,7 +30,12 @@ namespace BehaviourAPI.BehaviourTrees
             {
                 m_childNode = GetChildNodes().First() as BTNode;
             }
+            else
+            {
+                throw new Exception();
+            }
         }
+        
         #endregion
     }
 }

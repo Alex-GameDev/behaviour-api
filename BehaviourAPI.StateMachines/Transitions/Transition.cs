@@ -21,8 +21,15 @@
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        internal void SetFSM(FSM fsm) => _fsm = fsm;
-        internal void SetTargetState(State target) => _targetState = target;
+        public void SetFSM(FSM fsm) => _fsm = fsm;
+        public void SetTargetState(State target) => _targetState = target;
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            _fsm = BehaviourGraph as FSM;
+            _targetState = TargetNode as State;
+        }
 
         #endregion
 
