@@ -9,12 +9,13 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Status Status { get; protected set; }
+        public Status Status { get => _status; protected set => _status = value; }
+        Status _status;
 
         #endregion
-        
+
         #region --------------------------------------- Runtime methods --------------------------------------
-        
+
         public abstract void Start();
 
         public abstract void Update();

@@ -3,10 +3,12 @@ namespace BehaviourAPI.UtilitySystems
     using Core;
     public abstract class UtilityNode : Node, IUtilityHandler
     {
+
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override int MaxInputConnections => -1;
-        public float Utility { get; protected set; }
+        public float Utility { get => _utility; protected set => _utility = value; }
+        float _utility;
 
         #endregion
 

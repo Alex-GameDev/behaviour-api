@@ -7,7 +7,7 @@
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Perception? Perception { get; set; }
+        public Perception? Perception { get => _perception; set => _perception = value; }
 
         #endregion
 
@@ -15,6 +15,7 @@
 
         protected FSM? _fsm;
         protected State? _targetState;
+        Perception? _perception;
 
         #endregion
 

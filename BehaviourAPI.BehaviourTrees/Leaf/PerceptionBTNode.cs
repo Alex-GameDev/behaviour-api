@@ -4,11 +4,12 @@
     using Core;
     public class PerceptionBTNode : LeafNode, IPerceptionHandler
     {
+
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "Behaviour Tree Node that executes a perception";
-        public Perception? Perception { get; set; }
-
+        public override string Description => "Behaviour Tree Node that executes a _perception";
+        public Perception? Perception { get => _perception; set => _perception = value; }
+        Perception? _perception;
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------

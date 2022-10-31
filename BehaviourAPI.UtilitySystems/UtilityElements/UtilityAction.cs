@@ -8,10 +8,12 @@ namespace BehaviourAPI.UtilitySystems
     /// </summary>
     public class UtilityAction : UtilityElement, IActionHandler
     {
+
         #region ------------------------------------------ Properties ----------------------------------------
 
-        public override string Description => "Utility element that executes an action.";
-        public Action? Action { get; set; }
+        public override string Description => "Utility element that executes an _action.";
+        public Action? Action { get => _action; set => _action = value; }
+        Action? _action;
 
         #endregion
 

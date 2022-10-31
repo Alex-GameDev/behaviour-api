@@ -8,9 +8,11 @@ namespace BehaviourAPI.UtilitySystems
     /// </summary>
     public class UtilitySubgraph : UtilityElement, ISubgraphHandler
     {
+
         #region ------------------------------------------ Properties -----------------------------------------
-        public override string Description => "Utility element that executes a subgraph.";
-        public BehaviourGraph? Subgraph { get; set; }
+        public override string Description => "Utility element that executes a _subgraph.";
+        public BehaviourGraph? Subgraph { get => _subgraph; set => _subgraph = value; }
+        BehaviourGraph? _subgraph;
 
         #endregion
 

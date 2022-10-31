@@ -22,7 +22,7 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// The current execution status of the graph.
         /// </summary>
-        public Status Status { get; protected set; }
+        public Status Status { get => _status; protected set => _status = value; }
 
         #endregion
 
@@ -31,6 +31,8 @@ namespace BehaviourAPI.Core
         public List<Node> Nodes = new List<Node>();
         public List<Connection> Connections = new List<Connection>();
         public bool ExecuteOnLoop = true;
+
+        Status _status;
 
         #endregion
 

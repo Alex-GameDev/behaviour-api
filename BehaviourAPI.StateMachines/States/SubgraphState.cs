@@ -3,15 +3,16 @@
     using Core;
 
     /// <summary>
-    /// A State node that executes an Action.
+    /// A State node that executes an Subgraph.
     /// </summary>
     public class SubgraphState : State, ISubgraphHandler
     {
+
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "State Node that executes a subgraph";
-        public BehaviourGraph? Subgraph { get; set; }
-
+        public override string Description => "State Node that executes a _subgraph";
+        public BehaviourGraph? Subgraph { get => _subgraph; set => _subgraph = value; }
+        BehaviourGraph? _subgraph;
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
