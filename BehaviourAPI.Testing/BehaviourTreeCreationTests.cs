@@ -1,17 +1,12 @@
-﻿using BehaviourAPI.Core;
-using BehaviourAPI.Core.Actions;
-using BehaviourAPI.BehaviourTrees;
-using BehaviourAPI.StateMachines;
-using BehaviourAPI.UtilitySystems;
-using BehaviourAPI.Core.Perceptions;
-
-namespace BehaviourAPITesting
+﻿namespace BehaviourAPI.Testing
 {
+    using BehaviourTrees;
+
     [TestClass]
     public class BehaviourTreeCreationTests
     {
         [TestMethod("Composite node connections")]
-        public void TestCompositeNodeConntections()
+        public void Test_BT_CompositeNode_Connections()
         {
             BehaviourTree tree = new BehaviourTree();
             var action_1 = tree.CreateLeafNode<ActionBTNode>("Nodo 1");
@@ -38,7 +33,7 @@ namespace BehaviourAPITesting
         }
 
         [TestMethod("Decorator node connections")]
-        public void TestDecoratorNodeConnections()
+        public void Test_BT_DecoratorNode_Connections()
         {
             BehaviourTree tree = new BehaviourTree();
             var action_1 = tree.CreateLeafNode<ActionBTNode>("Nodo 1");
@@ -59,7 +54,7 @@ namespace BehaviourAPITesting
         }
 
         [TestMethod("Start node")]
-        public void TestStartNode()
+        public void Test_BT_StartNode()
         {
             BehaviourTree tree = new BehaviourTree();
             var action_1 = tree.CreateLeafNode<ActionBTNode>("Nodo 1");
@@ -71,7 +66,7 @@ namespace BehaviourAPITesting
         }
 
         [TestMethod("Complex tree connections")]
-        public void TestComplexTreeConnections()
+        public void Test_BT_MultilevelTree_Connections()
         {
             BehaviourTree tree = new BehaviourTree();
 

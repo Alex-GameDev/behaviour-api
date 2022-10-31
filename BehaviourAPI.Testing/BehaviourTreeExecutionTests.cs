@@ -1,16 +1,14 @@
-namespace BehaviourAPITesting
+namespace BehaviourAPI.Testing
 {
-    using BehaviourAPI.Core;
-    using BehaviourAPI.BehaviourTrees;
-    using BehaviourAPI.Core.Actions;
-    using BehaviourAPI.Core.Perceptions;
-    using BehaviourAPI.StateMachines;
+    using Core;
+    using BehaviourTrees;
+    using Core.Actions;
 
     [TestClass]
     public class BehaviourTreeExecutionTests
     {
         [TestMethod("Sequencer Execution Sucess")]
-        public void TestSequencerExecutionSucess()
+        public void Test_BT_Sequencer_Success()
         {
             BehaviourTree tree = new BehaviourTree();
             var action_1 = tree.CreateLeafNode<ActionBTNode>("Nodo 1").SetAction(new FunctionalAction(() => Status.Sucess));
@@ -46,7 +44,7 @@ namespace BehaviourAPITesting
 
 
         [TestMethod("Sequencer Execution Failure")]
-        public void TestSequencerExecutionFailure()
+        public void Test_BT_Sequencer_Failure()
         {
             BehaviourTree tree = new BehaviourTree();
             var action_1 = tree.CreateLeafNode<ActionBTNode>("Nodo 1").SetAction(new FunctionalAction(() => Status.Sucess));
@@ -75,7 +73,7 @@ namespace BehaviourAPITesting
         }
 
         [TestMethod("Complex tree execution")]
-        public void TestComplexTreeExec()
+        public void Test_BT_MultilevelTree()
         {
             BehaviourTree tree = new BehaviourTree();
 

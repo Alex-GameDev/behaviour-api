@@ -56,6 +56,7 @@ namespace BehaviourAPI.UtilitySystems
         {
             FunctionFactor curveFactor = CreateNode<FunctionFactor>(name);
             curveFactor.function = curve;
+            CreateConnection<UtilityConnection>(curveFactor, child);
             curveFactor.SetChild(child);
             return curveFactor;
         }
@@ -76,21 +77,23 @@ namespace BehaviourAPI.UtilitySystems
             return CreateFusionFactor<T>(name, children.ToList());
         }
 
-        public T CreateUtilityElement<T>(string name, Factor factor) where T : UtilityElement, new()
+        public T CreateUtilityElement<T>(string name, Factor factor, bool root = true) where T : UtilityElement, new()
         {
             T utilityExecutable = CreateNode<T>(name);
             CreateConnection<UtilityConnection>(utilityExecutable, factor);
+            if (root) _utilityCandidates.Add(utilityExecutable);
             utilityExecutable.SetFactor(factor);
             return utilityExecutable;
         }
 
-        public UtilityBucket CreateUtilityBucket(string name, List<UtilitySelectableNode> elements, 
+        public UtilityBucket CreateUtilityBucket(string name, List<UtilitySelectableNode> elements, bool root = true,
             float utilityThreshold = .3f, float inertia = 1.3f, float bucketThreshold = 0f)
         {
             UtilityBucket bucket = CreateNode<UtilityBucket>(name);
             bucket.UtilityThreshold = utilityThreshold;
             bucket.Inertia = inertia;
             bucket.BucketThreshold = bucketThreshold;
+            if (root) _utilityCandidates.Add(bucket);
             elements.ForEach(elem =>
             {
                 CreateConnection<UtilityConnection>(bucket, elem);
@@ -99,17 +102,17 @@ namespace BehaviourAPI.UtilitySystems
             return bucket;
         }
 
-        public UtilityBucket CreateUtilityBucket(string name, float utilityThreshold = .3f, 
+        public UtilityBucket CreateUtilityBucket(string name, bool root, float utilityThreshold = .3f, 
             float inertia = 1.3f, float bucketThreshold = 0f, params UtilitySelectableNode[] elements)
         {
-            return CreateUtilityBucket(name, elements.ToList(), utilityThreshold, inertia, bucketThreshold);
+            return CreateUtilityBucket(name, elements.ToList(), root, utilityThreshold, inertia, bucketThreshold);
         }
 
         public override bool SetStartNode(Node node)
         {
-            bool defaultutilityElementUpdated = base.SetStartNode(node);
-            if (defaultutilityElementUpdated) _utilityCandidates.MoveAtFirst(node as UtilitySelectableNode);
-            return defaultutilityElementUpdated;
+            bool defaultUtilityElementUpdated = base.SetStartNode(node);
+            if (defaultUtilityElementUpdated) _utilityCandidates.MoveAtFirst(node as UtilitySelectableNode);
+            return defaultUtilityElementUpdated;
         }
 
         public UtilitySystem SetInertia(float inertia)
@@ -141,7 +144,7 @@ namespace BehaviourAPI.UtilitySystems
         private UtilitySelectableNode? ComputeCurrentBestAction()
         {
             bool currentElementIsLocked = false;
-            float currentHigherUtility = 0f;
+            float currentHigherUtility = -1f; // If value starts in 0, elems with Utility == 0 cant be executed
 
             var newBestElement = _currentBestElement;
 

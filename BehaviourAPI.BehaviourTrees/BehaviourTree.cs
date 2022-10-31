@@ -55,7 +55,6 @@ namespace BehaviourAPI.BehaviourTrees
         public T CreateLeafNode<T>(string name) where T : LeafNode, new()
         {
             T node = CreateNode<T>(name);
-            node.Name = name;
             return node;
         }
 

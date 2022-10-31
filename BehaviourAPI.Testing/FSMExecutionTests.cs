@@ -1,20 +1,15 @@
-﻿using BehaviourAPI.Core;
-using BehaviourAPI.Core.Actions;
-using BehaviourAPI.Core.Perceptions;
-using BehaviourAPI.StateMachines;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviourAPI.Testing
+﻿namespace BehaviourAPI.Testing
 {
+    using Core;
+    using Core.Actions;
+    using Core.Perceptions;
+    using StateMachines;
+
     [TestClass]
     public class FSMExecutionTests
     {
-        [TestMethod("FSM two state execution")]
-        public void FSMDouble()
+        [TestMethod]
+        public void Test_FSM_Transition()
         {
             FSM fsm = new FSM();
             var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Running));
@@ -37,8 +32,8 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.None, s2.Status);
         }
 
-        [TestMethod("FSM three state execution")]
-        public void FSMTriple()
+        [TestMethod]
+        public void Test_FSM_MultipleTransitions()
         {
             FSM fsm = new FSM();
             var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Running));
@@ -85,8 +80,8 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.None, s3.Status);
         }
 
-        [TestMethod("FSM subgraph state execution")]
-        public void FSMSubgraph()
+        [TestMethod]
+        public void Test_FSM_SubFSM()
         {
             // S1 ===> S2(subgraph) ===(Check S2.Status == Failure)==> S3
             //              ||
@@ -153,8 +148,8 @@ namespace BehaviourAPI.Testing
 
         }
 
-        [TestMethod("FSM mealy transition execution")]
-        public void FSMMealyTransition()
+        [TestMethod]
+        public void Test_FSM_MealyTransition()
         {
             // S1 -> i = -1 -> s2 -> i = 0 -> s3 -> i = 1 -> s2 -> i = 0 -> s1
 

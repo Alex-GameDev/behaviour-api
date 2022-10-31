@@ -1,18 +1,12 @@
-﻿using BehaviourAPI.Core.Perceptions;
-using BehaviourAPI.StateMachines;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviourAPI.Testing
+﻿namespace BehaviourAPI.Testing
 {
+    using Core.Perceptions;
+    using StateMachines;
     [TestClass]
     public class FSMCreationTests
     {
         [TestMethod("FSM two state creation")]
-        public void FSMDoubleCreation()
+        public void Test_FSM_Simple_Creation()
         {
             FSM fsm = new FSM();
             var s1 = fsm.CreateState<ActionState>("st1");
@@ -27,7 +21,7 @@ namespace BehaviourAPI.Testing
         }
 
         [TestMethod("FSM multiple state creation")]
-        public void FSMMultipleCreation()
+        public void Test_FSM_Complex_Creation()
         {
             FSM fsm = new FSM();
             var s1 = fsm.CreateState<ActionState>("st1");
