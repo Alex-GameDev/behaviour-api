@@ -2,6 +2,8 @@
 {
     using Core.Perceptions;
     using Core;
+    using System.Xml.Linq;
+
     public class FSM : BehaviourGraph
     {
         #region ------------------------------------------ Properties -----------------------------------------
@@ -13,7 +15,9 @@
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        protected State? _currentState;        
+        protected State? _currentState;
+
+        protected Dictionary<string, Transition> _transitionDict = new Dictionary<string, Transition>();
 
         #endregion
 
@@ -25,20 +29,60 @@
             return state;
         }
 
-        public T CreateTransition<T>(State from, State to, Perception perception) where T : Transition, new()
+        public T CreateTransition<T>(string name, State from, State to, Perception perception) where T : Transition, new()
         {
-            T transition = CreateConnection<T>(from, to);
-            transition.Perception = perception;
-            transition.SetFSM(this);
-            transition.SetTargetState(to);
-            from.AddTransition(transition);
-            return transition;
+            if (!_transitionDict.ContainsKey(name))
+            {
+                T transition = CreateConnection<T>(from, to);
+                transition.Perception = perception;
+                transition.SetFSM(this);
+                transition.SetTargetState(to);
+                from.AddTransition(transition);
+                _transitionDict.Add(name, transition);
+                return transition;
+            }
+            else
+            {
+                throw new DuplicateWaitObjectException(name, "This FSM already contains a transition with this name.");
+            }
+           
         }
 
-        public T CreateFinishStateTransition<T>(State from, State to, bool triggerOnSuccess, bool triggerOnFailure) where T : Transition, new()
+        public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure) where T : Transition, new()
         {
             Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure); 
-            return CreateTransition<T>(from, to, finishStatePerception);
+            return CreateTransition<T>(name, from, to, finishStatePerception);
+        }
+
+        public Transition? FindTransition(string name)
+        {
+            if (_transitionDict.TryGetValue(name, out Transition? transition))
+            {
+                return transition;
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Node \"{name}\" doesn't exist in this graph");
+            }
+        }
+
+        public T? FindTransition<T>(string name) where T : Transition
+        {
+            if (_transitionDict.TryGetValue(name, out Transition? transition))
+            {
+                if (transition is T element)
+                {
+                    return element;
+                }
+                else
+                {
+                    throw new InvalidCastException($"Transition \"{name}\" exists, but is not an instance of {typeof(T).FullName} class.");
+                }
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Transition \"{name}\" doesn't exist in this fsm.");
+            }
         }
 
         #endregion

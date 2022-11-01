@@ -22,9 +22,9 @@ namespace BehaviourAPI.StateMachines
             _comeBackState = CreateState<ActionState>("comeback").SetAction(new FunctionalAction(ReturnToLastState));
         }
 
-        public T CreateComebackTransition<T>(State from, Perception perception) where T : Transition, new()
+        public T CreateComebackTransition<T>(string name, State from, Perception perception) where T : Transition, new()
         {
-            return CreateTransition<T>(from, _comeBackState, perception);
+            return CreateTransition<T>(name, from, _comeBackState, perception);
         }
 
         public override void Stop()
