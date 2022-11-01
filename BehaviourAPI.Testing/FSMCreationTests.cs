@@ -26,10 +26,10 @@
             FSM fsm = new FSM();
             var s1 = fsm.CreateState<ActionState>("st1");
             var s2 = fsm.CreateState<ActionState>("st2");
-            var s3 = fsm.CreateState<ActionState>("st1");
-            var s4 = fsm.CreateState<ActionState>("st2");
-            var s5 = fsm.CreateState<ActionState>("st1");
-            var s6 = fsm.CreateState<ActionState>("st2");
+            var s3 = fsm.CreateState<ActionState>("st3");
+            var s4 = fsm.CreateState<ActionState>("st4");
+            var s5 = fsm.CreateState<ActionState>("st5");
+            var s6 = fsm.CreateState<ActionState>("st6");
 
             Transition t12 = fsm.CreateTransition<Transition>(s1, s2, new ConditionalPerception(() => true));
             Transition t13 = fsm.CreateTransition<Transition>(s1, s3, new ConditionalPerception(() => true));

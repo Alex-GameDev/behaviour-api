@@ -19,7 +19,7 @@ namespace BehaviourAPI.Testing
             var v1 = 0f;
             UtilitySystem us = new UtilitySystem();
             Factor f1 = us.CreateVariableFactor("v1", () => v1, 0f, 1f);
-            UtilityAction action1 = us.CreateUtilityElement<UtilityAction>("Action1", f1).SetAction(new FunctionalAction(() =>
+            UtilityAction action1 = us.CreateUtilityElement<UtilityAction>("Action", f1).SetAction(new FunctionalAction(() =>
             {
                 v1 += 1f;
                 return Status.Running;

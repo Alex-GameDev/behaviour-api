@@ -1,3 +1,5 @@
+using static System.TimeZoneInfo;
+
 namespace BehaviourAPI.Core
 {
     public abstract class BehaviourGraph : IStatusHandler
@@ -32,6 +34,9 @@ namespace BehaviourAPI.Core
         public List<Connection> Connections = new List<Connection>();
         public bool ExecuteOnLoop = true;
 
+        // Used internally to find nodes by name
+        protected Dictionary<string, Node> nodeDict = new Dictionary<string, Node>();
+
         Status _status;
 
         #endregion
@@ -43,8 +48,15 @@ namespace BehaviourAPI.Core
             T node = new();
             node.BehaviourGraph = this;
             node.Name = name;
-            Nodes.Add(node);
-            return node;
+            if(nodeDict.TryAdd(name, node))
+            {
+                Nodes.Add(node);
+                return node;
+            }
+            else
+            {
+                throw new DuplicateWaitObjectException(name, "This graph already contains a node with this name.");
+            }            
         }
 
         protected T CreateConnection<T>(Node source, Node target) where T : Connection, new()
@@ -135,6 +147,37 @@ namespace BehaviourAPI.Core
 
             Nodes.MoveAtFirst(node);
             return true;
+        }
+
+        public Node? FindNode(string name)
+        {
+            if (nodeDict.TryGetValue(name, out Node? node))
+            {
+                return node;
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Node \"{name}\" doesn't exist in this graph");
+            }
+        }
+
+        public T? FindNode<T>(string name) where T : Node
+        {
+            if(nodeDict.TryGetValue(name, out Node? node))
+            {
+                if(node is T element)
+                {
+                    return element;
+                }
+                else
+                {
+                    throw new InvalidCastException($"Node \"{name}\" exists, but is not an instance of {typeof(T).FullName} class.");
+                }
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Node \"{name}\" doesn't exist in this graph");
+            }
         }
 
         #endregion   
