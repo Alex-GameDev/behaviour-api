@@ -166,5 +166,33 @@ namespace BehaviourAPI.Testing
             us.Update();
             Assert.AreEqual(.6f, action.Utility);
         }
+
+        [TestMethod("Connection repeated")]
+        public void Test_US_ConnectionRepeated()
+        {
+            UtilitySystem us = new UtilitySystem();
+            var a = us.CreateVariableFactor("A", () => 0f, 0f, 1f);
+
+            Assert.ThrowsException<ArgumentException>(() => us.CreateFusionFactor<MinFusionFactor>("F", a, a));
+            
+        }
+
+        [TestMethod("Connection loop")]
+        public void Test_US_ConnectionLoop()
+        {
+            UtilitySystem us = new UtilitySystem();
+            var a = (FunctionFactor)us.CreateNode(typeof(FunctionFactor));
+            var b = (FunctionFactor)us.CreateNode(typeof(FunctionFactor));
+            var c = (FunctionFactor)us.CreateNode(typeof(FunctionFactor));
+
+            us.CreateConnection(us.ConnectionType, a, b);
+            us.CreateConnection(us.ConnectionType, b, c);
+            us.CreateConnection(us.ConnectionType, a, c);
+
+            Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, a, a));
+            Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, b, a));
+            Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, c, a));
+
+        }
     }
  }

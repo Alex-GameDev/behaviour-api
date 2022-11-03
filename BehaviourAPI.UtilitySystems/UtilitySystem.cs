@@ -10,7 +10,12 @@ namespace BehaviourAPI.UtilitySystems
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override Type NodeType => typeof(UtilityNode);
+
         public override Type ConnectionType => typeof(UtilityConnection);
+
+        public override bool CanRepeatConnection => false;
+
+        public override bool CanCreateLoops => false;
 
         public UtilitySelectableNode? DefaultSelectedElement
         {

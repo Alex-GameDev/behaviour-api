@@ -9,7 +9,12 @@
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override Type NodeType => typeof(State);
+
         public override Type ConnectionType => typeof(Transition);
+
+        public override bool CanRepeatConnection => true;
+
+        public override bool CanCreateLoops => true;
 
         #endregion
 

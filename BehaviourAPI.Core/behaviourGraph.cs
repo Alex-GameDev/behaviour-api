@@ -24,6 +24,16 @@ namespace BehaviourAPI.Core
         /// </summary>
         public Status Status { get => _status; protected set => _status = value; }
 
+        /// <summary>
+        /// True if nodes can have more than one connection with the same node.
+        /// </summary>
+        public abstract bool CanRepeatConnection { get; }
+
+        /// <summary>
+        /// True if connections can create loops.
+        /// </summary>
+        public abstract bool CanCreateLoops { get; }
+
         #endregion
 
         #region ------------------------------------------- Fields ---------------------------------------------
@@ -59,24 +69,26 @@ namespace BehaviourAPI.Core
 
         protected T CreateConnection<T>(Node source, Node target) where T : Connection, new()
         {
-            if(Nodes.Contains(source) && Nodes.Contains(target))
-            {
-                T connection = new();
-                connection.BehaviourGraph = this;
-                connection.SourceNode = source;
-                connection.TargetNode = target;
-
-                target.InputConnections.Add(connection);
-                source.OutputConnections.Add(connection);
-
-                Connections.Add(connection);
-
-                return connection;
-            }
-            else
-            {
+            if (!Nodes.Contains(source) || !Nodes.Contains(target))
                 throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
-            }            
+
+            if(!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
+                throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
+
+            if (!CanCreateLoops && AreNodesConnected(target, source))
+                throw new ArgumentException("ERROR: Can't create a loop in this graph.");
+
+            T connection = new();
+            connection.BehaviourGraph = this;
+            connection.SourceNode = source;
+            connection.TargetNode = target;
+
+            target.InputConnections.Add(connection);
+            source.OutputConnections.Add(connection);
+
+            Connections.Add(connection);
+
+            return connection;           
         }
 
         public Node CreateNode(Type type)
@@ -88,6 +100,7 @@ namespace BehaviourAPI.Core
             if(node!= null)
             {
                 node.BehaviourGraph = this;
+                Nodes.Add(node);
                 return node;
             }
             throw new NullReferenceException("ERROR: Node couldn't be created.");
@@ -98,6 +111,15 @@ namespace BehaviourAPI.Core
         {
             if(type.IsSubclassOf(type))
                 throw new InvalidCastException("ERROR: \"type\" value is not a type derived from the graph connection type.");
+
+            if (!Nodes.Contains(source) || !Nodes.Contains(target))
+                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
+
+            if (!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
+                throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
+
+            if (!CanCreateLoops && AreNodesConnected(target, source))
+                throw new ArgumentException("ERROR: Can't create a loop in this graph.");
 
             if (Nodes.Contains(source) && Nodes.Contains(target))
             {
@@ -182,6 +204,47 @@ namespace BehaviourAPI.Core
             {
                 throw new KeyNotFoundException($"Node \"{name}\" doesn't exist in this graph");
             }
+        }
+
+        /// <summary>
+        /// Returns if graph has a connection path between a and b -> O(n).
+        /// </summary>
+        /// <param name="source">The source node.</param>
+        /// <param name="target">The target node.</param>
+        /// <returns>True if a path between the nodes exists.</returns>
+        public bool AreNodesConnected(Node source, Node target)
+        {
+            if(source == target) return true;
+            HashSet<Node> unvisitedNodes = new HashSet<Node>();
+            HashSet<Node> visitedNodes = new HashSet<Node>();
+            unvisitedNodes.Add(source);
+            while(unvisitedNodes.Count > 0)
+            {
+                Node n = unvisitedNodes.First();
+                unvisitedNodes.Remove(n);
+                visitedNodes.Add(n);
+                foreach(var child in n.GetChildNodes())
+                {
+                    if (child == null) continue;
+
+                    if (child == target)
+                        return true;
+                    if(!visitedNodes.Contains(child))
+                        unvisitedNodes.Add(child);
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Return true if a connection (source -> target) already exists.
+        /// </summary>
+        /// <param name="source">The source node.</param>
+        /// <param name="target">The target node.</param>
+        /// <returns>True if the connection exists.</returns>
+        public bool AreNodesDirectlyConnected(Node source, Node target)
+        {
+            return source.IsConnectedWith(target);
         }
 
         #endregion   

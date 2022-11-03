@@ -10,7 +10,12 @@ namespace BehaviourAPI.BehaviourTrees
         #region ------------------------------------------ Properties -----------------------------------------
 
         public override Type NodeType => typeof(BTNode);
+
         public override Type ConnectionType => typeof(BTConnection);
+
+        public override bool CanRepeatConnection => false; // This won't happen because BTNode's max input connections is 1.
+
+        public override bool CanCreateLoops => false;
 
         #endregion
 
