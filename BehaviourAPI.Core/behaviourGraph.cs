@@ -1,5 +1,3 @@
-using static System.TimeZoneInfo;
-
 namespace BehaviourAPI.Core
 {
     public abstract class BehaviourGraph : IStatusHandler
@@ -77,26 +75,31 @@ namespace BehaviourAPI.Core
             }
             else
             {
-                throw new Exception();
+                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
             }            
         }
 
-        public Node? CreateNode(Type type)
+        public Node CreateNode(Type type)
         {
-            if (!type.IsSubclassOf(NodeType)) return null;
+            if (!type.IsSubclassOf(NodeType))
+                throw new InvalidCastException("ERROR: \"type\" value is not a type derived from the graph node type.");
 
             Node? node = (Node?)Activator.CreateInstance(type);
             if(node!= null)
             {
                 node.BehaviourGraph = this;
+                return node;
             }
-            return node;
+            throw new NullReferenceException("ERROR: Node couldn't be created.");
         }
 
-        public Connection? CreateConnection(Type type, Node source, Node target,
+        public Connection CreateConnection(Type type, Node source, Node target,
             int sourceIndex = -1, int targetIndex = -1)
         {
-            if (Nodes.Contains(source) && Nodes.Contains(target) && type.IsSubclassOf(type))
+            if(type.IsSubclassOf(type))
+                throw new InvalidCastException("ERROR: \"type\" value is not a type derived from the graph connection type.");
+
+            if (Nodes.Contains(source) && Nodes.Contains(target))
             {
                 Connection? connection = (Connection?)Activator.CreateInstance(type);
                 if(connection != null)
@@ -111,12 +114,13 @@ namespace BehaviourAPI.Core
                     else target.InputConnections.Insert(targetIndex, connection);
 
                     Connections.Add(connection);
+                    return connection;
                 }
-                return connection;
+                throw new NullReferenceException("ERROR: Connection couldn't be created.");
             }
             else
             {
-                return null;
+                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
             }
         }
 
@@ -185,7 +189,7 @@ namespace BehaviourAPI.Core
         #region --------------------------------------- Runtime Methods ----------------------------------------
 
         /// <summary>
-        /// Enter this behavior graph from a subgraph node or a <see cref="BehaviourRunner"/>
+        /// Enter this behavior graph
         /// </summary>
         public virtual void Start() => Status = Status.Running;
 
