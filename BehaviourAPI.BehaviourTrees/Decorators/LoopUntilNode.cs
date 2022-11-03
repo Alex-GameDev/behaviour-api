@@ -6,10 +6,6 @@ namespace BehaviourAPI.BehaviourTrees
     /// </summary>
     public class LoopUntilNode : DecoratorNode
     {
-        #region ------------------------------------------ Properties -----------------------------------------
-        public override string Description => "Decorator node that executes its child until it returns the desired value";
-
-        #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
 

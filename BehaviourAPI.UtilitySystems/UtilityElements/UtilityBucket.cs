@@ -11,7 +11,6 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ----------------------------------------- Properties -----------------------------------------
 
-        public override string Description => "Utility element that choose between multiple Utility elements.";
         public override Type ChildType => typeof(UtilitySelectableNode);
         public override int MaxOutputConnections => -1;
 

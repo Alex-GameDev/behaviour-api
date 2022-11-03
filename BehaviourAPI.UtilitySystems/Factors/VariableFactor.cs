@@ -4,7 +4,6 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "Fusion factor that returns the value of a variable nromalized and clamped between 0 and 1.";
         public override int MaxOutputConnections => 0;
 
         #endregion

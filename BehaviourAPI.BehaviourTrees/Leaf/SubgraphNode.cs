@@ -6,8 +6,8 @@
 
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "Behaviour Tree Node that executes a _subgraph";
         public BehaviourGraph? Subgraph { get => _subgraph; set => _subgraph = value; }
+
         BehaviourGraph? _subgraph;
 
         #endregion

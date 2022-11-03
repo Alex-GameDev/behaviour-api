@@ -10,9 +10,10 @@
 
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "State Node that executes a _subgraph";
         public BehaviourGraph? Subgraph { get => _subgraph; set => _subgraph = value; }
+
         BehaviourGraph? _subgraph;
+
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------

@@ -8,15 +8,24 @@
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public virtual string Description => "No Description";
+        public BehaviourGraph? BehaviourGraph { get; set; }
 
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public BehaviourGraph? BehaviourGraph;
-
         public string Name = string.Empty;
+
+        #endregion
+
+        #region ---------------------------------------- Build methods ---------------------------------------
+
+        /// <summary>
+        /// Build the internal references
+        /// </summary>
+        public virtual void Initialize()
+        {
+        }
 
         #endregion
 

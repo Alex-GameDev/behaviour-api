@@ -10,7 +10,6 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ------------------------------------------ Properties -----------------------------------------
         public override int MaxOutputConnections => 1;
-        public override string Description => "Factor that modifies the child value with a function.";
 
         #endregion
 

@@ -6,11 +6,6 @@ namespace BehaviourAPI.BehaviourTrees
     /// </summary>
     public class SuccederNode : DecoratorNode
     {
-        #region ------------------------------------------ Properties -----------------------------------------
-        public override string Description => "Decorator node that changes Failure results by Success.";
-
-        #endregion
-
         #region --------------------------------------- Runtime methods --------------------------------------
 
         public override void Start()

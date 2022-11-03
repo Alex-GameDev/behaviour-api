@@ -10,8 +10,8 @@ namespace BehaviourAPI.BehaviourTrees
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "Behaviour Tree Node that executes an Action";
         public Action? Action { get => _action; set => _action = value; }
+
         Action? _action;
 
         #endregion

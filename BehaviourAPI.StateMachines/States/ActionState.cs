@@ -11,9 +11,10 @@
 
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "State Node that executes an Action";
         public Action? Action { get => _action; set => _action = value; }
+
         Action? _action;
+
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------

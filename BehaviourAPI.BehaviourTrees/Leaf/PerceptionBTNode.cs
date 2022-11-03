@@ -7,9 +7,10 @@
 
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override string Description => "Behaviour Tree Node that executes a _perception";
         public Perception? Perception { get => _perception; set => _perception = value; }
+
         Perception? _perception;
+
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------

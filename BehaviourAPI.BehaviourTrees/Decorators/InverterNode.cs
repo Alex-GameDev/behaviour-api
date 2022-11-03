@@ -7,11 +7,6 @@ namespace BehaviourAPI.BehaviourTrees
 
     public class InverterNode : DecoratorNode
     {
-        #region ------------------------------------------ Properties -----------------------------------------
-        public override string Description => "Decorator that returns the inverted status of its child.";
-
-        #endregion
-
         #region --------------------------------------- Runtime methods --------------------------------------
 
         public override void Start()

@@ -3,6 +3,7 @@ namespace BehaviourAPI.Core
     public abstract class Node : GraphElement
     {
         #region ------------------------------------------ Properties -----------------------------------------
+
         /// <summary>
         /// The type of nodes that this node can handle as a child(s).
         /// </summary>
@@ -19,22 +20,15 @@ namespace BehaviourAPI.Core
         public abstract int MaxOutputConnections { get; }
 
         /// <summary>
-        /// Return true if this node is the start node of the graph.
+        /// List of connections in the graph with this node as target.
         /// </summary>
-        public bool IsStartNode => BehaviourGraph?.StartNode == this;
-
-        #endregion
-
-        #region ------------------------------------------- Fields -------------------------------------------
-        /// <summary>
-        /// List of connections with this node as target.
-        /// </summary>
-        public List<Connection> InputConnections;
+        public List<Connection> InputConnections { get; private set; }
 
         /// <summary>
-        /// List of connections with this node as source.
+        /// List of connections in the graph with this node as source.
         /// </summary>
-        public List<Connection> OutputConnections;
+        public List<Connection> OutputConnections { get; private set; }
+
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
@@ -96,11 +90,10 @@ namespace BehaviourAPI.Core
         }
 
         /// <summary>
-        /// Build the node internal references
+        /// Return true if this node is the start node of the graph.
         /// </summary>
-        public virtual void Initialize() 
-        { 
-        }
+        public bool IsStartNode() => BehaviourGraph?.StartNode == this;
+
         #endregion
     }
 }

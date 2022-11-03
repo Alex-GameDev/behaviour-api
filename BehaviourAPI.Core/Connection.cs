@@ -9,8 +9,6 @@ namespace BehaviourAPI.Core
     /// </summary>
     public abstract class Connection : GraphElement
     {
-        public override string Description => "-";
-
         /// <summary>
         /// The Node where this connection starts
         /// </summary>
@@ -21,8 +19,5 @@ namespace BehaviourAPI.Core
         /// </summary>
         public Node? TargetNode;
 
-        public virtual void Initialize() 
-        { 
-        }
     }
 }

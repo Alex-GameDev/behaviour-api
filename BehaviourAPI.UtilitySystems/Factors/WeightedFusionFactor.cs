@@ -4,8 +4,8 @@ namespace BehaviourAPI.UtilitySystems
 {
     public class WeightedFusionFactor : FusionFactor
     {
-        public override string Description => "Fusion factor that returns the weighted sum of its childs";
         public float[] Weights = new float[0];
+
         protected override float ComputeUtility()
         {
             m_childFactors.ForEach(f => f.UpdateUtility());

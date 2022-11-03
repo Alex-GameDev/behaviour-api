@@ -10,8 +10,9 @@ namespace BehaviourAPI.UtilitySystems
     {
 
         #region ------------------------------------------ Properties -----------------------------------------
-        public override string Description => "Utility element that executes a _subgraph.";
+ 
         public BehaviourGraph? Subgraph { get => _subgraph; set => _subgraph = value; }
+
         BehaviourGraph? _subgraph;
 
         #endregion
@@ -27,6 +28,7 @@ namespace BehaviourAPI.UtilitySystems
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------
+        
         public override void Start()
         {
             Subgraph?.Start();
@@ -36,7 +38,6 @@ namespace BehaviourAPI.UtilitySystems
         {
             Subgraph?.Update();
             return Subgraph?.Status ?? Status.Error;
-            //Restart
         }
 
         public override void Stop()
