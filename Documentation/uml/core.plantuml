@@ -1,0 +1,42 @@
+@startuml Core
+
+!theme reddress-darkblue
+skinparam backgroundColor #111111
+
+abstract class Node
+abstract class Connection
+abstract class BehaviourGraph
+Interface IStatusHandler
+Interface IPerceptionHandler
+Interface IActionHandler
+Interface ISubgraphHandler
+
+abstract class Perception
+abstract class CompoundPerception
+abstract class Action
+enum Status
+
+Node --|> GraphElement
+GraphElement <|-- Connection
+Node o-- Connection
+Node --* Connection
+BehaviourGraph ..|> IStatusHandler
+Node --* BehaviourGraph
+Connection --* BehaviourGraph
+IStatusHandler --> Status
+ISubgraphHandler --> BehaviourGraph
+IActionHandler --> Action
+Action --> Status
+IPerceptionHandler --> Perception
+Perception <|-- ConditionPerception
+Perception <|-- CompoundPerception
+CompoundPerception <|-- AndPerception
+CompoundPerception <|-- OrPerception
+Perception <|-- TimerPerception
+Perception <|-- FinishExecutionPerception
+FinishExecutionPerception --> IStatusHandler
+Action <|-- FunctionalAction
+@enduml
+
+
+

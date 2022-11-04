@@ -1,0 +1,60 @@
+@startuml UtilitySystems
+
+!theme reddress-darkblue
+skinparam backgroundColor #111111
+
+abstract class BehaviourGraph
+abstract class Node
+abstract class Connection
+
+Interface IStatusHandler
+Interface IActionHandler
+Interface ISubgraphHandler
+
+Interface IUtilityHandler
+abstract class UtilityNode
+abstract class UtilitySelectableNode
+abstract class UtilityElement
+abstract class Factor
+abstract class FusionFactor
+
+Node <|-- UtilityNode
+Connection <|-- UtilityConnection
+ UtilitySystem --> UtilityConnection
+BehaviourGraph <|-- UtilitySystem
+IUtilityHandler <|.. UtilityNode
+UtilityNode <|-- UtilitySelectableNode
+IStatusHandler <|.. UtilitySelectableNode
+
+UtilitySelectableNode <|-- UtilityBucket
+UtilityBucket *-- UtilitySelectableNode
+
+UtilitySelectableNode <|-- UtilityElement
+UtilitySelectableNode --* UtilitySystem
+UtilityElement *-- Factor
+
+UtilityElement <|-- UtilityAction
+UtilityAction ..|> IActionHandler
+UtilityElement <|-- UtilitySubsystemNode
+UtilitySubsystemNode ..|> ISubgraphHandler
+UtilityElement <|-- UtilityExitNode
+UtilityNode <|-- Factor
+
+Factor <|-- VariableFactor
+Factor <|-- FusionFactor
+Factor <|-- FunctionFactor
+FusionFactor <|-- MaxFusionFactor
+FusionFactor <|-- MinFusionFactor
+FusionFactor <|-- WeightedFusionFactor
+
+FunctionFactor o-- UtilityFunction
+
+Factor --* FusionFactor
+Factor --o FunctionFactor
+
+
+
+
+@enduml
+
+

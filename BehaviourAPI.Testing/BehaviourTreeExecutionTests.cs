@@ -155,7 +155,6 @@ namespace BehaviourAPI.Testing
             tree.Update(); // i = 4 -> cond == false -> child.Stop();
             Assert.AreEqual(Status.Running, cond.Status);
             Assert.AreEqual(Status.None, action_1.Status);
-
         }
 
 

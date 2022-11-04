@@ -1,0 +1,31 @@
+@startuml
+
+!theme reddress-darkblue
+skinparam backgroundColor #111111
+
+abstract class Node
+abstract class Connection
+abstract class BehaviourGraph
+Interface IStatusHandler
+Interface IPerceptionHandler
+Interface IActionHandler
+Interface ISubgraphHandler
+
+abstract class State
+
+
+BehaviourGraph <|-- FSM
+Node <|-- State
+IStatusHandler <|.. State
+State --* FSM
+State <|-- ActionState
+State <|-- ExitState
+State <|-- SubgraphState
+State *--* Transition
+ActionState ..|> IActionHandler
+SubgraphState ..|> ISubgraphHandler
+FSM <|-- StackFSM
+Connection <|-- Transition
+Transition <|-- MealyTransition
+IPerceptionHandler <|.. Transition
+@enduml

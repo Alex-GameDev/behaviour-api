@@ -1,0 +1,57 @@
+@startuml behaviourTrees
+
+!theme reddress-darkblue
+skinparam backgroundColor #111111
+
+abstract class BehaviourGraph
+abstract class Node
+abstract class Connection
+
+Interface IStatusHandler
+Interface IPerceptionHandler
+Interface IActionHandler
+Interface ISubgraphHandler
+
+abstract class BTNode
+abstract class LeafNode
+abstract class CompositeNode
+abstract class DecoratorNode
+abstract class SerialCompositeNode
+
+
+Node <|-- BTNode
+BehaviourGraph <|-- BehaviourTree
+IStatusHandler <|.. BTNode
+BTNode --* BehaviourTree
+BTNode <|-- LeafNode
+BTNode <|-- CompositeNode
+BTNode <|-- DecoratorNode
+
+LeafNode <|-- ActionBTNode
+LeafNode <|-- PerceptionBTNode
+LeafNode <|-- ExitNode
+LeafNode <|-- SubsystemNode
+ActionBTNode ..|> IActionHandler
+PerceptionBTNode ..|> IPerceptionHandler
+SubsystemNode ..|> ISubgraphHandler
+
+DecoratorNode <|-- InverterNode
+DecoratorNode <|-- SuccederNode
+DecoratorNode <|-- LoopUntilNode
+DecoratorNode <|-- IteratorNode
+DecoratorNode <|-- ConditionDecoratorNode
+ConditionDecoratorNode ..|> IPerceptionHandler
+
+CompositeNode <|-- ParallelCompositeNode
+CompositeNode <|-- SerialCompositeNode
+SerialCompositeNode <|-- SequencerNode
+SerialCompositeNode <|-- SelectorNode
+
+DecoratorNode o-- BTNode
+CompositeNode o-- BTNode
+BTConnection --|> Connection
+BehaviourTree --> BTConnection
+
+@enduml
+
+
