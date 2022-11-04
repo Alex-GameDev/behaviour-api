@@ -3,20 +3,32 @@
     using Core;
     public class ExitBTNode : LeafNode
     {
-        Status _returnedStatus = Status.Sucess;
+        #region ------------------------------------------- Fields -------------------------------------------
+
+        public Status ReturnedStatus = Status.Sucess;
+
+        #endregion
+
+        #region ---------------------------------------- Build methods ---------------------------------------
 
         public ExitBTNode SetReturnedStatus(Status status)
         {
-            _returnedStatus = status;
+            ReturnedStatus = status;
             return this;
         }
 
-        public override void Start() => BehaviourGraph?.Finish(_returnedStatus);
+        #endregion
+
+        #region --------------------------------------- Runtime methods --------------------------------------
+
+        public override void Start() => BehaviourGraph?.Finish(ReturnedStatus);
 
         // This method should never be executed cause start method will always exit this node.
         protected override Status UpdateStatus()
         {
             return Status.Error;
         }
+
+        #endregion
     }
 }

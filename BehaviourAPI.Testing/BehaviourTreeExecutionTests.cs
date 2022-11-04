@@ -3,10 +3,162 @@ namespace BehaviourAPI.Testing
     using Core;
     using BehaviourTrees;
     using Core.Actions;
+    using BehaviourAPI.Core.Perceptions;
+    using System;
 
     [TestClass]
     public class BehaviourTreeExecutionTests
     {
+        [TestMethod("Inverter Decorator")]
+        public void Test_BT_Inverter()
+        {
+            BehaviourTree tree = new BehaviourTree();
+            var action_1 = tree.CreateLeafNode<PerceptionBTNode>("Nodo 1");
+            action_1.Perception = new ConditionPerception(() => false);
+            var inv = tree.CreateDecorator<InverterNode>("inv", action_1);
+            tree.SetStartNode(inv);
+
+            tree.Start();
+            Assert.AreEqual(Status.Running, inv.Status);
+
+            tree.Update();
+            Assert.AreEqual(Status.Sucess, inv.Status);
+            Assert.AreEqual(Status.Failure, action_1.Status);
+
+            action_1.Perception = new ConditionPerception(() => true);
+            tree.Update();
+            Assert.AreEqual(Status.Failure, inv.Status);
+            Assert.AreEqual(Status.Sucess, action_1.Status);
+        }
+
+        [TestMethod("Succeder Decorator")]
+        public void Test_BT_Succeder()
+        {
+            BehaviourTree tree = new BehaviourTree();
+            var action_1 = tree.CreateLeafNode<PerceptionBTNode>("Nodo 1");
+            action_1.Perception = new ConditionPerception(() => false);
+            var suc = tree.CreateDecorator<SuccederNode>("inv", action_1);
+            tree.SetStartNode(suc);
+
+            tree.Start();
+            Assert.AreEqual(Status.Running, suc.Status);
+
+            tree.Update();
+            Assert.AreEqual(Status.Sucess, suc.Status);
+            Assert.AreEqual(Status.Failure, action_1.Status);
+
+            action_1.Perception = new ConditionPerception(() => true);
+            tree.Update();
+            Assert.AreEqual(Status.Sucess, suc.Status);
+            Assert.AreEqual(Status.Sucess, action_1.Status);
+        }
+
+        [TestMethod("Iterator Decorator")]
+        public void Test_BT_Iterator()
+        {
+            BehaviourTree tree = new BehaviourTree();
+            var action_1 = tree.CreateLeafNode<PerceptionBTNode>("Nodo 1");
+            action_1.Perception = new ConditionPerception(() => true);
+            var iter = tree.CreateDecorator<IteratorNode>("inv", action_1).SetIterations(3);
+            tree.SetStartNode(iter);
+
+            tree.Start();
+            Assert.AreEqual(Status.Running, iter.Status);
+
+            tree.Update(); // Action ends with success -> iters = 1 -> iter restart action 
+            Assert.AreEqual(Status.Running, iter.Status);
+            Assert.AreEqual(Status.Running, action_1.Status);
+
+            tree.Update(); // Action ends with success -> iters = 2 -> iter restart action 
+            Assert.AreEqual(Status.Running, iter.Status);
+            Assert.AreEqual(Status.Running, action_1.Status);
+
+            tree.Update(); // Action ends with success -> iters = 3 -> keep the value 
+            Assert.AreEqual(Status.Sucess, iter.Status);
+            Assert.AreEqual(Status.Sucess, action_1.Status);
+        }
+
+        [TestMethod("LoopUntil Decorator")]
+        public void Test_BT_LoopUntil()
+        {
+            int i = 0;
+            int j = 0;
+
+            BehaviourTree tree = new BehaviourTree();
+            var action_1 = tree.CreateLeafNode<PerceptionBTNode>("Nodo 1");
+            var action_2 = tree.CreateLeafNode<PerceptionBTNode>("Nodo 2");
+            action_1.Perception = new ConditionPerception(() => i == 3);
+            action_2.Perception = new ConditionPerception(() => j == 3);
+            var loopUntil1 = tree.CreateDecorator<LoopUntilNode>("l1", action_1).SetTargetStatus(Status.Sucess);
+            var loopUntil2 = tree.CreateDecorator<LoopUntilNode>("l2", action_2).SetTargetStatus(Status.Sucess).SetMaxIterations(2);
+            var seq = tree.CreateComposite<SequencerNode>("seq", false, loopUntil1, loopUntil2);
+            tree.SetStartNode(seq);
+
+            tree.Start();
+
+            i++;
+            tree.Update(); // i = 1 -> Action1 end with failure -> iters = 1 -> loopUntil1 restart action1
+            Assert.AreEqual(Status.Running, loopUntil1.Status);
+            Assert.AreEqual(Status.Running, action_1.Status);
+
+            i++;
+            tree.Update(); // i = 2 -> Action1 end with failure -> iters = 2 -> loopUntil1 restart action1
+            Assert.AreEqual(Status.Running, loopUntil1.Status);
+            Assert.AreEqual(Status.Running, action_1.Status);
+
+            i++;
+            tree.Update(); // i = 3 -> Action1 end with success -> keep the value
+            Assert.AreEqual(Status.Sucess, loopUntil1.Status);
+            Assert.AreEqual(Status.Sucess, action_1.Status);
+
+            j++;
+            tree.Update(); // j = 1 -> Action1 end with failure -> iters = 1 -> loopUntil1 restart action1
+            Assert.AreEqual(Status.Running, loopUntil2.Status);
+            Assert.AreEqual(Status.Running, action_2.Status);
+
+            j++;
+            tree.Update(); // j = 1 -> Action1 end with failure -> iters = 2 -> keep the value
+            Assert.AreEqual(Status.Failure, loopUntil2.Status);
+            Assert.AreEqual(Status.Failure, action_2.Status);
+        }
+
+        [TestMethod("Condiotion Decorator")]
+        public void Test_BT_ConditionDecorator()
+        {
+            int i = 0;
+
+            BehaviourTree tree = new BehaviourTree();
+            var action_1 = tree.CreateLeafNode<PerceptionBTNode>("Nodo 1");
+            action_1.Perception = new ConditionPerception(() => true);
+            var cond = tree.CreateDecorator<ConditionDecoratorNode>("inv", action_1);
+            cond.Perception = new ConditionPerception(() => i > 2 && i < 4);
+            tree.SetStartNode(cond);
+
+            tree.Start();
+
+            i++;
+            tree.Update(); // i = 1 -> cond == false
+            Assert.AreEqual(Status.Running, cond.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+
+            i++;
+            tree.Update(); // i = 2 -> cond == false
+            Assert.AreEqual(Status.Running, cond.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+
+            i++;
+            tree.Update(); // i = 3 -> cond == true -> child.Start();
+            Assert.AreEqual(Status.Sucess, cond.Status);
+            Assert.AreEqual(Status.Sucess, action_1.Status);
+
+            i++;
+            tree.Update(); // i = 4 -> cond == false -> child.Stop();
+            Assert.AreEqual(Status.Running, cond.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+
+        }
+
+
         [TestMethod("Sequencer Execution Sucess")]
         public void Test_BT_Sequencer_Success()
         {
