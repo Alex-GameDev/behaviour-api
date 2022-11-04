@@ -1,19 +1,19 @@
 ﻿namespace BehaviourAPI.Core.Perceptions
 {
-    public class ConditionalPerception : Perception
+    public class ConditionPerception : Perception
     {
         Func<bool> _check;
-        System.Action? _start;
-        System.Action? _stop;
+        Action? _start;
+        Action? _stop;
 
-        public ConditionalPerception(System.Action? start, Func<bool> update, System.Action? stop = null)
+        public ConditionPerception(Action? start, Func<bool> update, Action? stop = null)
         {
             _start = start;
             _check = update;
             _stop = stop;
         }
 
-        public ConditionalPerception(Func<bool> check, System.Action? stop = null)
+        public ConditionPerception(Func<bool> check, Action? stop = null)
         {
             _check = check;
             _stop = stop;

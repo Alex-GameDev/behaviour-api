@@ -14,7 +14,7 @@
             FSM fsm = new FSM();
             var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Running));
             var s2 = fsm.CreateState<ActionState>("st2").SetAction(new FunctionalAction(() => Status.Running));
-            Transition t = fsm.CreateTransition<Transition>("t", s1, s2, new ConditionalPerception(() => true));
+            Transition t = fsm.CreateTransition<Transition>("t", s1, s2, new ConditionPerception(() => true));
 
             fsm.Start();
             Assert.AreEqual(Status.Running, fsm.Status);
@@ -40,14 +40,14 @@
             var s2 = fsm.CreateState<ActionState>("st2").SetAction(new FunctionalAction(() => Status.Running));
             var s3 = fsm.CreateState<ActionState>("st3").SetAction(new FunctionalAction(() => Status.Running));
 
-            Transition t1_2 = fsm.CreateTransition<Transition>("t12", s1, s2, new ConditionalPerception(() => false));
-            Transition t1_3 = fsm.CreateTransition<Transition>("t13", s1, s3, new ConditionalPerception(() => true));
+            Transition t1_2 = fsm.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => false));
+            Transition t1_3 = fsm.CreateTransition<Transition>("t13", s1, s3, new ConditionPerception(() => true));
 
-            Transition t2_1 = fsm.CreateTransition<Transition>("t21", s2, s1, new ConditionalPerception(() => false));
-            Transition t2_3 = fsm.CreateTransition<Transition>("t23", s2, s3, new ConditionalPerception(() => false));
+            Transition t2_1 = fsm.CreateTransition<Transition>("t21", s2, s1, new ConditionPerception(() => false));
+            Transition t2_3 = fsm.CreateTransition<Transition>("t23", s2, s3, new ConditionPerception(() => false));
 
-            Transition t3_1 = fsm.CreateTransition<Transition>("t31", s3, s2, new ConditionalPerception(() => true));
-            Transition t3_2 = fsm.CreateTransition<Transition>("t32", s3, s1, new ConditionalPerception(() => true));
+            Transition t3_1 = fsm.CreateTransition<Transition>("t31", s3, s2, new ConditionPerception(() => true));
+            Transition t3_2 = fsm.CreateTransition<Transition>("t32", s3, s1, new ConditionPerception(() => true));
 
             fsm.Start();
             Assert.AreEqual(Status.Running, fsm.Status);
@@ -94,12 +94,12 @@
             var s1 = parent.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Running));
             var s2 = parent.CreateState<SubgraphState>("st2").SetSubgraph(child);
             var s3 = parent.CreateState<ActionState>("st3").SetAction(new FunctionalAction(() => Status.Running));
-            var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2, new ConditionalPerception(() => true));
+            var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => true));
             var t2_3 = parent.CreateFinishStateTransition<Transition>("t2_3",s2, s3, false, true);
 
             var s4 = child.CreateState<ActionState>("st4").SetAction(new FunctionalAction(() => Status.Running));
             var s5 = child.CreateState<ExitState>("st5").SetReturnedStatus(Status.Failure);
-            var t4_5 = child.CreateTransition<Transition>("t45", s4, s5, new ConditionalPerception(() => true));
+            var t4_5 = child.CreateTransition<Transition>("t45", s4, s5, new ConditionPerception(() => true));
 
             parent.Start();
             Assert.AreEqual(Status.Running, parent.Status);
@@ -158,10 +158,10 @@
             var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Sucess));
             var s2 = fsm.CreateState<ActionState>("st2").SetAction(new FunctionalAction(() => Status.Sucess));
             var s3 = fsm.CreateState<ActionState>("st3").SetAction(new FunctionalAction(() => Status.Sucess));
-            var t1_2 = fsm.CreateTransition<MealyTransition>("t12", s1, s2, new ConditionalPerception(() => true)).SetOnPerformAction(() => i--);
-            var t2_3 = fsm.CreateTransition<MealyTransition>("t23", s2, s3, new ConditionalPerception(() => i < 0)).SetOnPerformAction(() => i++); 
-            var t3_2 = fsm.CreateTransition<MealyTransition>("t32", s3, s2, new ConditionalPerception(() => true)).SetOnPerformAction(() => i++); 
-            var t2_1 = fsm.CreateTransition<MealyTransition>("t21", s2, s1, new ConditionalPerception(() => i > 0)).SetOnPerformAction(() => i--);
+            var t1_2 = fsm.CreateTransition<MealyTransition>("t12", s1, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i--);
+            var t2_3 = fsm.CreateTransition<MealyTransition>("t23", s2, s3, new ConditionPerception(() => i < 0)).SetOnPerformAction(() => i++); 
+            var t3_2 = fsm.CreateTransition<MealyTransition>("t32", s3, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i++); 
+            var t2_1 = fsm.CreateTransition<MealyTransition>("t21", s2, s1, new ConditionPerception(() => i > 0)).SetOnPerformAction(() => i--);
 
             fsm.Start();
             Assert.AreEqual(0, i);
