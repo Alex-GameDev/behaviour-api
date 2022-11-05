@@ -1,7 +1,7 @@
 namespace BehaviourAPI.UtilitySystems
 {
     using Core;
-
+    using Core.Actions;
     /// <summary>
     /// Behaviour graph that choose between diferent <see cref="UtilitySelectableNode"/> items and executes.
     /// </summary>
@@ -82,9 +82,10 @@ namespace BehaviourAPI.UtilitySystems
             return CreateFusionFactor<T>(name, children.ToList());
         }
 
-        public T CreateUtilityElement<T>(string name, Factor factor, bool root = true) where T : UtilityElement, new()
+        public UtilityAction CreateUtilityAction(string name, Factor factor, Action? action = null, bool root = true) 
         {
-            T utilityExecutable = CreateNode<T>(name);
+            UtilityAction utilityExecutable = CreateNode<UtilityAction>(name);
+            utilityExecutable.Action = action;
             CreateConnection<UtilityConnection>(utilityExecutable, factor);
             if (root) _utilityCandidates.Add(utilityExecutable);
             utilityExecutable.SetFactor(factor);

@@ -1,6 +1,8 @@
 namespace BehaviourAPI.BehaviourTrees
 {
     using Core;
+    using Core.Actions;
+    using Core.Perceptions;
     /// <summary>
     /// Decision system that consists of traversing a tree in depth depending on the result returned by its nodes.
     /// The execution methods are propagated along the tree from the root node.
@@ -57,9 +59,17 @@ namespace BehaviourAPI.BehaviourTrees
             return CreateComposite<T>(name, childs.ToList(), randomOrder);
         }
 
-        public T CreateLeafNode<T>(string name) where T : LeafNode, new()
+        public ActionBTNode CreateActionBTNode(string name, Action? action = null)
         {
-            T node = CreateNode<T>(name);
+            ActionBTNode node = CreateNode<ActionBTNode>(name);
+            node.Action = action;
+            return node;
+        }
+
+        public PerceptionBTNode CreatePerceptionBTNode(string name, Perception? perception = null)
+        {
+            PerceptionBTNode node = CreateNode<PerceptionBTNode>(name);
+            node.Perception = perception;
             return node;
         }
 

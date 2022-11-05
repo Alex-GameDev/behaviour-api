@@ -9,21 +9,14 @@ abstract class BehaviourGraph
 Interface IStatusHandler
 Interface IPerceptionHandler
 Interface IActionHandler
-Interface ISubgraphHandler
-
-abstract class State
 
 
 BehaviourGraph <|-- FSM
 Node <|-- State
+IActionHandler <|.. State
 IStatusHandler <|.. State
 State --* FSM
-State <|-- ActionState
-State <|-- ExitState
-State <|-- SubgraphState
 State *--* Transition
-ActionState ..|> IActionHandler
-SubgraphState ..|> ISubgraphHandler
 FSM <|-- StackFSM
 Connection <|-- Transition
 Transition <|-- MealyTransition

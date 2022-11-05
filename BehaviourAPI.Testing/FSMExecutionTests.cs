@@ -12,8 +12,8 @@
         public void Test_FSM_Transition()
         {
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Running));
-            var s2 = fsm.CreateState<ActionState>("st2").SetAction(new FunctionalAction(() => Status.Running));
+            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Running));
+            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Running));
             Transition t = fsm.CreateTransition<Transition>("t", s1, s2, new ConditionPerception(() => true));
 
             fsm.Start();
@@ -36,9 +36,9 @@
         public void Test_FSM_MultipleTransitions()
         {
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Running));
-            var s2 = fsm.CreateState<ActionState>("st2").SetAction(new FunctionalAction(() => Status.Running));
-            var s3 = fsm.CreateState<ActionState>("st3").SetAction(new FunctionalAction(() => Status.Running));
+            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Running));
+            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Running));
+            var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Running));
 
             Transition t1_2 = fsm.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => false));
             Transition t1_3 = fsm.CreateTransition<Transition>("t13", s1, s3, new ConditionPerception(() => true));
@@ -91,17 +91,17 @@
             FSM child = new FSM();
             FSM parent = new FSM();
 
-            var s1 = parent.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Running));
-            var s2 = parent.CreateState<SubgraphState>("st2").SetSubgraph(child);
-            var s3 = parent.CreateState<ActionState>("st3").SetAction(new FunctionalAction(() => Status.Running));
+            var s1 = parent.CreateState("st1", new FunctionalAction(() => Status.Running));
+            var s2 = parent.CreateState("st2", new EnterGraphAction(child));
+            var s3 = parent.CreateState("st3", new FunctionalAction(() => Status.Running));
             var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => true));
             var t2_3 = parent.CreateFinishStateTransition<Transition>("t2_3",s2, s3, false, true);
 
-            var s4 = child.CreateState<ActionState>("st4").SetAction(new FunctionalAction(() => Status.Running));
-            var s5 = child.CreateState<ExitState>("st5").SetReturnedStatus(Status.Failure);
+            var s4 = child.CreateState("st4", new FunctionalAction(() => Status.Running));
+            var s5 = child.CreateState("st5", new ExitGraphAction(child, Status.Failure));
             var t4_5 = child.CreateTransition<Transition>("t45", s4, s5, new ConditionPerception(() => true));
 
-            parent.Start();
+            parent.Start(); // Enter S1
             Assert.AreEqual(Status.Running, parent.Status);
             Assert.AreEqual(Status.None, child.Status);
             Assert.AreEqual(Status.Running, s1.Status);
@@ -110,7 +110,7 @@
             Assert.AreEqual(Status.None, s4.Status);
             Assert.AreEqual(Status.None, s5.Status);
 
-            parent.Update();
+            parent.Update(); // Exit S1 -> Enter S2 -> Enter Subgraph -> Enter S4
             Assert.AreEqual(Status.Running, parent.Status);
             Assert.AreEqual(Status.Running, child.Status);
             Assert.AreEqual(Status.None, s1.Status);
@@ -119,16 +119,16 @@
             Assert.AreEqual(Status.Running, s4.Status);
             Assert.AreEqual(Status.None, s5.Status);
 
-            parent.Update();
+            parent.Update(); // Exit S4 -> Enter S5 -> Exit subgraph (failure) -> S2 (failure)
             Assert.AreEqual(Status.Running, parent.Status);
             Assert.AreEqual(Status.Failure, child.Status);
             Assert.AreEqual(Status.None, s1.Status);
             Assert.AreEqual(Status.Failure, s2.Status);
             Assert.AreEqual(Status.None, s3.Status);
             Assert.AreEqual(Status.None, s4.Status);
-            Assert.AreEqual(Status.None, s5.Status);
+            Assert.AreEqual(Status.Running, s5.Status); // ?
 
-            parent.Update();
+            parent.Update(); // Perception checked -> Exit S2 -> Enter S4
             Assert.AreEqual(Status.Running, parent.Status);
             Assert.AreEqual(Status.None, child.Status);
             Assert.AreEqual(Status.None, s1.Status);
@@ -137,7 +137,7 @@
             Assert.AreEqual(Status.None, s4.Status);
             Assert.AreEqual(Status.None, s5.Status);
 
-            parent.Stop();
+            parent.Stop(); // Exit graph
             Assert.AreEqual(Status.None, parent.Status);
             Assert.AreEqual(Status.None, child.Status);
             Assert.AreEqual(Status.None, s1.Status);
@@ -155,9 +155,9 @@
 
             var i = 0;
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState<ActionState>("st1").SetAction(new FunctionalAction(() => Status.Sucess));
-            var s2 = fsm.CreateState<ActionState>("st2").SetAction(new FunctionalAction(() => Status.Sucess));
-            var s3 = fsm.CreateState<ActionState>("st3").SetAction(new FunctionalAction(() => Status.Sucess));
+            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Sucess));
+            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Sucess));
+            var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Sucess));
             var t1_2 = fsm.CreateTransition<MealyTransition>("t12", s1, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i--);
             var t2_3 = fsm.CreateTransition<MealyTransition>("t23", s2, s3, new ConditionPerception(() => i < 0)).SetOnPerformAction(() => i++); 
             var t3_2 = fsm.CreateTransition<MealyTransition>("t32", s3, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i++); 

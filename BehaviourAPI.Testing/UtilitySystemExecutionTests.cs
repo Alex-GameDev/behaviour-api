@@ -19,7 +19,7 @@ namespace BehaviourAPI.Testing
             var v1 = 0f;
             UtilitySystem us = new UtilitySystem();
             Factor f1 = us.CreateVariableFactor("v1", () => v1, 0f, 1f);
-            UtilityAction action1 = us.CreateUtilityElement<UtilityAction>("Action", f1).SetAction(new FunctionalAction(() =>
+            UtilityAction action1 = us.CreateUtilityAction("Action", f1, new FunctionalAction(() =>
             {
                 v1 += 1f;
                 return Status.Running;
@@ -48,13 +48,13 @@ namespace BehaviourAPI.Testing
             Factor f1 = us.CreateVariableFactor("v1", () => v1, 0f, 1f);
             Factor f2 = us.CreateVariableFactor("v2", () => v2, 0f, 1f);
 
-            UtilityAction action1 = us.CreateUtilityElement<UtilityAction>("Action1", f1).SetAction(new FunctionalAction(() =>
+            UtilityAction action1 = us.CreateUtilityAction("Action1", f1, new FunctionalAction(() =>
             {
                 v1 -= .25f;
                 v2 += .25f;
                 return Status.Running;
             }));
-            UtilityAction action2 = us.CreateUtilityElement<UtilityAction>("Action2", f2).SetAction(new FunctionalAction(() =>
+            UtilityAction action2 = us.CreateUtilityAction("Action2", f2, new FunctionalAction(() =>
             {
                 v1 += .25f;
                 v2 -= .25f;
@@ -109,7 +109,7 @@ namespace BehaviourAPI.Testing
             
             Factor f1 = us.CreateVariableFactor("v1", () => v1, 0f, 1f);
             FunctionFactor ff = us.CreateFunctionFactor("ff", f1, new CustomFunction((x) => x * x));
-            UtilityAction action = us.CreateUtilityElement<UtilityAction>("Action1", ff).SetAction(new FunctionalAction(() =>
+            UtilityAction action = us.CreateUtilityAction("Action1", ff, new FunctionalAction(() =>
             {
                 v1 += .25f;
                 return Status.Running;
@@ -147,7 +147,7 @@ namespace BehaviourAPI.Testing
             Factor f2 = us.CreateVariableFactor("v2", () => v2, 0, 10);
             Factor f3 = us.CreateVariableFactor("v3", () => v3, 0, 10);
             FusionFactor ff = us.CreateFusionFactor<MaxFusionFactor>("ff", f1, f2, f3);
-            UtilityAction action = us.CreateUtilityElement<UtilityAction>("Action1", ff).SetAction(new FunctionalAction(() =>
+            UtilityAction action = us.CreateUtilityAction("Action1", ff, new FunctionalAction(() =>
             {
                 v1 += 1;
                 v3 -= 3;

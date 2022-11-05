@@ -2,7 +2,7 @@
 {
     using Core.Perceptions;
     using Core;
-    using System.Xml.Linq;
+    using Core.Actions;
 
     public class FSM : BehaviourGraph
     {
@@ -28,9 +28,10 @@
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public T CreateState<T>(string name) where T : State, new()
+        public State CreateState(string name, Action? action = null)
         {
-            T state = CreateNode<T>(name);
+            State state = CreateNode<State>(name);
+            state.Action = action;
             return state;
         }
 
@@ -49,8 +50,7 @@
             else
             {
                 throw new DuplicateWaitObjectException(name, "This FSM already contains a transition with this name.");
-            }
-           
+            }           
         }
 
         public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure) where T : Transition, new()

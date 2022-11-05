@@ -3,8 +3,11 @@
 !theme reddress-darkblue
 skinparam backgroundColor #111111
 
+
 abstract class Node
+
 abstract class Connection
+abstract class GraphElement
 abstract class BehaviourGraph
 Interface IStatusHandler
 Interface IPerceptionHandler
@@ -17,9 +20,9 @@ abstract class Action
 enum Status
 
 Node --|> GraphElement
+
 GraphElement <|-- Connection
-Node o-- Connection
-Node --* Connection
+Node o--* Connection
 BehaviourGraph ..|> IStatusHandler
 Node --* BehaviourGraph
 Connection --* BehaviourGraph
@@ -27,6 +30,8 @@ IStatusHandler --> Status
 ISubgraphHandler --> BehaviourGraph
 IActionHandler --> Action
 Action --> Status
+Action <|-- EnterGraphAction
+Action <|-- ExitGraphAction
 IPerceptionHandler --> Perception
 Perception <|-- ConditionPerception
 Perception <|-- CompoundPerception

@@ -14,8 +14,11 @@ Interface ISubgraphHandler
 
 abstract class BTNode
 abstract class LeafNode
-abstract class CompositeNode
 abstract class DecoratorNode
+
+abstract class CompositeNode
+
+
 abstract class SerialCompositeNode
 
 
@@ -23,14 +26,12 @@ Node <|-- BTNode
 BehaviourGraph <|-- BehaviourTree
 IStatusHandler <|.. BTNode
 BTNode --* BehaviourTree
-BTNode <|-- LeafNode
-BTNode <|-- CompositeNode
 BTNode <|-- DecoratorNode
+BTNode <|-- CompositeNode
+BTNode <|-- LeafNode
 
 LeafNode <|-- ActionBTNode
 LeafNode <|-- PerceptionBTNode
-LeafNode <|-- ExitNode
-LeafNode <|-- SubsystemNode
 ActionBTNode ..|> IActionHandler
 PerceptionBTNode ..|> IPerceptionHandler
 SubsystemNode ..|> ISubgraphHandler

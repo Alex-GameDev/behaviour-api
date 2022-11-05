@@ -14,12 +14,12 @@ namespace BehaviourAPI.StateMachines
     {
         Stack<State> _stateStack;
 
-        ActionState _comeBackState;
+        State _comeBackState;
 
         public StackFSM()
         {
             _stateStack = new Stack<State>();
-            _comeBackState = CreateState<ActionState>("comeback").SetAction(new FunctionalAction(ReturnToLastState));
+            _comeBackState = CreateState("comeback", new FunctionalAction(ReturnToLastState));
         }
 
         public T CreateComebackTransition<T>(string name, State from, Perception perception) where T : Transition, new()
