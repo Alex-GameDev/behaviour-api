@@ -40,7 +40,6 @@ namespace BehaviourAPI.Core
 
         public List<Node> Nodes = new List<Node>();
         public List<Connection> Connections = new List<Connection>();
-        public bool ExecuteOnLoop = true;
 
         // Used internally to find nodes by name
         protected Dictionary<string, Node> nodeDict = new Dictionary<string, Node>();

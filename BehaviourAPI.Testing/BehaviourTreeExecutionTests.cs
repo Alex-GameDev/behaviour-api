@@ -122,7 +122,7 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Failure, action_2.Status);
         }
 
-        [TestMethod("Condiotion Decorator")]
+        [TestMethod("Condition Decorator")]
         public void Test_BT_ConditionDecorator()
         {
             int i = 0;
@@ -156,7 +156,6 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Running, cond.Status);
             Assert.AreEqual(Status.None, action_1.Status);
         }
-
 
         [TestMethod("Sequencer Execution Sucess")]
         public void Test_BT_Sequencer_Success()

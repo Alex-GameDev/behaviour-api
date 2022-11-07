@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviourAPI.UtilitySystems
+﻿namespace BehaviourAPI.UtilitySystems
 {
     public class LinearFunction : UtilityFunction
     {
@@ -17,6 +10,6 @@ namespace BehaviourAPI.UtilitySystems
             this.n = n;
         }
 
-        public override float Evaluate(float x) => m * x + n;
+        public override float Evaluate(float x) => Math.Clamp(m * x + n, 0f, 1f);
     }
 }
