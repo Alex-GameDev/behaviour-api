@@ -53,6 +53,11 @@
             }           
         }
 
+        public Transition CreateTransition(string name, State from, State to, Perception perception)
+        {
+            return CreateTransition<Transition>(name, from, to, perception);
+        }
+
         public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure) where T : Transition, new()
         {
             Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure); 

@@ -43,6 +43,12 @@ namespace BehaviourAPI.BehaviourTrees
             if (IsRandomized) m_children.OrderBy((guid) => Guid.NewGuid());
         }
 
+        public override void Stop()
+        {
+            base.Stop();
+            m_children.ForEach(c => c?.Stop());
+        }
+
         protected BTNode? GetChildAt(int idx)
         {
             if (idx < 0 || idx >= m_children.Count) return null;

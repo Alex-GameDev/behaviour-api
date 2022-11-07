@@ -35,7 +35,15 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
+            _currentIterations = 0;
             m_childNode?.Start();
+        }
+
+        public override void Stop()
+        {
+            base.Stop();
+            _currentIterations = 0;
+            m_childNode?.Stop();
         }
 
         protected override Status UpdateStatus()

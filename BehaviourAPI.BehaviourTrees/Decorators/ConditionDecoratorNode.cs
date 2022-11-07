@@ -54,7 +54,7 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Stop()
         {
             base.Stop();
-
+            if(m_childNode != null && _childExecutedLastFrame) m_childNode.Stop();
             if (Perception != null)
             {
                 Perception.Stop();
