@@ -38,7 +38,6 @@
         public void Start() => Perception?.Start();
         public void Stop() => Perception?.Stop();
         public virtual bool Check() => Perception?.Check() ?? false;
-
         public virtual void Perform() => _fsm?.SetCurrentState(_targetState);
 
         #endregion

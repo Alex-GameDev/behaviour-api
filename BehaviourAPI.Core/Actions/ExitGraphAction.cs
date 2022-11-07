@@ -7,7 +7,7 @@
         public BehaviourGraph? Graph;
 
         // Graph arg must be the IActionHandler's graph.
-        public ExitGraphAction(BehaviourGraph graph, Status returnedStatus = Status.Sucess)
+        public ExitGraphAction(BehaviourGraph graph, Status returnedStatus = Status.Success)
         {
             ReturnedStatus = returnedStatus;
             Graph = graph;

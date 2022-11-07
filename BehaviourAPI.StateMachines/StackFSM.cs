@@ -19,7 +19,7 @@ namespace BehaviourAPI.StateMachines
         public StackFSM()
         {
             _stateStack = new Stack<State>();
-            _comeBackState = CreateState("comeback", new FunctionalAction(ReturnToLastState));
+            _comeBackState = CreateState("comeback", new FunctionalAction(() => ReturnToLastState(), () => Status.None));
         }
 
         public T CreateComebackTransition<T>(string name, State from, Perception perception) where T : Transition, new()
@@ -33,25 +33,27 @@ namespace BehaviourAPI.StateMachines
             _stateStack.Clear();
         }
 
-        private Status ReturnToLastState()
+        private void ReturnToLastState()
         {
+            _stateStack.Pop(); // Ignore the last state (the origin of the transition).
             State state = _stateStack.Pop();
             if (state != null)
             {
                 _currentState?.Stop();
                 _currentState = state;
                 _currentState?.Start();
-                return Status.Sucess;
             }
             else
-                return Status.Error;
+                throw new NullReferenceException();
         }
 
         public override void SetCurrentState(State? state)
         {
             if(_currentState != null)
                 _stateStack.Push(_currentState);
-            SetCurrentState(state);
+            base.SetCurrentState(state);
         }
+
+        public State LastState => _stateStack.Peek();
     }
 }

@@ -31,7 +31,7 @@
             if (allStatus.Contains(TriggerStatus)) return TriggerStatus;
 
             // Check if execution finish
-            if (!allStatus.Contains(Status.Running)) return TriggerStatus == Status.Sucess ? Status.Failure : Status.Sucess;
+            if (!allStatus.Contains(Status.Running)) return TriggerStatus == Status.Success ? Status.Failure : Status.Success;
 
             return Status.Running;
         }

@@ -9,7 +9,7 @@ namespace BehaviourAPI.BehaviourTrees
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public Status TargetStatus = Status.Sucess;
+        public Status TargetStatus = Status.Success;
 
         public int MaxIterations = -1;
 

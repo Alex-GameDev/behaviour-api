@@ -15,34 +15,34 @@
         {
             BehaviourTree bt = new BehaviourTree();
             FSM fsm = new FSM();
-            var action1 = bt.CreateActionBTNode("action1", new FunctionalAction(() => Status.Sucess));
+            var action1 = bt.CreateActionBTNode("action1", new FunctionalAction(() => Status.Success));
             var action2 = bt.CreateActionBTNode("action2", new EnterGraphAction(fsm));
-            var action3 = bt.CreateActionBTNode("action3", new FunctionalAction(() => Status.Sucess));
+            var action3 = bt.CreateActionBTNode("action3", new FunctionalAction(() => Status.Success));
             var seq = bt.CreateComposite<SequencerNode>("seq", false, action1, action2, action3);
             bt.SetStartNode(seq);
 
             var entry = fsm.CreateState("entry");
-            var exit = fsm.CreateState("exit", new ExitGraphAction(fsm, Status.Sucess));
+            var exit = fsm.CreateState("exit", new ExitGraphAction(fsm, Status.Success));
             var t = fsm.CreateTransition("t", entry, exit, new ConditionPerception(() => true));
 
 
             bt.Start();
             bt.Update(); //Árbol (R) [ Success - Running - None] - FSM (R) [Running - None]
-            Assert.AreEqual(Status.Sucess, action1.Status);
+            Assert.AreEqual(Status.Success, action1.Status);
             Assert.AreEqual(Status.Running, action2.Status);
             Assert.AreEqual(Status.Running, fsm.Status);
             Assert.AreEqual(Status.Running, entry.Status);
 
             bt.Update(); //Árbol (R) [ Success - Success - Running] - FSM (S) [None - Running]
-            Assert.AreEqual(Status.Sucess, action2.Status);
+            Assert.AreEqual(Status.Success, action2.Status);
             Assert.AreEqual(Status.Running, action3.Status);
-            Assert.AreEqual(Status.Sucess, fsm.Status);
+            Assert.AreEqual(Status.Success, fsm.Status);
             Assert.AreEqual(Status.Running, exit.Status);
 
             bt.Update(); //Árbol (S) [ Success - Success - Success] - FSM (S) [None - Running]
-            Assert.AreEqual(Status.Sucess, action3.Status);
-            Assert.AreEqual(Status.Sucess, bt.Status);
-            Assert.AreEqual(Status.Sucess, fsm.Status);
+            Assert.AreEqual(Status.Success, action3.Status);
+            Assert.AreEqual(Status.Success, bt.Status);
+            Assert.AreEqual(Status.Success, fsm.Status);
             Assert.AreEqual(Status.Running, exit.Status);
         }
 
@@ -58,7 +58,7 @@
             var t2 = fsm.CreateFinishStateTransition<Transition>("t2", subBT, final, true, false);
 
             var action1 = bt.CreateActionBTNode("action1", new FunctionalAction(() => Status.Failure));
-            var action2 = bt.CreateActionBTNode("action2", new FunctionalAction(() => Status.Sucess));
+            var action2 = bt.CreateActionBTNode("action2", new FunctionalAction(() => Status.Success));
             var sel = bt.CreateComposite<SelectorNode>("seq", false, action1, action2);
             bt.SetStartNode(sel);
 
@@ -81,9 +81,9 @@
             Assert.AreEqual(Status.Running, action2.Status);
 
             fsm.Update(); //FSM (R) [None - Success - None] - Árbol (S) [Failure - Success]
-            Assert.AreEqual(Status.Sucess, subBT.Status);
-            Assert.AreEqual(Status.Sucess, bt.Status);
-            Assert.AreEqual(Status.Sucess, action2.Status);
+            Assert.AreEqual(Status.Success, subBT.Status);
+            Assert.AreEqual(Status.Success, bt.Status);
+            Assert.AreEqual(Status.Success, action2.Status);
 
             fsm.Update(); //FSM (R) [None - None - Running] - Árbol (N)
             Assert.AreEqual(Status.None, subBT.Status);

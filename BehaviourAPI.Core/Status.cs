@@ -4,7 +4,7 @@ namespace BehaviourAPI.Core
     {
         None = 0,
         Running = 1,
-        Sucess = 2,
+        Success = 2,
         Failure = 3,              
         Error = 4
     }

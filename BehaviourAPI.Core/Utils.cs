@@ -4,14 +4,14 @@
     {
         public static Status Inverted(this Status status)
         {
-            if (status == Status.Sucess) return Status.Failure;
-            if (status == Status.Failure) return Status.Sucess;
+            if (status == Status.Success) return Status.Failure;
+            if (status == Status.Failure) return Status.Success;
             else return status;
         }
 
         public static Status ToStatus(this bool check)
         {
-            return check ? Status.Sucess : Status.Failure;
+            return check ? Status.Success : Status.Failure;
         }
 
         public static void MoveAtFirst<T>(this List<T> list, T element)

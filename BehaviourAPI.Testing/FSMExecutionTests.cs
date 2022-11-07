@@ -155,9 +155,9 @@
 
             var i = 0;
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Sucess));
-            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Sucess));
-            var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Sucess));
+            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Success));
+            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Success));
+            var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Success));
             var t1_2 = fsm.CreateTransition<MealyTransition>("t12", s1, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i--);
             var t2_3 = fsm.CreateTransition<MealyTransition>("t23", s2, s3, new ConditionPerception(() => i < 0)).SetOnPerformAction(() => i++); 
             var t3_2 = fsm.CreateTransition<MealyTransition>("t32", s3, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i++); 
@@ -193,6 +193,60 @@
             Assert.AreEqual(Status.Running, s1.Status);
             Assert.AreEqual(Status.None, s2.Status);
             Assert.AreEqual(Status.None, s3.Status);
+        }
+
+        [TestMethod("Stack FSM")]
+        public void Test_FSM_StackFSM()
+        {
+            bool detectaEnemigo = false;
+            bool herido = false;
+            StackFSM fsm = new StackFSM();
+            Assert.AreEqual(1, fsm.Nodes.Count);
+            var st1 = fsm.CreateState("andando", new FunctionalAction(() => Status.Running));
+            var st2 = fsm.CreateState("luchando", new FunctionalAction(() => Status.Running));
+            var st3 = fsm.CreateState("beber_poción", new FunctionalAction(() => Status.Running));
+            var t1_2 = fsm.CreateTransition("enemigo", st1, st2, new ConditionPerception(() => detectaEnemigo));
+            var t2_1 = fsm.CreateTransition("vencido", st2, st1, new ConditionPerception(() => !detectaEnemigo));
+            var t1_3 = fsm.CreateTransition("caida", st1, st3, new ConditionPerception(() => herido));
+            var t2_3 = fsm.CreateTransition("herido", st2, st3, new ConditionPerception(() => herido));
+            var t3_r = fsm.CreateComebackTransition<Transition>("recuperado", st3, new ConditionPerception(() => !herido));
+            fsm.SetStartNode(st1);
+
+            fsm.Start();
+            Assert.AreEqual(Status.Running, st1.Status);
+            Assert.AreEqual(Status.None, st2.Status);
+            Assert.AreEqual(Status.None, st3.Status);
+
+            herido = true;
+            fsm.Update(); // 
+            Assert.AreEqual(Status.None, st1.Status);
+            Assert.AreEqual(Status.None, st2.Status);
+            Assert.AreEqual(Status.Running, st3.Status);
+
+            herido = false;
+            fsm.Update();
+            Assert.AreEqual(Status.Running, st1.Status);
+            Assert.AreEqual(Status.None, st2.Status);
+            Assert.AreEqual(Status.None, st3.Status);
+
+            detectaEnemigo = true;
+            fsm.Update();
+            Assert.AreEqual(Status.None, st1.Status);
+            Assert.AreEqual(Status.Running, st2.Status);
+            Assert.AreEqual(Status.None, st3.Status);
+
+            herido = true;
+            fsm.Update();
+            Assert.AreEqual(Status.None, st1.Status);
+            Assert.AreEqual(Status.None, st2.Status);
+            Assert.AreEqual(Status.Running, st3.Status);
+
+            herido = false;
+            fsm.Update();
+            Assert.AreEqual(Status.None, st1.Status);
+            Assert.AreEqual(Status.Running, st2.Status);
+            Assert.AreEqual(Status.None, st3.Status);
+
         }
     }
 }

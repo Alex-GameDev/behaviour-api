@@ -24,7 +24,7 @@ namespace BehaviourAPI.BehaviourTrees
         {
             m_childNode?.Update();
             var status = m_childNode?.Status ?? Status.Error;
-            if (status == Status.Failure) status = Status.Sucess;
+            if (status == Status.Failure) status = Status.Success;
             return status;
         }
         #endregion

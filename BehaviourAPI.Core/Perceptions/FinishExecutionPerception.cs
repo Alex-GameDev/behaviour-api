@@ -19,7 +19,7 @@
 
         public override bool Check()
         {
-            return ((_statusHandler.Status == Status.Sucess && _triggerOnSuccess) ||
+            return ((_statusHandler.Status == Status.Success && _triggerOnSuccess) ||
                 (_statusHandler.Status == Status.Failure && _triggerOnFailure));
         }
     }
