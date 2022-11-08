@@ -96,7 +96,7 @@ namespace BehaviourAPI.Core
                 throw new InvalidCastException("ERROR: \"type\" value is not a type derived from the graph node type.");
 
             Node? node = (Node?)Activator.CreateInstance(type);
-            if(node!= null)
+            if(node != null)
             {
                 node.BehaviourGraph = this;
                 Nodes.Add(node);

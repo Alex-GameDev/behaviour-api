@@ -6,6 +6,7 @@
     using UtilitySystems;
     using Core.Actions;
     using BehaviourAPI.Core.Perceptions;
+    using BehaviourAPI.BehaviourTrees.Composites;
 
     [TestClass]
     public class SubgraphTests
@@ -91,6 +92,60 @@
             Assert.AreEqual(Status.None, bt.Status);
             Assert.AreEqual(Status.None, action1.Status);
             Assert.AreEqual(Status.None, action2.Status);
+        }
+
+        [TestMethod("US Sub BT and FSM")]
+        public void Test_US_SubBTFSM()
+        {
+            var v1 = 1f;
+            var v2 = 0f;
+            var v3 = 0f;
+            UtilitySystem us = new UtilitySystem();
+            var f1 = us.CreateVariableFactor("f1", () => v1, 0f, 1f);
+            var f2 = us.CreateVariableFactor("f2", () => v2, 0f, 1f);
+            var f3 = us.CreateVariableFactor("f3", () => v3, 0f, 1f);
+
+            FSM fsm = new FSM();
+            BehaviourTree bt = new BehaviourTree();
+
+            var basic = us.CreateUtilityAction("base", f1, new FunctionalAction(()=> { v1 = 0f; v2 = 1f; }, () => Status.Running));
+            var subfsm = us.CreateUtilityAction("fsm", f2, new EnterGraphAction(fsm));
+            var subbt = us.CreateUtilityAction("bt", f3, new EnterGraphAction(bt));
+
+            var entry = fsm.CreateState("entry");
+            var action = fsm.CreateState("action", new FunctionalAction(() => { v2 = 0f; v3 = .5f; }, () => Status.Running));
+
+            var t1 = fsm.CreateTransition("t1", entry, action, new ConditionPerception(() => true));
+
+            var action1 = bt.CreateActionBTNode("action1", new FunctionalAction(() => v1 = 1f, () => Status.Success));
+            var action2 = bt.CreateActionBTNode("action2", new FunctionalAction(() => v3 = 0f, () => Status.Success));
+            var parallel = bt.CreateComposite<ParallelCompositeNode>("parallel", false, action1, action2);
+            bt.SetStartNode(parallel);
+
+            us.Start();
+
+            us.Update(); // Us (basic-1, fsm-0, bt-0) -> basic.start() -> basic.update() -> v1 = 0, v2 = 1 
+            Assert.AreEqual(Status.Running, basic.Status);
+            Assert.AreEqual(1f, basic.Utility);
+            Assert.AreEqual(0f, subfsm.Utility);
+            Assert.AreEqual(0f, subbt.Utility);
+
+            us.Update(); // US (basic-0, fsm-1, bt-0) -> basic.stop() -> fsm.start() -> fsm.Update() -> t1 -> action.Start() -> v2 = 0, v3 = 0
+            Assert.AreEqual(Status.Running, subfsm.Status);
+            Assert.AreEqual(Status.Running, fsm.Status);
+            Assert.AreEqual(Status.Running, action.Status);
+            Assert.AreEqual(0f, basic.Utility);
+            Assert.AreEqual(1f, subfsm.Utility);
+            Assert.AreEqual(0f, subbt.Utility);
+
+            us.Update(); // US (basic-0, fsm-0, bt-1) -> fsm.stop() -> bt.start() -> bt.Update() -> Success -> v1 = 1, v3 = 0
+            Assert.AreEqual(Status.None, fsm.Status);
+            Assert.AreEqual(Status.Success, subbt.Status);
+            Assert.AreEqual(Status.Success, bt.Status);
+            Assert.AreEqual(Status.Success, action1.Status);
+            Assert.AreEqual(Status.Success, action2.Status);
+            Assert.AreEqual(0f, v3);
+            Assert.AreEqual(1f, v1);
         }
     }
 }
