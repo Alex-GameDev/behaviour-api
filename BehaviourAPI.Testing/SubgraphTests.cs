@@ -147,5 +147,19 @@
             Assert.AreEqual(0f, v3);
             Assert.AreEqual(1f, v1);
         }
+
+        [TestMethod("Exception when execute graph twice")]
+        public void Test_ExecuteGraphTwice()
+        {
+            BehaviourTree tree = new BehaviourTree();
+            FSM fsm = new FSM();
+            fsm.CreateState("State", new FunctionalAction(() => Status.Running));
+            var a1 = tree.CreateActionBTNode("sub1", new EnterGraphAction(fsm));
+            var a2 = tree.CreateActionBTNode("sub2", new EnterGraphAction(fsm));
+            var parallel = tree.CreateComposite<ParallelCompositeNode>("parallel", false, a1, a2);
+            tree.SetStartNode(parallel);
+            Assert.ThrowsException<Exception>(() => tree.Start());           
+
+        }
     }
 }

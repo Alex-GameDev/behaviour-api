@@ -253,7 +253,13 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// Enter this behavior graph
         /// </summary>
-        public virtual void Start() => Status = Status.Running;
+        public virtual void Start()
+        {
+            if (Status != Status.None)
+                throw new Exception("ERROR: This graph is already been executed");
+
+            Status = Status.Running;
+        }
 
         /// <summary>
         /// Executes every frame
