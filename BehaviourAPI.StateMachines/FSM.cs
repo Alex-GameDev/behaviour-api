@@ -43,6 +43,7 @@
                 transition.Perception = perception;
                 transition.Action = action;
                 transition.SetFSM(this);
+                transition.SetSourceState(from);
                 transition.SetTargetState(to);
                 from.AddTransition(transition);
                 _transitionDict.Add(name, transition);
@@ -130,6 +131,8 @@
             _currentState = state;
             _currentState?.Start();
         }
+
+        public bool IsCurrentState(State? state) => _currentState == state;
 
         #endregion
     }

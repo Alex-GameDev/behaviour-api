@@ -4,7 +4,7 @@
     using BehaviourAPI.Core.Perceptions;
     using Core;
 
-    public class Transition : Connection, IPerceptionHandler, IActionHandler
+    public class Transition : Connection, IPerceptionHandler, IActionHandler, IPushActivable
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
@@ -15,6 +15,7 @@
         #region ------------------------------------------- Fields -------------------------------------------
 
         protected FSM? _fsm;
+        protected State? _sourceState;
         protected State? _targetState;
         Perception? _perception;
         Action? _action;
@@ -24,6 +25,7 @@
         #region ---------------------------------------- Build methods ---------------------------------------
 
         public void SetFSM(FSM fsm) => _fsm = fsm;
+        public void SetSourceState(State source) => _sourceState = source;
         public void SetTargetState(State target) => _targetState = target;
 
         public override void Initialize()
@@ -31,6 +33,7 @@
             base.Initialize();
             _fsm = BehaviourGraph as FSM;
             _targetState = TargetNode as State;
+            _targetState = SourceNode as State;
         }
 
         #endregion
@@ -42,7 +45,9 @@
         public virtual bool Check() => Perception?.Check() ?? false;
         public virtual void Perform()
         {
-            if(Action != null)
+            if (!(_fsm?.IsCurrentState(_sourceState) ?? false)) return;
+
+            if (Action != null)
             {
                 Action.Start();
                 Action.Update();
@@ -50,6 +55,8 @@
             }
             _fsm?.SetCurrentState(_targetState);
         }
+
+        public void Fire() => Perform();
 
         #endregion
     }
