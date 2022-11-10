@@ -35,12 +35,13 @@
             return state;
         }
 
-        public T CreateTransition<T>(string name, State from, State to, Perception perception) where T : Transition, new()
+        public T CreateTransition<T>(string name, State from, State to, Perception perception, Action? action = null) where T : Transition, new()
         {
             if (!_transitionDict.ContainsKey(name))
             {
                 T transition = CreateConnection<T>(from, to);
                 transition.Perception = perception;
+                transition.Action = action;
                 transition.SetFSM(this);
                 transition.SetTargetState(to);
                 from.AddTransition(transition);
@@ -53,15 +54,21 @@
             }           
         }
 
-        public Transition CreateTransition(string name, State from, State to, Perception perception)
+        public Transition CreateTransition(string name, State from, State to, Perception perception, Action? action = null)
         {
-            return CreateTransition<Transition>(name, from, to, perception);
+            return CreateTransition<Transition>(name, from, to, perception, action);
         }
 
-        public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure) where T : Transition, new()
+        public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action? action = null) where T : Transition, new()
         {
             Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure); 
-            return CreateTransition<T>(name, from, to, finishStatePerception);
+            return CreateTransition<T>(name, from, to, finishStatePerception, action);
+        }
+
+        public Transition CreateFinishStateTransition(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action? action = null)
+        {
+            Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure);
+            return CreateTransition<Transition>(name, from, to, finishStatePerception, action);
         }
 
         public Transition? FindTransition(string name)

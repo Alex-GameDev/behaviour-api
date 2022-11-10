@@ -95,7 +95,7 @@
             var s2 = parent.CreateState("st2", new EnterGraphAction(child));
             var s3 = parent.CreateState("st3", new FunctionalAction(() => Status.Running));
             var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => true));
-            var t2_3 = parent.CreateFinishStateTransition<Transition>("t2_3",s2, s3, false, true);
+            var t2_3 = parent.CreateFinishStateTransition("t2_3",s2, s3, false, true);
 
             var s4 = child.CreateState("st4", new FunctionalAction(() => Status.Running));
             var s5 = child.CreateState("st5", new ExitGraphAction(child, Status.Failure));
@@ -158,10 +158,10 @@
             var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Success));
             var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Success));
             var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Success));
-            var t1_2 = fsm.CreateTransition<MealyTransition>("t12", s1, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i--);
-            var t2_3 = fsm.CreateTransition<MealyTransition>("t23", s2, s3, new ConditionPerception(() => i < 0)).SetOnPerformAction(() => i++); 
-            var t3_2 = fsm.CreateTransition<MealyTransition>("t32", s3, s2, new ConditionPerception(() => true)).SetOnPerformAction(() => i++); 
-            var t2_1 = fsm.CreateTransition<MealyTransition>("t21", s2, s1, new ConditionPerception(() => i > 0)).SetOnPerformAction(() => i--);
+            var t1_2 = fsm.CreateTransition("t12", s1, s2, new ConditionPerception(() => true), new FunctionalAction(() => i--));
+            var t2_3 = fsm.CreateTransition("t23", s2, s3, new ConditionPerception(() => i < 0), new FunctionalAction(() => i++)); 
+            var t3_2 = fsm.CreateTransition("t32", s3, s2, new ConditionPerception(() => true), new FunctionalAction(() => i++)); 
+            var t2_1 = fsm.CreateTransition("t21", s2, s1, new ConditionPerception(() => i > 0), new FunctionalAction(() => i--));
 
             fsm.Start();
             Assert.AreEqual(0, i);

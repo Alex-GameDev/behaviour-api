@@ -26,6 +26,7 @@
             bool check = Perception?.Check() ?? false;
             return check.ToStatus();
         }
+
         public override void Stop()
         {
             base.Stop();
