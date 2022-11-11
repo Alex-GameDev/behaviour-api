@@ -35,7 +35,14 @@
             return state;
         }
 
-        public T CreateTransition<T>(string name, State from, State to, Perception perception, Action? action = null) where T : Transition, new()
+        public T CreateState<T>(string name, Action? action = null) where T : State, new()
+        {
+            T state = CreateNode<T>(name);
+            state.Action = action;
+            return state;
+        }
+
+        public T CreateTransition<T>(string name, State from, State to, Perception? perception = null, Action? action = null) where T : Transition, new()
         {
             if (!_transitionDict.ContainsKey(name))
             {
@@ -54,10 +61,22 @@
                 throw new DuplicateWaitObjectException(name, "This FSM already contains a transition with this name.");
             }           
         }
-
-        public Transition CreateTransition(string name, State from, State to, Perception perception, Action? action = null)
+        
+        public Transition CreateTransition(string name, State from, State to, Perception? perception = null, Action? action = null)
         {
             return CreateTransition<Transition>(name, from, to, perception, action);
+        }
+
+        public T CreateProbabilisticTransition<T>(string name, ProbabilisticState from, State to, float probability, Perception? perception = null) where T : Transition, new()
+        {
+            T transition = CreateTransition<T>(name, from, to, perception);
+            from.SetProbabilisticTransition(transition, probability);
+            return transition;
+        }
+
+        public Transition CreateProbabilisticTransition(string name, ProbabilisticState from, State to, float probability, Perception? perception = null) 
+        {
+            return CreateProbabilisticTransition<Transition>(name, from, to, probability, perception);
         }
 
         public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action? action = null) where T : Transition, new()

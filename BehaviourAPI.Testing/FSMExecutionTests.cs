@@ -95,7 +95,7 @@
             var s2 = parent.CreateState("st2", new EnterGraphAction(child));
             var s3 = parent.CreateState("st3", new FunctionalAction(() => Status.Running));
             var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => true));
-            var t2_3 = parent.CreateFinishStateTransition("t2_3",s2, s3, false, true);
+            var t2_3 = parent.CreateFinishStateTransition("t2_3", s2, s3, false, true);
 
             var s4 = child.CreateState("st4", new FunctionalAction(() => Status.Running));
             var s5 = child.CreateState("st5", new ExitGraphAction(child, Status.Failure));
@@ -159,8 +159,8 @@
             var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Success));
             var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Success));
             var t1_2 = fsm.CreateTransition("t12", s1, s2, new ConditionPerception(() => true), new FunctionalAction(() => i--));
-            var t2_3 = fsm.CreateTransition("t23", s2, s3, new ConditionPerception(() => i < 0), new FunctionalAction(() => i++)); 
-            var t3_2 = fsm.CreateTransition("t32", s3, s2, new ConditionPerception(() => true), new FunctionalAction(() => i++)); 
+            var t2_3 = fsm.CreateTransition("t23", s2, s3, new ConditionPerception(() => i < 0), new FunctionalAction(() => i++));
+            var t3_2 = fsm.CreateTransition("t32", s3, s2, new ConditionPerception(() => true), new FunctionalAction(() => i++));
             var t2_1 = fsm.CreateTransition("t21", s2, s1, new ConditionPerception(() => i > 0), new FunctionalAction(() => i--));
 
             fsm.Start();
@@ -246,7 +246,87 @@
             Assert.AreEqual(Status.None, st1.Status);
             Assert.AreEqual(Status.Running, st2.Status);
             Assert.AreEqual(Status.None, st3.Status);
+        }
 
+        [TestMethod("Probability State")]
+        public void Test_FSM_ProbabilityState()
+        {
+            var p1 = .5f;
+            var p2 = .2f;
+            var p3 = .3f;
+
+            // Sum >= 1
+            var sumProb = p1 + p2 + p3;
+            FSM fsm = new FSM();
+
+            var ps = fsm.CreateState<ProbabilisticState>("ps", new FunctionalAction(() => Status.Running));
+            var s1 = fsm.CreateState("s1", new FunctionalAction(() => Status.Running));
+            var s2 = fsm.CreateState("s2", new FunctionalAction(() => Status.Running));
+            var s3 = fsm.CreateState("s3", new FunctionalAction(() => Status.Running));
+            var tp1 = fsm.CreateProbabilisticTransition("tp1", ps, s1, p1);
+            var tp2 = fsm.CreateProbabilisticTransition("tp2", ps, s2, p2);
+            var tp3 = fsm.CreateProbabilisticTransition("tp3", ps, s3, p3);
+            var t1p = fsm.CreateTransition("t1p", s1, ps, new ConditionPerception(() => true));
+            var t2p = fsm.CreateTransition("t2p", s2, ps, new ConditionPerception(() => true));
+            var t3p = fsm.CreateTransition("t3p", s3, ps, new ConditionPerception(() => true));
+
+            fsm.Start();
+            Assert.AreEqual(Status.Running, ps.Status);
+            Assert.AreEqual(.5f, ps.GetProbability(tp1));            
+
+            for(int i = 0; i < 1000; i++)
+            {
+                // ps <--> s1 (0.0 <= p < 0.5) 
+                // ps <--> s2 (0.5 <= p < 0.7)
+                // ps <--> s3 (0.7 <= p < 1.0)
+                fsm.Update();
+                Assert.IsTrue(ps.Prob < sumProb);
+
+                State s;
+                if (ps.Prob < p1) s = s1;
+                else if (ps.Prob < p1 + p2) s = s2;
+                else s = s3;
+
+                Assert.AreEqual(Status.None, ps.Status);
+                Assert.AreEqual(Status.Running, s.Status);
+                fsm.Update();
+                Assert.AreEqual(Status.Running, ps.Status);
+                Assert.AreEqual(Status.None, s.Status);
+            }
+            
+        }
+
+        [TestMethod("Fire transitions")]
+        public void Test_FSM_FireTransitions()
+        {
+            var fsm = new FSM();
+            var s1 = fsm.CreateState("s1", new FunctionalAction(()=> Status.Running));
+            var s2 = fsm.CreateState("s2", new FunctionalAction(() => Status.Running));
+            var t1 = fsm.CreateTransition("t1", s1, s2);
+            var t2 = fsm.CreateTransition("t2", s2, s1);
+
+            var pushT1 = new PushPerception(t1);
+            var pushT2 = new PushPerception(t2);
+
+            // s1 <--> s2
+            // Trigger transitions using Push perceptions
+            fsm.Start();    // s1 (R) <--> s2(N)
+            fsm.Update();   // s1 (R) <--> s2(N)
+
+            Assert.AreEqual(Status.Running, s1.Status);
+            Assert.AreEqual(Status.None, s2.Status);
+
+            pushT2.Fire(); // S2 is not current state -> s1 (R) <--> s2(N)
+            Assert.AreEqual(Status.Running, s1.Status);
+            Assert.AreEqual(Status.None, s2.Status);
+
+            pushT1.Fire(); // S1 is current state -> s1 (N) <--> s2(R)
+            Assert.AreEqual(Status.None, s1.Status);
+            Assert.AreEqual(Status.Running, s2.Status);
+
+            pushT2.Fire(); // S2 is current state -> s1 (R) <--> s2(N)
+            Assert.AreEqual(Status.Running, s1.Status);
+            Assert.AreEqual(Status.None, s2.Status);
         }
     }
 }

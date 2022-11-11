@@ -21,7 +21,7 @@
 
         #region -------------------------------------------- Fields ------------------------------------------
 
-        List<Transition?> _transitions;
+        protected List<Transition?> _transitions;
 
         #endregion
 
@@ -70,12 +70,11 @@
             Action?.Stop();
         }
 
-        private bool CheckTransitions()
+        protected virtual bool CheckTransitions()
         {
             for(int i = 0; i < _transitions.Count; i++)
             {
-                bool check = _transitions[i]?.Check() ?? false;
-                if(check)
+                if(_transitions[i]?.Check() ?? false)
                 {
                     _transitions[i]?.Perform();
                     return true;
