@@ -59,8 +59,8 @@
 
         public void Update()
         {
-            if (CheckTransitions()) return;
             Status = Action?.Update() ?? Status.Error;
+            CheckTransitions();           
         }
 
         public virtual void Stop()

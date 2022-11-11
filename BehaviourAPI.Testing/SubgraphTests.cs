@@ -81,17 +81,11 @@
             Assert.AreEqual(Status.Failure, action1.Status);
             Assert.AreEqual(Status.Running, action2.Status);
 
-            fsm.Update(); //FSM (R) [None - Success - None] - Árbol (S) [Failure - Success]
-            Assert.AreEqual(Status.Success, subBT.Status);
-            Assert.AreEqual(Status.Success, bt.Status);
-            Assert.AreEqual(Status.Success, action2.Status);
-
             fsm.Update(); //FSM (R) [None - None - Running] - Árbol (N)
             Assert.AreEqual(Status.None, subBT.Status);
-            Assert.AreEqual(Status.Running, final.Status);
             Assert.AreEqual(Status.None, bt.Status);
-            Assert.AreEqual(Status.None, action1.Status);
             Assert.AreEqual(Status.None, action2.Status);
+            Assert.AreEqual(Status.Running, final.Status);
         }
 
         [TestMethod("US Sub BT and FSM")]

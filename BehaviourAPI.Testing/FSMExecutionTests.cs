@@ -119,23 +119,15 @@
             Assert.AreEqual(Status.Running, s4.Status);
             Assert.AreEqual(Status.None, s5.Status);
 
-            parent.Update(); // Exit S4 -> Enter S5 -> Exit subgraph (failure) -> S2 (failure)
-            Assert.AreEqual(Status.Running, parent.Status);
-            Assert.AreEqual(Status.Failure, child.Status);
-            Assert.AreEqual(Status.None, s1.Status);
-            Assert.AreEqual(Status.Failure, s2.Status);
-            Assert.AreEqual(Status.None, s3.Status);
-            Assert.AreEqual(Status.None, s4.Status);
-            Assert.AreEqual(Status.Running, s5.Status); // ?
-
-            parent.Update(); // Perception checked -> Exit S2 -> Enter S4
+            parent.Update(); // Exit S4 -> Enter S5 -> Exit subgraph (Failure) -> trigger exitgraphperception ->
+                             // -> S2 (None) -> S3(running)
             Assert.AreEqual(Status.Running, parent.Status);
             Assert.AreEqual(Status.None, child.Status);
             Assert.AreEqual(Status.None, s1.Status);
             Assert.AreEqual(Status.None, s2.Status);
             Assert.AreEqual(Status.Running, s3.Status);
             Assert.AreEqual(Status.None, s4.Status);
-            Assert.AreEqual(Status.None, s5.Status);
+            Assert.AreEqual(Status.None, s5.Status); 
 
             parent.Stop(); // Exit graph
             Assert.AreEqual(Status.None, parent.Status);
@@ -145,7 +137,6 @@
             Assert.AreEqual(Status.None, s3.Status);
             Assert.AreEqual(Status.None, s4.Status);
             Assert.AreEqual(Status.None, s5.Status);
-
         }
 
         [TestMethod]
