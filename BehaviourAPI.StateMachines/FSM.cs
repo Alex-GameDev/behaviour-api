@@ -151,6 +151,8 @@
             _currentState?.Start();
         }
 
+        public virtual void OnTriggerTransition(Transition transition) { }
+
         public bool IsCurrentState(State? state) => _currentState == state;
 
         #endregion

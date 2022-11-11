@@ -53,6 +53,7 @@
                 Action.Update();
                 Action.Stop();
             }
+            _fsm?.OnTriggerTransition(this);
             _fsm?.SetCurrentState(_targetState);
         }
 

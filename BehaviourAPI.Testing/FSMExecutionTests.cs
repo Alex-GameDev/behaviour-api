@@ -191,52 +191,70 @@
         {
             bool detectaEnemigo = false;
             bool herido = false;
+            bool bebido = false;
             StackFSM fsm = new StackFSM();
             Assert.AreEqual(1, fsm.Nodes.Count);
             var st1 = fsm.CreateState("andando", new FunctionalAction(() => Status.Running));
             var st2 = fsm.CreateState("luchando", new FunctionalAction(() => Status.Running));
             var st3 = fsm.CreateState("beber_poción", new FunctionalAction(() => Status.Running));
+            var st4 = fsm.CreateState("tirar_poción", new FunctionalAction(() => Status.Running));
             var t1_2 = fsm.CreateTransition("enemigo", st1, st2, new ConditionPerception(() => detectaEnemigo));
             var t2_1 = fsm.CreateTransition("vencido", st2, st1, new ConditionPerception(() => !detectaEnemigo));
-            var t1_3 = fsm.CreateTransition("caida", st1, st3, new ConditionPerception(() => herido));
-            var t2_3 = fsm.CreateTransition("herido", st2, st3, new ConditionPerception(() => herido));
-            var t3_r = fsm.CreateComebackTransition<Transition>("recuperado", st3, new ConditionPerception(() => !herido));
+            var t1_3 = fsm.CreatePushTransition("caida", st1, st3, new ConditionPerception(() => herido));
+            var t2_3 = fsm.CreatePushTransition("herido", st2, st3, new ConditionPerception(() => herido));
+            var t3_4 = fsm.CreateTransition("curado", st3, st4, new ConditionPerception(() => bebido));
+            var t3_r = fsm.CreatePopTransition<Transition>("recuperado_desde_tirar", st3, new ConditionPerception(() => !herido));
+            var t4_r = fsm.CreatePopTransition<Transition>("recuperado_desde_beber", st4, new ConditionPerception(() => !herido));
             fsm.SetStartNode(st1);
 
-            fsm.Start();
+            fsm.Start(); // start -> s1
             Assert.AreEqual(Status.Running, st1.Status);
             Assert.AreEqual(Status.None, st2.Status);
             Assert.AreEqual(Status.None, st3.Status);
+            Assert.AreEqual(Status.None, st4.Status);
 
             herido = true;
-            fsm.Update(); // 
+            fsm.Update(); // s1 -> s3(push s1)
             Assert.AreEqual(Status.None, st1.Status);
             Assert.AreEqual(Status.None, st2.Status);
             Assert.AreEqual(Status.Running, st3.Status);
+            Assert.AreEqual(Status.None, st4.Status);
 
+            bebido = true;
+            fsm.Update(); // s3 -> s4
+            Assert.AreEqual(Status.None, st1.Status);
+            Assert.AreEqual(Status.None, st2.Status);
+            Assert.AreEqual(Status.None, st3.Status);
+            Assert.AreEqual(Status.Running, st4.Status);
+            bebido = false;
             herido = false;
-            fsm.Update();
+
+            fsm.Update(); //s4 -> s1(pop s1)
             Assert.AreEqual(Status.Running, st1.Status);
             Assert.AreEqual(Status.None, st2.Status);
             Assert.AreEqual(Status.None, st3.Status);
+            Assert.AreEqual(Status.None, st4.Status);
 
             detectaEnemigo = true;
-            fsm.Update();
+            fsm.Update(); //s1 -> s2 
             Assert.AreEqual(Status.None, st1.Status);
             Assert.AreEqual(Status.Running, st2.Status);
             Assert.AreEqual(Status.None, st3.Status);
+            Assert.AreEqual(Status.None, st4.Status);
 
             herido = true;
-            fsm.Update();
+            fsm.Update(); //s2 -> s3 (push s2)
             Assert.AreEqual(Status.None, st1.Status);
             Assert.AreEqual(Status.None, st2.Status);
             Assert.AreEqual(Status.Running, st3.Status);
+            Assert.AreEqual(Status.None, st4.Status);
 
             herido = false;
-            fsm.Update();
+            fsm.Update(); //s3 -> s2 (pop s2)
             Assert.AreEqual(Status.None, st1.Status);
             Assert.AreEqual(Status.Running, st2.Status);
             Assert.AreEqual(Status.None, st3.Status);
+            Assert.AreEqual(Status.None, st4.Status);
         }
 
         [TestMethod("Probability State")]
