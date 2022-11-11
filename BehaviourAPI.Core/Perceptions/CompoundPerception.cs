@@ -23,14 +23,14 @@ namespace BehaviourAPI.Core.Perceptions
             Perceptions = perceptions.ToList();
         }
 
-        public override void Start()
+        public override void Initialize()
         {
-            Perceptions.ForEach(p => p.Start());
+            Perceptions.ForEach(p => p.Initialize());
         }
 
-        public override void Stop()
+        public override void Reset()
         {
-            Perceptions.ForEach(p => p.Stop());
+            Perceptions.ForEach(p => p.Reset());
         }
     }
 }

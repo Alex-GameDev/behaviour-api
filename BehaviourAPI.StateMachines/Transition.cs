@@ -40,8 +40,8 @@
 
         #region --------------------------------------- Runtime methods --------------------------------------
 
-        public void Start() => Perception?.Start();
-        public void Stop() => Perception?.Stop();
+        public void Start() => Perception?.Initialize();
+        public void Stop() => Perception?.Reset();
         public virtual bool Check() => Perception?.Check() ?? false;
         public virtual void Perform()
         {

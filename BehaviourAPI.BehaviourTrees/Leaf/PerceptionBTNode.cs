@@ -18,7 +18,7 @@
         public override void Start()
         {
             base.Start();
-            Perception?.Start();
+            Perception?.Initialize();
         }
 
         protected override Status UpdateStatus()
@@ -30,7 +30,7 @@
         public override void Stop()
         {
             base.Stop();
-            Perception?.Stop();
+            Perception?.Reset();
         }
 
         #endregion

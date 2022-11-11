@@ -6,24 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BehaviourAPI.BehaviourTrees
+namespace BehaviourAPI.BehaviourTrees.Decorators
 {
+    using Core.Perceptions;
+
     /// <summary>
-    /// Decorator that executes its child only if a perception is checked. Starts or stops the child execution 
-    /// when the perception value changes.
+    /// Decorator that executes its child only if a perception is triggered. Perception is checked at the start
+    /// and return Failure if isn't triggered. Otherwise execute the child and returns its value.
     /// </summary>
     public class ConditionDecoratorNode : DecoratorNode, IPerceptionHandler
     {
-        #region ------------------------------------------ Properties -----------------------------------------
+       #region ------------------------------------------ Properties -----------------------------------------
 
         public Perception? Perception { get => _perception; set => _perception = value; }
         Perception? _perception;
-
-        #endregion
-
-        #region ------------------------------------------- Fields -------------------------------------------
-
-        bool _childExecutedLastFrame;
+        bool _executeChild;
 
         #endregion
 
@@ -42,50 +39,48 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
-
-            if(Perception != null)
+            if (Perception != null)
             {
-                Perception.Start();
+                Perception.Initialize();
+                _executeChild = Perception.Check();
+                Perception.Reset();                
             }
             else
                 throw new NullReferenceException("ERROR: Perception is not defined.");
+
+            if (_executeChild)
+            {
+                if (m_childNode != null) m_childNode.Start();
+                else throw new NullReferenceException("ERROR: Child node is not defined");
+            }
         }
 
         public override void Stop()
         {
             base.Stop();
-            if(m_childNode != null && _childExecutedLastFrame) m_childNode.Stop();
-            if (Perception != null)
+            if(_executeChild)
             {
-                Perception.Stop();
-            }
-            else
-                throw new NullReferenceException("ERROR: Perception is not defined.");
+                if (m_childNode != null) m_childNode.Stop();
+                else throw new NullReferenceException("ERROR: Child node is not defined");
+                _executeChild = false;
+            }            
         }
 
         protected override Status UpdateStatus()
         {
-            if (Perception != null)
+            if (m_childNode != null)
             {
-                if(m_childNode != null)
-                {
-                    if(Perception.Check())
-                    {
-                        if (!_childExecutedLastFrame) m_childNode.Start();
-                        _childExecutedLastFrame = true;
-                        m_childNode.Update();
-                        return m_childNode.Status;
-                    }
-                    else
-                    {
-                        if (_childExecutedLastFrame) m_childNode.Stop();
-                        _childExecutedLastFrame = false;
-                        return Status.Running;
-                    }
+                if (_executeChild)
+                {                    
+                    m_childNode.Update();
+                    return m_childNode.Status;
                 }
-                throw new NullReferenceException("ERROR: Child node is not defined.");
+                else
+                {                    
+                    return Status.Failure;
+                }
             }
-            throw new NullReferenceException("ERROR: Perception is not defined.");
+            throw new NullReferenceException("ERROR: Child node is not defined.");
         }
 
         #endregion

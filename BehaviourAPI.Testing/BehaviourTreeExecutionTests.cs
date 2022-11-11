@@ -5,6 +5,7 @@ namespace BehaviourAPI.Testing
     using Core.Actions;
     using BehaviourAPI.Core.Perceptions;
     using System;
+    using BehaviourAPI.BehaviourTrees.Decorators;
 
     [TestClass]
     public class BehaviourTreeExecutionTests
@@ -125,12 +126,44 @@ namespace BehaviourAPI.Testing
         [TestMethod("Condition Decorator")]
         public void Test_BT_ConditionDecorator()
         {
+            bool check_1 = false;
+            bool check_2 = true;
+
+            BehaviourTree tree = new BehaviourTree();
+            var action_1 = tree.CreateActionBTNode("Nodo 1", new FunctionalAction(()=>Status.Success));
+            var cond_1 = tree.CreateDecorator<ConditionDecoratorNode>("cond_1", action_1)
+                .SetPerception(new ConditionPerception(() => check_1));
+            var action_2 = tree.CreateActionBTNode("Nodo 2", new FunctionalAction(() => Status.Success));
+            var cond_2 = tree.CreateDecorator<ConditionDecoratorNode>("cond_2", action_2)
+                .SetPerception(new ConditionPerception(()=> check_2));
+            var sel = tree.CreateComposite<SelectorNode>("sel", false, cond_1, cond_2);
+            tree.SetStartNode(sel);
+
+            tree.Start();  // check_1 = false -> cond_1 don't starts child
+            Assert.AreEqual(Status.Running, cond_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+
+            tree.Update(); // cond_1 returns Failure -> sel go to cond_2 -> check_2 = true -> cond_2 starts child
+            Assert.AreEqual(Status.Failure, cond_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+            Assert.AreEqual(Status.Failure, cond_1.Status);
+            Assert.AreEqual(Status.Running, cond_2.Status);
+            Assert.AreEqual(Status.Running, action_2.Status);
+
+            tree.Update(); // action_2 returns success
+            Assert.AreEqual(Status.Success, cond_2.Status);
+            Assert.AreEqual(Status.Success, action_2.Status);
+        }
+
+        [TestMethod("Switch Decorator")]
+        public void Test_BT_SwitchDecorator()
+        {
             int i = 0;
 
             BehaviourTree tree = new BehaviourTree();
             var action_1 = tree.CreatePerceptionBTNode("Nodo 1");
             action_1.Perception = new ConditionPerception(() => true);
-            var cond = tree.CreateDecorator<ConditionDecoratorNode>("inv", action_1);
+            var cond = tree.CreateDecorator<SwitchDecoratorNode>("inv", action_1);
             cond.Perception = new ConditionPerception(() => i > 2 && i < 4);
             tree.SetStartNode(cond);
 

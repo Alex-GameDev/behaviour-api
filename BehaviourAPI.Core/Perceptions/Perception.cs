@@ -2,8 +2,8 @@
 {
     public abstract class Perception
     {
-        public virtual void Start() { }
+        public virtual void Initialize() { }
         public abstract bool Check();
-        public virtual void Stop() { }
+        public virtual void Reset() { }
     }
 }
