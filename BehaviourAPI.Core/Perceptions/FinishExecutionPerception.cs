@@ -5,22 +5,22 @@
     /// </summary>
     public class FinishExecutionPerception : Perception
     {
-        IStatusHandler _statusHandler;
+        public IStatusHandler StatusHandler;
 
-        bool _triggerOnSuccess;
-        bool _triggerOnFailure;
+        public bool TriggerOnSuccess;
+        public bool TriggerOnFailure;
 
         public FinishExecutionPerception(IStatusHandler statusHandler, bool triggerOnSuccess, bool triggerOnFailure)
         {
-            _statusHandler = statusHandler;
-            _triggerOnSuccess = triggerOnSuccess;
-            _triggerOnFailure = triggerOnFailure;
+            StatusHandler = statusHandler;
+            TriggerOnSuccess = triggerOnSuccess;
+            TriggerOnFailure = triggerOnFailure;
         }
 
         public override bool Check()
         {
-            return ((_statusHandler.Status == Status.Success && _triggerOnSuccess) ||
-                (_statusHandler.Status == Status.Failure && _triggerOnFailure));
+            return ((StatusHandler.Status == Status.Success && TriggerOnSuccess) ||
+                (StatusHandler.Status == Status.Failure && TriggerOnFailure));
         }
     }
 }

@@ -11,11 +11,9 @@
         public override int MaxOutputConnections => -1;
         public override Type ChildType => typeof(State);
 
-        public Status Status { get => _status; protected set => _status = value; }
-        Status _status;
+        public Status Status { get; protected set; }
 
-        public Action? Action { get => _action; set => _action = value; }       
-        Action? _action;
+        public Action? Action { get; set; }
 
         #endregion
 

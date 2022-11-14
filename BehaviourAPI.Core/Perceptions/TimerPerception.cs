@@ -3,7 +3,7 @@
 namespace BehaviourAPI.Core.Perceptions
 {
     /// <summary>
-    /// Perception that
+    /// Perception that returns false until a determined amount of time.
     /// </summary>
     public class TimerPerception : Perception
     {

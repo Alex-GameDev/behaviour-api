@@ -58,7 +58,7 @@
             }
             else
             {
-                throw new DuplicateWaitObjectException(name, "This FSM already contains a transition with this name.");
+                throw new ArgumentException(name, "This FSM already contains a transition with this name.");
             }           
         }
         

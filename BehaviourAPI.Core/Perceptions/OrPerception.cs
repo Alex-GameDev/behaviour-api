@@ -2,6 +2,10 @@
 {
     public class OrPerception : CompoundPerception
     {
+        public OrPerception(List<Perception> perceptions) : base(perceptions) { }
+
+        public OrPerception(params Perception[] perceptions) : base(perceptions) { }
+
         public override bool Check()
         {
             if (Perceptions.Count == 0) return false;
@@ -11,6 +15,7 @@
             while (result == false && idx < Perceptions.Count)
             {
                 result = Perceptions[idx].Check();
+                idx++;
             }
             return result;
         }

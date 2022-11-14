@@ -1,11 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviourAPI.StateMachines
+﻿namespace BehaviourAPI.StateMachines
 {
     using BehaviourAPI.Core;
     using BehaviourAPI.Core.Actions;

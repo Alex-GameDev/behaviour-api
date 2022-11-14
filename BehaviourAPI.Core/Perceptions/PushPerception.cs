@@ -5,13 +5,17 @@
     /// </summary>
     public class PushPerception
     {
-        public IPushActivable PushActivable;
+        public List<IPushActivable> PushListeners;
 
-        public PushPerception(IPushActivable pushActivable)
+        public PushPerception(params IPushActivable[] listeners)
         {
-            PushActivable = pushActivable;
+            PushListeners = listeners.ToList();
+        }
+        public PushPerception(List<IPushActivable> listeners)
+        {
+            PushListeners = listeners.ToList();
         }
 
-        public void Fire() => PushActivable?.Fire();
+        public void Fire() => PushListeners.ForEach(p => p?.Fire());
     }
 }

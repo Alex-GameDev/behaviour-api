@@ -1,12 +1,6 @@
-﻿using BehaviourAPI.Core.Perceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviourAPI.StateMachines
+﻿namespace BehaviourAPI.StateMachines
 {
+    using Core.Perceptions;
     public class ProbabilisticState : State
     {
         Dictionary<Transition, float> _probabilities;
@@ -14,19 +8,20 @@ namespace BehaviourAPI.StateMachines
         Random _random;
 
         public double Prob { get; private set; }
+
         public ProbabilisticState()
         {
             _probabilities = new Dictionary<Transition, float>();
             _random = new Random();
         }
-        
+
         public void SetProbabilisticTransition(Transition transition, float probability)
         {
-            if(_transitions.Contains(transition))
+            if (_transitions.Contains(transition))
             {
                 _probabilities[transition] = probability;
                 _totalProbability = MathF.Max(_probabilities.Sum(p => p.Value), 1f);
-            }            
+            }
         }
 
         protected override bool CheckTransitions()
@@ -39,8 +34,8 @@ namespace BehaviourAPI.StateMachines
             {
                 Transition? transition = _transitions[i];
                 if (transition == null) break;
-                
-                if(_probabilities.TryGetValue(transition, out float value))
+
+                if (_probabilities.TryGetValue(transition, out float value))
                 {
                     if (selectedTransition == null)
                     {
@@ -62,15 +57,15 @@ namespace BehaviourAPI.StateMachines
             }
             if (selectedTransition != null)
             {
-                if(selectedTransition.Perception == null || selectedTransition.Check())
+                if (selectedTransition.Perception == null || selectedTransition.Check())
                 {
                     selectedTransition.Perform();
                     return true;
-                    
-                }                    
+
+                }
             }
             return false;
-            
+
         }
 
         public float GetProbability(Transition t)

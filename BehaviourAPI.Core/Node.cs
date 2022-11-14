@@ -2,6 +2,7 @@ namespace BehaviourAPI.Core
 {
     public abstract class Node : GraphElement
     {
+
         #region ------------------------------------------ Properties -----------------------------------------
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// The current execution status of the graph.
         /// </summary>
-        public Status Status { get => _status; protected set => _status = value; }
+        public Status Status { get; protected set; }
 
         /// <summary>
         /// True if nodes can have more than one connection with the same node.
@@ -44,8 +44,6 @@ namespace BehaviourAPI.Core
         // Used internally to find nodes by name
         protected Dictionary<string, Node> nodeDict = new Dictionary<string, Node>();
 
-        Status _status;
-
         #endregion
 
         #region ---------------------------------------- Build methods -----------------------------------------
@@ -62,7 +60,7 @@ namespace BehaviourAPI.Core
             }
             else
             {
-                throw new DuplicateWaitObjectException(name, "This graph already contains a node with this name.");
+                throw new ArgumentException(name, "This graph already contains a node with this name.");
             }            
         }
 

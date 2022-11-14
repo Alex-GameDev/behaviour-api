@@ -8,8 +8,8 @@
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Perception? Perception { get => _perception; set => _perception = value; }
-        public Action? Action { get => _action; set => _action = value; }
+        public Perception? Perception { get; set; }
+        public Action? Action { get; set; }
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
@@ -17,8 +17,6 @@
         protected FSM? _fsm;
         protected State? _sourceState;
         protected State? _targetState;
-        Perception? _perception;
-        Action? _action;
 
         #endregion
 
