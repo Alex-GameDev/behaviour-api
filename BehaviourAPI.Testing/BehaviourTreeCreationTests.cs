@@ -9,9 +9,9 @@
         public void Test_BT_CompositeNode_Connections()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreateActionBTNode("Nodo 1");
-            var action_2 = tree.CreateActionBTNode("Nodo 2");
-            var action_3 = tree.CreateActionBTNode("Nodo 3");
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            var action_2 = tree.CreateLeafNode("Nodo 2");
+            var action_3 = tree.CreateLeafNode("Nodo 3");
             var composite = tree.CreateComposite<SelectorNode>("Sel", false, action_1, action_2, action_3);
 
             Assert.AreEqual(4, tree.Nodes.Count);
@@ -36,7 +36,7 @@
         public void Test_BT_DecoratorNode_Connections()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreateActionBTNode("Nodo 1");
+            var action_1 = tree.CreateLeafNode("Nodo 1");
             var decorator = tree.CreateDecorator<InverterNode>("Sel", action_1);
 
             Assert.AreEqual(1, decorator.GetChildNodes().Count());
@@ -57,7 +57,7 @@
         public void Test_BT_StartNode()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreateActionBTNode("Nodo 1");
+            var action_1 = tree.CreateLeafNode("Nodo 1");
             var decorator = tree.CreateDecorator<InverterNode>("Sel", action_1);
             tree.SetStartNode(decorator);
 
@@ -70,17 +70,17 @@
         {
             BehaviourTree tree = new BehaviourTree();
 
-            var action_1 = tree.CreateActionBTNode("Nodo 1");
-            var action_2 = tree.CreateActionBTNode("Nodo 2");
-            var action_3 = tree.CreateActionBTNode("Nodo 3");
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            var action_2 = tree.CreateLeafNode("Nodo 2");
+            var action_3 = tree.CreateLeafNode("Nodo 3");
             var composite_1 = tree.CreateComposite<SelectorNode>("Sel_1", false, action_1, action_2, action_3);
 
-            var action_4 = tree.CreateActionBTNode("Nodo 4");
-            var action_5 = tree.CreateActionBTNode("Nodo 5");
-            var action_6 = tree.CreateActionBTNode("Nodo 6");
+            var action_4 = tree.CreateLeafNode("Nodo 4");
+            var action_5 = tree.CreateLeafNode("Nodo 5");
+            var action_6 = tree.CreateLeafNode("Nodo 6");
             var composite_2 = tree.CreateComposite<SelectorNode>("Sel_2", false, action_2, action_3, action_4, action_5, action_6);
 
-            var action_7 = tree.CreateActionBTNode("Nodo 7");
+            var action_7 = tree.CreateLeafNode("Nodo 7");
 
             var composite_root = tree.CreateComposite<SequencerNode>("Seq", false, composite_1, composite_2, action_7);
 
@@ -92,7 +92,6 @@
             Assert.AreEqual(3, composite_root.OutputConnections.Count);
             Assert.AreEqual(0, composite_root.InputConnections.Count);
 
-            Assert.AreEqual(false, tree.SetStartNode(action_7));
             Assert.AreEqual(true, tree.SetStartNode(composite_root));
             Assert.AreEqual(false, tree.SetStartNode(composite_root));
 

@@ -1,24 +1,24 @@
+﻿using BehaviourAPI.Core;
+using BehaviourAPI.Core.Actions;
+using BehaviourAPI.Core.Perceptions;
+
 namespace BehaviourAPI.BehaviourTrees
 {
-    using BehaviourAPI.Core.Actions;
-    using Core;
-
+    using Core.Actions;
     /// <summary>
-    /// A behaviour tree node that executes an Action.
+    /// BTNode type that has no children.
     /// </summary>
-    public class ActionBTNode : LeafNode, IActionHandler
+    public class LeafNode : BTNode, IActionHandler
     {
         #region ------------------------------------------ Properties -----------------------------------------
-
-        public Action? Action { get => _action; set => _action = value; }
-
-        Action? _action;
+        public sealed override int MaxOutputConnections => 0;
+        public Action? Action { get; set; }     
 
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public ActionBTNode SetAction(Action action)
+        public LeafNode SetAction(Action action)
         {
             Action = action;
             return this;

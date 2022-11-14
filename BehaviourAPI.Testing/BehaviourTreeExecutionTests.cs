@@ -14,8 +14,8 @@ namespace BehaviourAPI.Testing
         public void Test_BT_Inverter()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreatePerceptionBTNode("Nodo 1");
-            action_1.Perception = new ConditionPerception(() => false);
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            action_1.Action = new FunctionalAction(() => Status.Failure);
             var inv = tree.CreateDecorator<InverterNode>("inv", action_1);
             tree.SetStartNode(inv);
 
@@ -26,7 +26,7 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Success, inv.Status);
             Assert.AreEqual(Status.Failure, action_1.Status);
 
-            action_1.Perception = new ConditionPerception(() => true);
+            action_1.Action = new FunctionalAction(() => Status.Success);
             tree.Update();
             Assert.AreEqual(Status.Failure, inv.Status);
             Assert.AreEqual(Status.Success, action_1.Status);
@@ -36,8 +36,8 @@ namespace BehaviourAPI.Testing
         public void Test_BT_Succeder()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreatePerceptionBTNode("Nodo 1");
-            action_1.Perception = new ConditionPerception(() => false);
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            action_1.Action = new FunctionalAction(() => Status.Failure);
             var suc = tree.CreateDecorator<SuccederNode>("inv", action_1);
             tree.SetStartNode(suc);
 
@@ -48,7 +48,7 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Success, suc.Status);
             Assert.AreEqual(Status.Failure, action_1.Status);
 
-            action_1.Perception = new ConditionPerception(() => true);
+            action_1.Action = new FunctionalAction(() => Status.Success);
             tree.Update();
             Assert.AreEqual(Status.Success, suc.Status);
             Assert.AreEqual(Status.Success, action_1.Status);
@@ -58,8 +58,8 @@ namespace BehaviourAPI.Testing
         public void Test_BT_Iterator()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreatePerceptionBTNode("Nodo 1");
-            action_1.Perception = new ConditionPerception(() => true);
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            action_1.Action = new FunctionalAction(() => Status.Success);
             var iter = tree.CreateDecorator<IteratorNode>("inv", action_1).SetIterations(3);
             tree.SetStartNode(iter);
 
@@ -86,10 +86,10 @@ namespace BehaviourAPI.Testing
             int j = 0;
 
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreatePerceptionBTNode("Nodo 1");
-            var action_2 = tree.CreatePerceptionBTNode("Nodo 2");
-            action_1.Perception = new ConditionPerception(() => i == 3);
-            action_2.Perception = new ConditionPerception(() => j == 3);
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            var action_2 = tree.CreateLeafNode("Nodo 2");
+            action_1.Action = new FunctionalAction(() => i == 3 ? Status.Success : Status.Failure);
+            action_2.Action = new FunctionalAction(() => j == 3 ? Status.Success : Status.Failure);
             var loopUntil1 = tree.CreateDecorator<LoopUntilNode>("l1", action_1).SetTargetStatus(Status.Success);
             var loopUntil2 = tree.CreateDecorator<LoopUntilNode>("l2", action_2).SetTargetStatus(Status.Success).SetMaxIterations(2);
             var seq = tree.CreateComposite<SequencerNode>("seq", false, loopUntil1, loopUntil2);
@@ -130,10 +130,10 @@ namespace BehaviourAPI.Testing
             bool check_2 = true;
 
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreateActionBTNode("Nodo 1", new FunctionalAction(()=>Status.Success));
+            var action_1 = tree.CreateLeafNode("Nodo 1", new FunctionalAction(()=>Status.Success));
             var cond_1 = tree.CreateDecorator<ConditionDecoratorNode>("cond_1", action_1)
                 .SetPerception(new ConditionPerception(() => check_1));
-            var action_2 = tree.CreateActionBTNode("Nodo 2", new FunctionalAction(() => Status.Success));
+            var action_2 = tree.CreateLeafNode("Nodo 2", new FunctionalAction(() => Status.Success));
             var cond_2 = tree.CreateDecorator<ConditionDecoratorNode>("cond_2", action_2)
                 .SetPerception(new ConditionPerception(()=> check_2));
             var sel = tree.CreateComposite<SelectorNode>("sel", false, cond_1, cond_2);
@@ -161,8 +161,8 @@ namespace BehaviourAPI.Testing
             int i = 0;
 
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreatePerceptionBTNode("Nodo 1");
-            action_1.Perception = new ConditionPerception(() => true);
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            action_1.Action = new FunctionalAction(() => Status.Success);
             var cond = tree.CreateDecorator<SwitchDecoratorNode>("inv", action_1);
             cond.Perception = new ConditionPerception(() => i > 2 && i < 4);
             tree.SetStartNode(cond);
@@ -194,9 +194,9 @@ namespace BehaviourAPI.Testing
         public void Test_BT_Sequencer_Success()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreateActionBTNode("Nodo 1", new FunctionalAction(() => Status.Success));
-            var action_2 = tree.CreateActionBTNode("Nodo 2", new FunctionalAction(() => Status.Success));
-            var action_3 = tree.CreateActionBTNode("Nodo 3", new FunctionalAction(() => Status.Success));
+            var action_1 = tree.CreateLeafNode("Nodo 1", new FunctionalAction(() => Status.Success));
+            var action_2 = tree.CreateLeafNode("Nodo 2", new FunctionalAction(() => Status.Success));
+            var action_3 = tree.CreateLeafNode("Nodo 3", new FunctionalAction(() => Status.Success));
             var seq = tree.CreateComposite<SequencerNode>("Seq", false, action_1, action_2, action_3);
             tree.SetStartNode(seq);
 
@@ -230,9 +230,9 @@ namespace BehaviourAPI.Testing
         public void Test_BT_Sequencer_Failure()
         {
             BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreateActionBTNode("Nodo 1", new FunctionalAction(() => Status.Success));
-            var action_2 = tree.CreateActionBTNode("Nodo 2", new FunctionalAction(() => Status.Failure));
-            var action_3 = tree.CreateActionBTNode("Nodo 3", new FunctionalAction(() => Status.Success));
+            var action_1 = tree.CreateLeafNode("Nodo 1", new FunctionalAction(() => Status.Success));
+            var action_2 = tree.CreateLeafNode("Nodo 2", new FunctionalAction(() => Status.Failure));
+            var action_3 = tree.CreateLeafNode("Nodo 3", new FunctionalAction(() => Status.Success));
             var seq = tree.CreateComposite<SequencerNode>("Seq", false, action_1, action_2, action_3);
             tree.SetStartNode(seq);
 
@@ -260,36 +260,35 @@ namespace BehaviourAPI.Testing
         {
             BehaviourTree tree = new BehaviourTree();
 
-            var action_1 = tree.CreateActionBTNode("Nodo 1");
+            var action_1 = tree.CreateLeafNode("Nodo 1");
             action_1.Action = new FunctionalAction(() => Status.Failure);
-            var action_2 = tree.CreateActionBTNode("Nodo 2");
+            var action_2 = tree.CreateLeafNode("Nodo 2");
             action_2.Action = new FunctionalAction(() => Status.Success);
-            var action_3 = tree.CreateActionBTNode("Nodo 3");
+            var action_3 = tree.CreateLeafNode("Nodo 3");
             action_3.Action = new FunctionalAction(() => Status.Failure);
             var composite_1 = tree.CreateComposite<SelectorNode>("Sel_1", false, action_1, action_2, action_3);
 
-            var action_4 = tree.CreateActionBTNode("Nodo 4");
+            var action_4 = tree.CreateLeafNode("Nodo 4");
             action_4.Action = new FunctionalAction(() => Status.Success);
-            var action_5 = tree.CreateActionBTNode("Nodo 5");
+            var action_5 = tree.CreateLeafNode("Nodo 5");
             action_5.Action = new FunctionalAction(() => Status.Success);
-            var action_6 = tree.CreateActionBTNode("Nodo 6");
+            var action_6 = tree.CreateLeafNode("Nodo 6");
             action_6.Action = new FunctionalAction(() => Status.Success);
             var composite_2 = tree.CreateComposite<SequencerNode>("Seq_2", false, action_4, action_5, action_6);
 
-            var action_7 = tree.CreateActionBTNode("Nodo 7");
+            var action_7 = tree.CreateLeafNode("Nodo 7");
             action_7.Action = new FunctionalAction(() => Status.Success);
 
             var composite_root = tree.CreateComposite<SequencerNode>("Seq", false, composite_1, composite_2, action_7);
 
-            Assert.AreEqual(10, tree.Nodes.Count);
             Assert.AreEqual(9, tree.Connections.Count);
+            Assert.AreEqual(10, tree.Nodes.Count);
 
             Assert.AreEqual(3, composite_1.OutputConnections.Count);
             Assert.AreEqual(1, composite_1.InputConnections.Count);
             Assert.AreEqual(3, composite_root.OutputConnections.Count);
             Assert.AreEqual(0, composite_root.InputConnections.Count);
 
-            Assert.AreEqual(false, tree.SetStartNode(action_7));
             Assert.AreEqual(true, tree.SetStartNode(composite_root));
             Assert.AreEqual(false, tree.SetStartNode(composite_root));
 

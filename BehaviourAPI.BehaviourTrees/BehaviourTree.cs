@@ -59,23 +59,15 @@ namespace BehaviourAPI.BehaviourTrees
             return CreateComposite<T>(name, childs.ToList(), randomOrder);
         }
 
-        public ActionBTNode CreateActionBTNode(string name, Action? action = null)
+        public LeafNode CreateLeafNode(string name, Action? action = null)
         {
-            ActionBTNode node = CreateNode<ActionBTNode>(name);
+            LeafNode node = CreateNode<LeafNode>(name);
             node.Action = action;
-            return node;
-        }
-
-        public PerceptionBTNode CreatePerceptionBTNode(string name, Perception? perception = null)
-        {
-            PerceptionBTNode node = CreateNode<PerceptionBTNode>(name);
-            node.Perception = perception;
             return node;
         }
 
         public override bool SetStartNode(Node node)
         {
-            if (node.InputConnections.Count > 0) return false;
             bool starNodeUpdated = base.SetStartNode(node);
             if(starNodeUpdated) m_rootNode = node as BTNode;
             return starNodeUpdated;
