@@ -81,13 +81,13 @@
 
         public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action? action = null) where T : Transition, new()
         {
-            Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure); 
+            Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure); 
             return CreateTransition<T>(name, from, to, finishStatePerception, action);
         }
 
         public Transition CreateFinishStateTransition(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action? action = null)
         {
-            Perception finishStatePerception = new FinishExecutionPerception(from, triggerOnSuccess, triggerOnFailure);
+            Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure);
             return CreateTransition<Transition>(name, from, to, finishStatePerception, action);
         }
 
