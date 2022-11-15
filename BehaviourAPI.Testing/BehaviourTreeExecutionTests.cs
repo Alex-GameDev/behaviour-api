@@ -155,35 +155,42 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Success, action_2.Status);
         }
 
-        [TestMethod("Timer decorator")]
-        public void Test_BT_TimerDecorator()
-        {
-            BehaviourTree tree = new BehaviourTree();
-            var action_1 = tree.CreateLeafNode("Nodo 1", new FunctionalAction(() => Status.Success));
-            var timer = tree.CreateDecorator<TimerDecoratorNode>("timer", action_1).SetTime(.2f);
-            tree.SetStartNode(timer);
+        //[TestMethod("Timer decorator")]
+        //public void Test_BT_TimerDecorator()
+        //{
+        //    BehaviourTree tree = new BehaviourTree();
+        //    var action_1 = tree.CreateLeafNode("Nodo 1", new FunctionalAction(() => Status.Success));
+        //    var timer = tree.CreateDecorator<TimerDecoratorNode>("timer", action_1).SetTime(1f);
+        //    tree.SetStartNode(timer);
 
-            tree.Start();
-            Assert.AreEqual(Status.Running, tree.Status);
-            Assert.AreEqual(Status.Running, timer.Status);
-            Assert.AreEqual(Status.None, action_1.Status);
+        //    tree.Start();
+        //    Assert.AreEqual(Status.Running, tree.Status);
+        //    Assert.AreEqual(Status.Running, timer.Status);
+        //    Assert.AreEqual(Status.None, action_1.Status);
 
-            tree.Update();
-            var dateTime = DateTime.Now;
-            while((DateTime.Now - dateTime).TotalSeconds < .1f)
-            {                
-                Assert.AreEqual(Status.Running, tree.Status);
-                Assert.AreEqual(Status.Running, timer.Status);
-                Assert.AreEqual(Status.None, action_1.Status);
-                tree.Update();
-                Thread.Sleep(50);
-            }
-            Thread.Sleep(100);
-            tree.Update();
-            Assert.AreEqual(Status.Success, tree.Status);
-            Assert.AreEqual(Status.Success, timer.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
-        }
+        //    tree.Update();
+
+        //    bool t
+        //    Assert.AreEqual(Status.Running, tree.Status);
+        //    Assert.AreEqual(Status.Running, timer.Status);
+        //    Assert.AreEqual(Status.None, action_1.Status);
+
+        //    Thread.Sleep(1000);
+        //    tree.Update();
+        //    while ((DateTime.Now - dateTime).TotalSeconds < .1f)
+        //    {                
+        //        Assert.AreEqual(Status.Running, tree.Status);
+        //        Assert.AreEqual(Status.Running, timer.Status);
+        //        Assert.AreEqual(Status.None, action_1.Status);
+        //        tree.Update();
+        //        Thread.Sleep(50);
+        //    }
+        //    Thread.Sleep(100);
+        //    tree.Update();
+        //    Assert.AreEqual(Status.Success, tree.Status);
+        //    Assert.AreEqual(Status.Success, timer.Status);
+        //    Assert.AreEqual(Status.Success, action_1.Status);
+        //}
 
         [TestMethod("Switch Decorator")]
         public void Test_BT_SwitchDecorator()
