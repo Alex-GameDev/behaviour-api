@@ -65,7 +65,6 @@
                 }
             }
             return false;
-
         }
 
         public float GetProbability(Transition t)

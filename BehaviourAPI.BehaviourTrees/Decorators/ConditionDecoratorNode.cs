@@ -16,10 +16,10 @@ namespace BehaviourAPI.BehaviourTrees.Decorators
     /// </summary>
     public class ConditionDecoratorNode : DecoratorNode, IPerceptionHandler
     {
-       #region ------------------------------------------ Properties -----------------------------------------
+        #region ------------------------------------------ Properties -----------------------------------------
 
-        public Perception? Perception { get => _perception; set => _perception = value; }
-        Perception? _perception;
+        public Perception? Perception { get; set; }
+
         bool _executeChild;
 
         #endregion
@@ -28,7 +28,7 @@ namespace BehaviourAPI.BehaviourTrees.Decorators
 
         public ConditionDecoratorNode SetPerception(Perception perception)
         {
-            _perception = perception;
+            Perception = perception;
             return this;
         }
 

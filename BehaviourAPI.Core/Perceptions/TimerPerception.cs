@@ -12,23 +12,23 @@ namespace BehaviourAPI.Core.Perceptions
         System.Timers.Timer _timer;
 
         bool _isTimeout;
-        bool _launched;
 
         public TimerPerception(float time)
         {
             Time = time;
             _timer = new System.Timers.Timer(time * 1000);
             _timer.Elapsed += OnTimerElapsed;
-        }        
+        }
+
+        public override void Initialize()
+        {
+            _isTimeout = false;
+            _timer.Enabled = true;
+            _timer.Start();
+        }
 
         public override bool Check()
         {
-            if(_launched)
-            {
-                _isTimeout = false;
-                _timer.Enabled = true;
-                _timer.Start();
-            }
             return _isTimeout;
         }
 
