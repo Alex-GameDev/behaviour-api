@@ -44,7 +44,7 @@
 
         public override bool Check()
         {
-            StatusFlags handlerStatusFlag = (StatusFlags) StatusHandler.Status;
+            StatusFlags handlerStatusFlag = StatusHandler.Status.GetFlags();
             return (handlerStatusFlag & StatusFlags) != 0;
         }
     }
@@ -52,8 +52,9 @@
     [Flags]
     public enum StatusFlags
     {
+        None = 0,
         Running = 1,
         Success = 2,
-        Failure = 3
+        Failure = 4
     }
 }
