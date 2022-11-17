@@ -98,7 +98,68 @@ namespace BehaviourAPI.Testing
         [TestMethod]
         public void Test_UtilitySystem_Buckets()
         {
+            var v1 = 0f;
+            var v2 = 0f;
+            var v3 = 0f;
+            var v4 = 0f;
 
+            var actionId = 0;
+
+            var us = new UtilitySystem(inertia: 1.0f, utilityThreshold: 0.2f);
+            var f1 = us.CreateVariableFactor("f1", () => v1, 0f, 1f);
+            var f2 = us.CreateVariableFactor("f2", () => v2, 0f, 1f);
+            var f3 = us.CreateVariableFactor("f3", () => v3, 0f, 1f);
+            var f4 = us.CreateVariableFactor("f4", () => v4, 0f, 1f);
+            var action_1 = us.CreateUtilityAction("Action_1", f1, new FunctionalAction(() => actionId = 1, () => Status.Running));
+            var action_2 = us.CreateUtilityAction("Action_2", f2, new FunctionalAction(() => actionId = 2, () => Status.Running), root: false);
+            var action_3 = us.CreateUtilityAction("Action_3", f3, new FunctionalAction(() => actionId = 3, () => Status.Running), root: false);
+            var bucket = us.CreateUtilityBucket("Bucket", true, 0.1f, 1.0f, 0.5f, action_2, action_3);
+            var action_4 = us.CreateUtilityAction("Action_4", f4, new FunctionalAction(() => actionId = 4, () => Status.Running));
+
+            us.Start();
+            Assert.AreEqual(Status.None, us.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+            Assert.AreEqual(Status.None, bucket.Status);
+            Assert.AreEqual(Status.None, action_2.Status);
+
+            v1 = 0f; v2 = .15f; v3 = .1f; v4 = .15f;
+            us.Update(); // utility < UtilityThreshold -> Default action
+            Assert.AreEqual(0f, action_1.Utility);
+            Assert.AreEqual(.15f, action_2.Utility);
+            Assert.AreEqual(.1f, action_3.Utility);
+            Assert.AreEqual(.15f, action_4.Utility);
+            Assert.AreEqual(.15f, bucket.Utility);
+            Assert.AreEqual(1, actionId);
+
+            v1 = .5f; v2 = .2f; v3 = .2f; v4 = .3f;
+            us.Update(); // Action1 > Bucket > Action 3
+            Assert.AreEqual(.5f, action_1.Utility);
+            Assert.AreEqual(.2f, action_2.Utility);
+            Assert.AreEqual(.2f, action_3.Utility);
+            Assert.AreEqual(.3f, action_4.Utility);
+            Assert.AreEqual(.2f, bucket.Utility);
+            Assert.AreEqual(1, actionId);
+
+            v1 = .1f; v2 = .6f; v3 = .2f; v4 = .8f;
+            us.Update(); // Bucket is locked (v3 > bucket.threshold)
+            Assert.AreEqual(.1f, action_1.Utility);
+            Assert.AreEqual(.6f, action_2.Utility);
+            Assert.AreEqual(.2f, action_3.Utility);
+            Assert.AreEqual(.3f, action_4.Utility); // This utility is not recalculated
+            Assert.AreEqual(.6f, bucket.Utility);
+            Assert.AreEqual(2, actionId);
+
+            v1 = .1f; v2 = .4f; v3 = .2f; v4 = .8f;
+            us.Update(); // Bucket is not locked (v3 < bucket.threshold)
+            Assert.AreEqual(.1f, action_1.Utility);
+            Assert.AreEqual(.4f, action_2.Utility);
+            Assert.AreEqual(.2f, action_3.Utility);
+            Assert.AreEqual(.8f, action_4.Utility);
+            Assert.AreEqual(.4f, bucket.Utility);
+            Assert.AreEqual(4, actionId);
+
+            // TODO: Problema: Si la utilidad del bucket es superior a su umbral pero menor al umbral
+            // del us, la utilidad devuelta sería 1, cuando deberia descartarse
         }
 
         [TestMethod]

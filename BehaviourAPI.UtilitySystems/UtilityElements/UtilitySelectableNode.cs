@@ -9,8 +9,12 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Status Status { get => _status; protected set => _status = value; }
-        Status _status;
+        public Status Status { get; protected set; }
+
+        /// <summary>
+        /// True if this element should be executed even if later elements have more utility:
+        /// </summary>
+        public bool ExecutionPriority { get; protected set; }
 
         #endregion
 

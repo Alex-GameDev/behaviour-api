@@ -108,7 +108,7 @@ namespace BehaviourAPI.UtilitySystems
             return bucket;
         }
 
-        public UtilityBucket CreateUtilityBucket(string name, bool root, float utilityThreshold = .3f, 
+        public UtilityBucket CreateUtilityBucket(string name, bool root = true, float utilityThreshold = .3f, 
             float inertia = 1.3f, float bucketThreshold = 0f, params UtilitySelectableNode[] elements)
         {
             return CreateUtilityBucket(name, elements.ToList(), root, utilityThreshold, inertia, bucketThreshold);
@@ -144,6 +144,7 @@ namespace BehaviourAPI.UtilitySystems
         public override void Update()
         {
             var newBestAction = ComputeCurrentBestAction();
+            // If the best action changes:
             if(newBestAction != _currentBestElement)
             {
                 _currentBestElement?.Stop();
@@ -153,31 +154,40 @@ namespace BehaviourAPI.UtilitySystems
             _currentBestElement?.Update();
         }
 
+
         private UtilitySelectableNode? ComputeCurrentBestAction()
         {
-            bool currentElementIsLocked = false;
             float currentHigherUtility = -1f; // If value starts in 0, elems with Utility == 0 cant be executed
 
-            var newBestElement = _currentBestElement;
+            UtilitySelectableNode? newBestElement = _currentBestElement;
 
-            for (int i = 0; i < _utilityCandidates.Count; i++)
+            int i = 0;
+            var currentActionIsLocked = false; // True if current action is a locked bucket.
+
+            while (i < _utilityCandidates.Count && !currentActionIsLocked)
             {
-                var utilityElement = _utilityCandidates[i];
-                if (utilityElement == null) break;
+                // Update utility
+                var currentAction = _utilityCandidates[i];
+                if (currentAction == null) continue;
+                currentAction.UpdateUtility();
 
-                utilityElement.UpdateUtility();
-                // The current action utility is mutiplied by the Inertia
-                var utility = utilityElement.Utility * (utilityElement == _currentBestElement? Inertia : 1f);
+                // Compute the current action utility:
+                var utility = currentAction.Utility;
+                if (currentAction == _currentBestElement) utility *= Inertia;
 
-                if(!currentElementIsLocked && utility > currentHigherUtility)
+                // If it's higher than the current max utility, update the selection.
+                if(utility > currentHigherUtility)
                 {
-                    newBestElement = utilityElement;
+                    newBestElement = currentAction;
                     currentHigherUtility = utility;
-                    if (utility >= float.MaxValue) currentElementIsLocked = true;
+
+                    // If the action is a locked bucket:
+                    if (currentAction.ExecutionPriority) currentActionIsLocked = true;
                 }
+                i++;
             }
 
-            // if max utility is lower than the treshold, executes the default action.
+            // If utility is lower than the threshold, execute the default action:
             if (currentHigherUtility < UtilityThreshold) newBestElement = DefaultSelectedElement;
 
             return newBestElement;
