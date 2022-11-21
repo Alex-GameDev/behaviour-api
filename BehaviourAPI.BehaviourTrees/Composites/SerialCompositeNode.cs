@@ -27,6 +27,7 @@
 
         public override void Start()
         {
+            currentChildIdx = 0;
             base.Start();
             GetCurrentChild()?.Start();
         }

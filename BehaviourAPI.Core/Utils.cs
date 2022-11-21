@@ -11,9 +11,9 @@ namespace BehaviourAPI.Core
             else return status;
         }
 
-        public static Status ToStatus(this bool check)
+        public static Status ToStatus(this bool check, Status valueIfFalse = Status.Failure)
         {
-            return check ? Status.Success : Status.Failure;
+            return check ? Status.Success : valueIfFalse;
         }
 
         public static void MoveAtFirst<T>(this List<T> list, T element)

@@ -81,6 +81,47 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Success, action_1.Status);
         }
 
+        [TestMethod("Iterator Decorator on sequence")]
+        public void Test_BT_Iterator_Sequence()
+        {
+            BehaviourTree tree = new BehaviourTree();
+            var action_1 = tree.CreateLeafNode("Nodo 1");
+            action_1.Action = new FunctionalAction(() => Status.Success);
+            var action_2 = tree.CreateLeafNode("Nodo 2");
+            action_2.Action = new FunctionalAction(() => Status.Success);
+
+            var seq = tree.CreateComposite<SequencerNode>("seq", false, action_1, action_2);
+            var iter = tree.CreateDecorator<IteratorNode>("inv", seq).SetIterations(2);
+            tree.SetStartNode(iter);
+
+            tree.Start();
+            Assert.AreEqual(Status.Running, iter.Status);
+
+            tree.Update(); // Action 1 ends with success 
+            Assert.AreEqual(Status.Running, iter.Status);
+            Assert.AreEqual(Status.Running, seq.Status);
+            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.Running, action_2.Status);
+
+            tree.Update(); // Action 2 ends with success -> iters = 1 -> iter restart action 
+            Assert.AreEqual(Status.Running, iter.Status);
+            Assert.AreEqual(Status.Running, seq.Status);
+            Assert.AreEqual(Status.Running, action_1.Status);
+            Assert.AreEqual(Status.None,    action_2.Status);
+
+            tree.Update(); // Action 1 ends with success
+            Assert.AreEqual(Status.Running, iter.Status);
+            Assert.AreEqual(Status.Running, seq.Status);
+            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.Running, action_2.Status);
+
+            tree.Update(); // Action 2 ends with success -> iters = 2 -> keep the value 
+            Assert.AreEqual(Status.Success, iter.Status);
+            Assert.AreEqual(Status.Success, seq.Status);
+            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.Success, action_2.Status);
+        }
+
         [TestMethod("LoopUntil Decorator")]
         public void Test_BT_LoopUntil()
         {
