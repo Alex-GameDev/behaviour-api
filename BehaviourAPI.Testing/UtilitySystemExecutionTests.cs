@@ -117,7 +117,7 @@ namespace BehaviourAPI.Testing
             var action_4 = us.CreateUtilityAction("Action_4", f4, new FunctionalAction(() => actionId = 4, () => Status.Running));
 
             us.Start();
-            Assert.AreEqual(Status.None, us.Status);
+            Assert.AreEqual(Status.Running, us.Status);
             Assert.AreEqual(Status.None, action_1.Status);
             Assert.AreEqual(Status.None, bucket.Status);
             Assert.AreEqual(Status.None, action_2.Status);

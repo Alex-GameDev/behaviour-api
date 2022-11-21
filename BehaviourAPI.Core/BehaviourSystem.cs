@@ -39,12 +39,24 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// Executes the last execution frame
         /// </summary>
-        public abstract void Update();
+        public void Update()
+        {
+            if (Status != Status.Running) return; // Graph already finished
+            Execute();                
+        }
 
         /// <summary>
         /// Finish the execution status giving 
         /// </summary>
         /// <param name="executionResult"></param>
         public void Finish(Status executionResult) => Status = executionResult;
+
+        public abstract void Execute();
+
+        public void Restart()
+        {
+            Stop();
+            Start();
+        }
     }
 }

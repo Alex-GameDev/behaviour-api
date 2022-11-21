@@ -137,11 +137,7 @@ namespace BehaviourAPI.UtilitySystems
 
         #region --------------------------------------- Runtime methods --------------------------------------
 
-        public override void Start()
-        {
-        }
-
-        public override void Update()
+        public override void Execute()
         {
             var newBestAction = ComputeCurrentBestAction();
             // If the best action changes:
@@ -153,7 +149,6 @@ namespace BehaviourAPI.UtilitySystems
             }
             _currentBestElement?.Update();
         }
-
 
         private UtilitySelectableNode? ComputeCurrentBestAction()
         {

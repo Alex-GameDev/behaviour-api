@@ -83,7 +83,7 @@ namespace BehaviourAPI.BehaviourTrees
             m_rootNode?.Start();
         }
 
-        public override void Update()
+        public override void Execute()
         {
             m_rootNode?.Update();
             Status = m_rootNode?.Status ?? Status.Error;

@@ -25,7 +25,8 @@ namespace BehaviourAPI.Testing
             tree.Update();
             Assert.AreEqual(Status.Success, inv.Status);
             Assert.AreEqual(Status.Failure, action_1.Status);
-
+            
+            tree.Restart();
             action_1.Action = new FunctionalAction(() => Status.Success);
             tree.Update();
             Assert.AreEqual(Status.Failure, inv.Status);
@@ -48,6 +49,7 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Success, suc.Status);
             Assert.AreEqual(Status.Failure, action_1.Status);
 
+            tree.Restart();
             action_1.Action = new FunctionalAction(() => Status.Success);
             tree.Update();
             Assert.AreEqual(Status.Success, suc.Status);
@@ -222,6 +224,7 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Success, action_1.Status);
 
             i++;
+            tree.Restart();
             tree.Update(); // i = 4 -> cond == false -> child.Stop();
             Assert.AreEqual(Status.Running, cond.Status);
             Assert.AreEqual(Status.None, action_1.Status);
