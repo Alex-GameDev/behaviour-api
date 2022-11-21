@@ -57,7 +57,7 @@ namespace BehaviourAPI.BehaviourTrees
                 if(status != Status.Running)
                 {
                     _currentIterations++;
-                    if(_currentIterations < Iterations)
+                    if(Iterations == -1 || _currentIterations < Iterations)
                     {
                         status = Status.Running;
                         m_childNode?.Stop();
