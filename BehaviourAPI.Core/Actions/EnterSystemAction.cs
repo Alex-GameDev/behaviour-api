@@ -1,10 +1,10 @@
 ﻿namespace BehaviourAPI.Core.Actions
 {
-    public class EnterGraphAction : Action
+    public class EnterSystemAction : Action
     {
-        public BehaviourGraph? Subgraph;
+        public BehaviourSystem? Subgraph;
 
-        public EnterGraphAction(BehaviourGraph? subgraph)
+        public EnterSystemAction(BehaviourSystem? subgraph)
         {
             Subgraph = subgraph;
         }

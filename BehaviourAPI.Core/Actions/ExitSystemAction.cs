@@ -1,13 +1,13 @@
 ﻿namespace BehaviourAPI.Core.Actions
 {
-    public class ExitGraphAction : Action
+    public class ExitSystemAction : Action
     {
         public Status ReturnedStatus;
         
-        public BehaviourGraph? Graph;
+        public BehaviourSystem? Graph;
 
         // Graph arg must be the IActionHandler's graph.
-        public ExitGraphAction(BehaviourGraph graph, Status returnedStatus = Status.Success)
+        public ExitSystemAction(BehaviourSystem graph, Status returnedStatus = Status.Success)
         {
             ReturnedStatus = returnedStatus;
             Graph = graph;

@@ -1,6 +1,6 @@
 namespace BehaviourAPI.Core
 {
-    public abstract class BehaviourGraph : IStatusHandler
+    public abstract class BehaviourGraph : BehaviourSystem
     {
         #region ----------------------------------------- Properties -------------------------------------------
 
@@ -18,11 +18,6 @@ namespace BehaviourAPI.Core
         /// The default entry point of the graph
         /// </summary>
         public Node? StartNode => Nodes[0];
-
-        /// <summary>
-        /// The current execution status of the graph.
-        /// </summary>
-        public Status Status { get; protected set; }
 
         /// <summary>
         /// True if nodes can have more than one connection with the same node.
@@ -245,37 +240,5 @@ namespace BehaviourAPI.Core
         }
 
         #endregion   
-
-        #region --------------------------------------- Runtime Methods ----------------------------------------
-
-        /// <summary>
-        /// Enter this behavior graph
-        /// </summary>
-        public virtual void Start()
-        {
-            if (Status != Status.None)
-                throw new Exception("ERROR: This graph is already been executed");
-
-            Status = Status.Running;
-        }
-
-        /// <summary>
-        /// Executes every frame
-        /// </summary>
-
-        public abstract void Update();
-
-        /// <summary>
-        /// Executes the last execution frame
-        /// </summary>
-        public virtual void Stop() => Status = Status.None;
-
-        /// <summary>
-        /// Finish the execution status giving 
-        /// </summary>
-        /// <param name="executionResult"></param>
-        public void Finish(Status executionResult) => Status = executionResult;
-
-        #endregion
     }
 }

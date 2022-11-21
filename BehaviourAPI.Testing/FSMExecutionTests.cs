@@ -92,13 +92,13 @@
             FSM parent = new FSM();
 
             var s1 = parent.CreateState("st1", new FunctionalAction(() => Status.Running));
-            var s2 = parent.CreateState("st2", new EnterGraphAction(child));
+            var s2 = parent.CreateState("st2", new EnterSystemAction(child));
             var s3 = parent.CreateState("st3", new FunctionalAction(() => Status.Running));
             var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => true));
             var t2_3 = parent.CreateFinishStateTransition("t2_3", s2, s3, false, true);
 
             var s4 = child.CreateState("st4", new FunctionalAction(() => Status.Running));
-            var s5 = child.CreateState("st5", new ExitGraphAction(child, Status.Failure));
+            var s5 = child.CreateState("st5", new ExitSystemAction(child, Status.Failure));
             var t4_5 = child.CreateTransition<Transition>("t45", s4, s5, new ConditionPerception(() => true));
 
             parent.Start(); // Enter S1
