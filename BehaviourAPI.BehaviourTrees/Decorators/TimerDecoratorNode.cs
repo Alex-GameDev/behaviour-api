@@ -29,6 +29,7 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
+            _childExecuted = false;
             _timer = new System.Timers.Timer(Time * 1000);
             _timer.Elapsed += OnTimerElapsed;
 
@@ -63,6 +64,13 @@ namespace BehaviourAPI.BehaviourTrees
             { 
                 _timer.Enabled = false;
                 _timer.Stop();
+            }
+
+            if(_childExecuted)
+            {
+                if (m_childNode != null) m_childNode.Stop();
+                else throw new NullReferenceException("ERROR: Child node is not defined");
+                _childExecuted = false;
             }
         }
 
