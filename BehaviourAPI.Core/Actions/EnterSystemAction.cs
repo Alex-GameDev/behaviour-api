@@ -2,34 +2,45 @@
 {
     public class EnterSystemAction : Action
     {
-        public BehaviourSystem? Subgraph;
+        public BehaviourSystem? SubSystem;
 
         /// <summary>
         /// True if the subsystem will restart after finish
         /// </summary>
         public bool ExecuteOnLoop;
 
-        public EnterSystemAction(BehaviourSystem? subgraph)
+        /// <summary>
+        /// True if the subsystem won't restart if is interrupted
+        /// </summary>
+        public bool DontStopOnInterrupt;
+
+        public EnterSystemAction(BehaviourSystem? subSystem, bool executeOnLoop = false, bool dontStopOnInterrupt = false)
         {
-            Subgraph = subgraph;
+            SubSystem = subSystem;
+            ExecuteOnLoop = executeOnLoop;
+            DontStopOnInterrupt = dontStopOnInterrupt;
         }
 
         public override void Start()
         {
-            Subgraph?.Start();
+            if (DontStopOnInterrupt && SubSystem?.Status == Status.None) return;
+
+            SubSystem?.Start();
         }
 
         public override Status Update()
         {
-            if(ExecuteOnLoop && Subgraph?.Status != Status.Running) Subgraph?.Restart();
+            if(ExecuteOnLoop && SubSystem?.Status != Status.Running) SubSystem?.Restart();
 
-            Subgraph?.Update();
-            return Subgraph?.Status ?? Status.Error;
+            SubSystem?.Update();
+            return SubSystem?.Status ?? Status.Error;
         }
 
         public override void Stop()
         {
-            Subgraph?.Stop();
+            if (DontStopOnInterrupt && SubSystem?.Status == Status.Running) return;
+            
+            SubSystem?.Stop();
         }
     }
 }

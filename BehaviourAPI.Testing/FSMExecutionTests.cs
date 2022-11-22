@@ -110,7 +110,7 @@
             Assert.AreEqual(Status.None, s4.Status);
             Assert.AreEqual(Status.None, s5.Status);
 
-            parent.Update(); // Exit S1 -> Enter S2 -> Enter Subgraph -> Enter S4
+            parent.Update(); // Exit S1 -> Enter S2 -> Enter SubSystem -> Enter S4
             Assert.AreEqual(Status.Running, parent.Status);
             Assert.AreEqual(Status.Running, child.Status);
             Assert.AreEqual(Status.None, s1.Status);
