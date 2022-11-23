@@ -57,10 +57,9 @@ namespace BehaviourAPI.UtilitySystems
             return variableFactor;
         }
 
-        public FunctionFactor CreateFunctionFactor(string name, Factor child, UtilityFunction curve)
+        public T CreateFunctionFactor<T>(string name, Factor child) where T : FunctionFactor, new()
         {
-            FunctionFactor curveFactor = CreateNode<FunctionFactor>(name);
-            curveFactor.function = curve;
+            T curveFactor = CreateNode<T>(name);
             CreateConnection<UtilityConnection>(curveFactor, child);
             curveFactor.SetChild(child);
             return curveFactor;

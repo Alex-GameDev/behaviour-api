@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace BehaviourAPI.UtilitySystems
 {
     public class WeightedFusionFactor : FusionFactor

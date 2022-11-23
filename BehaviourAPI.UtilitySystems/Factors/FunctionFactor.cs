@@ -6,7 +6,7 @@ namespace BehaviourAPI.UtilitySystems
     /// <summary>
     /// Factor that modifies its child value with a function.
     /// </summary>  
-    public class FunctionFactor : Factor
+    public abstract class FunctionFactor : Factor
     {
         #region ------------------------------------------ Properties -----------------------------------------
         public override int MaxOutputConnections => 1;
@@ -14,8 +14,6 @@ namespace BehaviourAPI.UtilitySystems
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
-
-        public UtilityFunction? function;
 
         Factor? m_childFactor;
 
@@ -49,9 +47,10 @@ namespace BehaviourAPI.UtilitySystems
         protected override float ComputeUtility()
         {
             m_childFactor?.UpdateUtility();
-            return function?.Evaluate(m_childFactor?.Utility ?? 0f) ?? 0f;
+            return Evaluate(m_childFactor?.Utility ?? 0f);
         }
 
+        protected abstract float Evaluate(float childUtility);
         #endregion
     }
 }

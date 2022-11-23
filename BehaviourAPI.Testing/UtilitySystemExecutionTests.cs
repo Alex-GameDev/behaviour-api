@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviourAPI.Testing
+﻿namespace BehaviourAPI.Testing
 {
     using UtilitySystems;
     using Core;
-    using BehaviourAPI.Core.Actions;
+    using Core.Actions;
 
     [TestClass]
     public class UtilitySystemExecutionTests
@@ -158,7 +152,7 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(.4f, bucket.Utility);
             Assert.AreEqual(4, actionId);
 
-            // TODO: Problema: Si la utilidad del bucket es superior a su umbral pero menor al umbral
+            // TODO: Problema: Si la utilidad del bucket es superior grownRate su umbral pero menor al umbral
             // del us, la utilidad devuelta sería 1, cuando deberia descartarse
         }
 
@@ -169,7 +163,7 @@ namespace BehaviourAPI.Testing
             UtilitySystem us = new UtilitySystem();
             
             Factor f1 = us.CreateVariableFactor("v1", () => v1, 0f, 1f);
-            FunctionFactor ff = us.CreateFunctionFactor("ff", f1, new CustomFunction((x) => x * x));
+            FunctionFactor ff = us.CreateFunctionFactor<CustomFunction>("ff", f1).SetFunction((x) => x * x);
             UtilityAction action = us.CreateUtilityAction("Action1", ff, new FunctionalAction(() =>
             {
                 v1 += .25f;
@@ -242,9 +236,9 @@ namespace BehaviourAPI.Testing
         public void Test_US_ConnectionLoop()
         {
             UtilitySystem us = new UtilitySystem();
-            var a = (FunctionFactor)us.CreateNode(typeof(FunctionFactor));
-            var b = (FunctionFactor)us.CreateNode(typeof(FunctionFactor));
-            var c = (FunctionFactor)us.CreateNode(typeof(FunctionFactor));
+            var a = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
+            var b = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
+            var c = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
 
             us.CreateConnection(us.ConnectionType, a, b);
             us.CreateConnection(us.ConnectionType, b, c);

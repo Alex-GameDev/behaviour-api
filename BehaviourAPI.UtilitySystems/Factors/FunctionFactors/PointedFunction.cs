@@ -2,17 +2,19 @@
 
 namespace BehaviourAPI.UtilitySystems
 {
-    public class PointedFunction : UtilityFunction
+    public class PointedFunction : FunctionFactor
     {
-        public List<Vector2> points;
+        public List<Vector2> points = new List<Vector2>();
+        // Points shouldn't be changed directly using the list
 
-        public PointedFunction(List<Vector2> points)
+        public PointedFunction SetPoints(List<Vector2> points)
         {
             this.points = points;
             points.Sort((u, v) => u.X.CompareTo(v.X));
+            return this;
         }
 
-        public override float Evaluate(float x)
+        protected override float Evaluate(float x)
         {
             int id = findClosestLowerId(x);
             if (id == -1) 
