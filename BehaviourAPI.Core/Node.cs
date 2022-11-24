@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace BehaviourAPI.Core
 {
     public abstract class Node : GraphElement
@@ -96,5 +98,11 @@ namespace BehaviourAPI.Core
         public bool IsStartNode() => BehaviourGraph?.StartNode == this;
 
         #endregion
+
+        public override void SerializeToJSON(Utf8JsonWriter writer, JsonSerializerOptions options)
+        {
+            base.SerializeToJSON(writer, options);
+            writer.WriteString("Name", Name);
+        }
     }
 }

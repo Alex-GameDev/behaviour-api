@@ -1,6 +1,8 @@
+using System.Text.Json;
+
 namespace BehaviourAPI.Core
 {
-    public abstract class BehaviourGraph : BehaviourSystem
+    public abstract class BehaviourGraph : BehaviourSystem, ISerializableElement
     {
         #region ----------------------------------------- Properties -------------------------------------------
 
@@ -239,6 +241,32 @@ namespace BehaviourAPI.Core
             return source.IsConnectedWith(target);
         }
 
-        #endregion   
+        #endregion
+
+        public virtual void SerializeToJSON(Utf8JsonWriter writer)
+        {
+            writer.WriteString("_type", GetType().FullName);
+            writer.WriteStartArray("nodes");
+            Nodes.ForEach(node =>
+            {
+                writer.WriteStartObject();
+                node.SerializeToJSON(writer);
+                writer.WriteEndObject();
+            });
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("connections");
+            Connections.ForEach(conn => {
+                writer.WriteStartObject();
+                conn.SerializeToJSON(writer);
+                writer.WriteEndObject();
+            });
+            writer.WriteEndArray();
+        }
+
+        public virtual void DeserializeFromJSON(ref Utf8JsonReader reader)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
