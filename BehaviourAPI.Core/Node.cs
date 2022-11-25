@@ -86,6 +86,18 @@ namespace BehaviourAPI.Core
         public bool IsStartNode() => BehaviourGraph?.StartNode == this;
 
         /// <summary>
+        /// Check if the node can have more children.
+        /// </summary>
+        /// <returns>True if can have more children, false otherwise.</returns>
+        public bool CanAddAChild() => MaxOutputConnections == -1 || Children.Count < MaxOutputConnections;
+
+        /// <summary>
+        /// Check if the node can have more parents.
+        /// </summary>
+        /// <returns>True if can have more children, false otherwise.</returns>
+        public bool CanAddAParent() => MaxInputConnections == -1 || Parents.Count < MaxInputConnections;
+
+        /// <summary>
         /// Build the internal references
         /// </summary>
         public virtual void Initialize()
