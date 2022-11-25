@@ -11,8 +11,6 @@ namespace BehaviourAPI.UtilitySystems
 
         public override Type NodeType => typeof(UtilityNode);
 
-        public override Type ConnectionType => typeof(UtilityConnection);
-
         public override bool CanRepeatConnection => false;
 
         public override bool CanCreateLoops => false;
@@ -60,7 +58,7 @@ namespace BehaviourAPI.UtilitySystems
         public T CreateFunctionFactor<T>(string name, Factor child) where T : FunctionFactor, new()
         {
             T curveFactor = CreateNode<T>(name);
-            CreateConnection<UtilityConnection>(curveFactor, child);
+            Connect(curveFactor, child);
             curveFactor.SetChild(child);
             return curveFactor;
         }
@@ -70,7 +68,7 @@ namespace BehaviourAPI.UtilitySystems
             T fusionFactor = CreateNode<T>(name);
             factors.ForEach(factor =>
             {
-                CreateConnection<UtilityConnection>(fusionFactor, factor);
+                Connect(fusionFactor, factor);
                 fusionFactor.AddFactor(factor);
             });
             return fusionFactor;
@@ -85,7 +83,7 @@ namespace BehaviourAPI.UtilitySystems
         {
             UtilityAction utilityExecutable = CreateNode<UtilityAction>(name);
             utilityExecutable.Action = action;
-            CreateConnection<UtilityConnection>(utilityExecutable, factor);
+            Connect(utilityExecutable, factor);
             if (root) _utilityCandidates.Add(utilityExecutable);
             utilityExecutable.SetFactor(factor);
             return utilityExecutable;
@@ -101,7 +99,7 @@ namespace BehaviourAPI.UtilitySystems
             if (root) _utilityCandidates.Add(bucket);
             elements.ForEach(elem =>
             {
-                CreateConnection<UtilityConnection>(bucket, elem);
+                Connect(bucket, elem);
                 bucket.AddElement(elem);
             });
             return bucket;
@@ -125,7 +123,7 @@ namespace BehaviourAPI.UtilitySystems
             base.Initialize();
             Nodes.ForEach(node =>
             {
-                if(node.InputConnections.Count == 0)
+                if(node.Parents.Count == 0)
                 {
                     _utilityCandidates.Add(node as UtilitySelectableNode);
                 }

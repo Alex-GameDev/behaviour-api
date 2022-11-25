@@ -2,14 +2,19 @@
 {
     using BehaviourAPI.Core.Actions;
     using BehaviourAPI.Core.Perceptions;
-    using Core;
 
-    public class Transition : Connection, IPerceptionHandler, IActionHandler, IPushActivable
+    public class Transition : FSMNode, IPerceptionHandler, IActionHandler, IPushActivable
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
         public Perception? Perception { get; set; }
         public Action? Action { get; set; }
+
+        public override Type ChildType => typeof(State);
+
+        public override int MaxInputConnections => 1;
+
+        public override int MaxOutputConnections => 1;
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
@@ -30,8 +35,8 @@
         {
             base.Initialize();
             _fsm = BehaviourGraph as FSM;
-            _targetState = TargetNode as State;
-            _targetState = SourceNode as State;
+            _targetState = GetFirstChild() as State;
+            _sourceState = GetFirstParent() as State;
         }
 
         #endregion

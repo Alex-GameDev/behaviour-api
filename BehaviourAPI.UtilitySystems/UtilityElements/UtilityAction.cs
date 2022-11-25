@@ -33,9 +33,9 @@ namespace BehaviourAPI.UtilitySystems
         public override void Initialize()
         {
             base.Initialize();
-            if(OutputConnections.Count == 1)
+            if(Children.Count == 1)
             {
-                _factor = GetChildNodes().First() as Factor;
+                _factor = GetFirstChild() as Factor;
             }
             else
             {

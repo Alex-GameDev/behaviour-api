@@ -15,15 +15,11 @@
             var composite = tree.CreateComposite<SelectorNode>("Sel", false, action_1, action_2, action_3);
 
             Assert.AreEqual(4, tree.Nodes.Count);
-            Assert.AreEqual(3, tree.Connections.Count);
 
-            Assert.AreEqual(3, composite.GetChildNodes().Count());
-            Assert.AreEqual(0, composite.GetParentNodes().Count());
-            Assert.AreEqual(3, composite.OutputConnections.Count);
-            Assert.AreEqual(0, composite.InputConnections.Count);
-            Assert.AreEqual(1, action_2.GetParentNodes().Count());
-            Assert.AreEqual(1, action_2.InputConnections.Count);
-            Assert.AreEqual(0, action_2.OutputConnections.Count);
+            Assert.AreEqual(3, composite.Children.Count);
+            Assert.AreEqual(0, composite.Parents.Count);
+            Assert.AreEqual(1, action_2.Parents.Count);
+            Assert.AreEqual(0, action_2.Children.Count);
 
             Assert.AreEqual(true, action_2.IsChildOf(composite));
             Assert.AreEqual(true, composite.IsParentOf(action_2));
@@ -39,15 +35,11 @@
             var action_1 = tree.CreateLeafNode("Nodo 1");
             var decorator = tree.CreateDecorator<InverterNode>("Sel", action_1);
 
-            Assert.AreEqual(1, decorator.GetChildNodes().Count());
-            Assert.AreEqual(0, decorator.GetParentNodes().Count());
-            Assert.AreEqual(1, decorator.OutputConnections.Count);
-            Assert.AreEqual(0, decorator.InputConnections.Count);
+            Assert.AreEqual(1, decorator.Children.Count);
+            Assert.AreEqual(0, decorator.Parents.Count);
 
-            Assert.AreEqual(0, action_1.GetChildNodes().Count());
-            Assert.AreEqual(1, action_1.GetParentNodes().Count());
-            Assert.AreEqual(1, action_1.InputConnections.Count);
-            Assert.AreEqual(0, action_1.OutputConnections.Count);
+            Assert.AreEqual(1, action_1.Parents.Count);
+            Assert.AreEqual(0, action_1.Children.Count);
 
             Assert.AreEqual(true, action_1.IsChildOf(decorator));
             Assert.AreEqual(true, decorator.IsParentOf(action_1));
@@ -85,19 +77,18 @@
             var composite_root = tree.CreateComposite<SequencerNode>("Seq", false, composite_1, composite_2, action_7);
 
             Assert.AreEqual(10, tree.Nodes.Count);
-            Assert.AreEqual(9, tree.Connections.Count);
 
-            Assert.AreEqual(3, composite_1.OutputConnections.Count);
-            Assert.AreEqual(1, composite_1.InputConnections.Count);
-            Assert.AreEqual(3, composite_root.OutputConnections.Count);
-            Assert.AreEqual(0, composite_root.InputConnections.Count);
+            Assert.AreEqual(3, composite_1.Children.Count);
+            Assert.AreEqual(1, composite_1.Parents.Count);
+            Assert.AreEqual(3, composite_root.Children.Count);
+            Assert.AreEqual(0, composite_root.Parents.Count);
 
             Assert.AreEqual(true, tree.SetStartNode(composite_root));
             Assert.AreEqual(false, tree.SetStartNode(composite_root));
 
             var decorator = tree.CreateDecorator<InverterNode>("Inv", action_1);
-            Assert.AreEqual(0, decorator.GetChildNodes().Count());
-            Assert.AreEqual(1, action_1.GetParentNodes().Count());
+            Assert.AreEqual(0, decorator.Children.Count);
+            Assert.AreEqual(1, action_1.Parents.Count);
 
             tree.Start();
             tree.Update();

@@ -50,7 +50,7 @@ namespace BehaviourAPI.UtilitySystems
         public override void Initialize()
         {
             base.Initialize();
-            GetChildNodes().ToList().ForEach(node => _utilityCandidates.Add(node as UtilitySelectableNode));
+            Children.ToList().ForEach(node => _utilityCandidates.Add(node as UtilitySelectableNode));
         }
 
         /// <summary>
@@ -58,11 +58,16 @@ namespace BehaviourAPI.UtilitySystems
         /// </summary>
         public bool SetDefaulSelectedElement(UtilitySelectableNode node)
         {
-            if (!GetChildNodes().Contains(node) || node == DefaultSelectedElement) return false;
+            if (!Children.Contains(node) || node == DefaultSelectedElement) return false;
             _utilityCandidates.MoveAtFirst(node);
-            Connection? conn = OutputConnections.Find((conn) => conn.TargetNode == node);
-            if(conn != null) OutputConnections.MoveAtFirst(conn);
-            return true;
+
+            if (node.IsChildOf(this))
+            {
+                Children.MoveAtFirst(node);
+                return true;
+            }
+            else
+                return false;
         }
 
         #endregion

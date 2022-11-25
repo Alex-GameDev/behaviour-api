@@ -10,11 +10,6 @@ namespace BehaviourAPI.Core
         public abstract System.Type NodeType { get; }
 
         /// <summary>
-        /// The base type of the <see cref="Connection"/> elements that this <see cref="BehaviourGraph"/> can contain.
-        /// </summary>
-        public abstract System.Type ConnectionType { get; }
-
-        /// <summary>
         /// The default entry point of the graph
         /// </summary>
         public Node? StartNode => Nodes[0];
@@ -34,7 +29,6 @@ namespace BehaviourAPI.Core
         #region ------------------------------------------- Fields ---------------------------------------------
 
         public List<Node> Nodes = new List<Node>();
-        public List<Connection> Connections = new List<Connection>();
 
         // Used internally to find nodes by name
         protected Dictionary<string, Node> nodeDict = new Dictionary<string, Node>();
@@ -59,29 +53,56 @@ namespace BehaviourAPI.Core
             }            
         }
 
-        protected T CreateConnection<T>(Node source, Node target) where T : Connection, new()
+        protected void Connect(Node source, Node target)
         {
             if (!Nodes.Contains(source) || !Nodes.Contains(target))
                 throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
 
-            if(!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
+            if (!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
                 throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
 
             if (!CanCreateLoops && AreNodesConnected(target, source))
                 throw new ArgumentException("ERROR: Can't create a loop in this graph.");
 
-            T connection = new();
-            connection.BehaviourGraph = this;
-            connection.SourceNode = source;
-            connection.TargetNode = target;
-
-            target.InputConnections.Add(connection);
-            source.OutputConnections.Add(connection);
-
-            Connections.Add(connection);
-
-            return connection;           
+            source.Children.Add(target);
+            target.Parents.Add(source);
         }
+
+        public void Disconnect(Node source, Node target)
+        {
+            if (!Nodes.Contains(source) || !Nodes.Contains(target))
+                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
+
+            if(source.IsParentOf(target) && target.IsChildOf(source))
+            {
+                source.Children.Remove(target);
+                target.Parents.Remove(source);
+            }
+        }
+
+        //protected T CreateConnection<T>(Node source, Node target) where T : Connection, new()
+        //{
+        //    if (!Nodes.Contains(source) || !Nodes.Contains(target))
+        //        throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
+
+        //    if(!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
+        //        throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
+
+        //    if (!CanCreateLoops && AreNodesConnected(target, source))
+        //        throw new ArgumentException("ERROR: Can't create a loop in this graph.");
+
+        //    T connection = new();
+        //    connection.BehaviourGraph = this;
+        //    connection.SourceNode = source;
+        //    connection.TargetNode = target;
+
+        //    target.Parents.Add(connection);
+        //    source.Children.Add(connection);
+
+        //    Connections.Add(connection);
+
+        //    return connection;           
+        //}
 
         public Node CreateNode(Type type)
         {
@@ -98,62 +119,54 @@ namespace BehaviourAPI.Core
             throw new NullReferenceException("ERROR: Node couldn't be created.");
         }
 
-        public Connection CreateConnection(Type type, Node source, Node target,
-            int sourceIndex = -1, int targetIndex = -1)
-        {
-            if(type.IsSubclassOf(type))
-                throw new InvalidCastException("ERROR: \"type\" value is not a type derived from the graph connection type.");
+        //public Connection CreateConnection(Type type, Node source, Node target,
+        //    int sourceIndex = -1, int targetIndex = -1)
+        //{
+        //    if(type.IsSubclassOf(type))
+        //        throw new InvalidCastException("ERROR: \"type\" value is not a type derived from the graph connection type.");
 
-            if (!Nodes.Contains(source) || !Nodes.Contains(target))
-                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
+        //    if (!Nodes.Contains(source) || !Nodes.Contains(target))
+        //        throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
 
-            if (!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
-                throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
+        //    if (!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
+        //        throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
 
-            if (!CanCreateLoops && AreNodesConnected(target, source))
-                throw new ArgumentException("ERROR: Can't create a loop in this graph.");
+        //    if (!CanCreateLoops && AreNodesConnected(target, source))
+        //        throw new ArgumentException("ERROR: Can't create a loop in this graph.");
 
-            if (Nodes.Contains(source) && Nodes.Contains(target))
-            {
-                Connection? connection = (Connection?)Activator.CreateInstance(type);
-                if(connection != null)
-                {
-                    connection.BehaviourGraph = this;
-                    connection.SourceNode = source;
-                    connection.TargetNode = target;
+        //    if (Nodes.Contains(source) && Nodes.Contains(target))
+        //    {
+        //        Connection? connection = (Connection?)Activator.CreateInstance(type);
+        //        if(connection != null)
+        //        {
+        //            connection.BehaviourGraph = this;
+        //            connection.SourceNode = source;
+        //            connection.TargetNode = target;
 
-                    if (sourceIndex == -1) source.OutputConnections.Add(connection);
-                    else source.OutputConnections.Insert(sourceIndex, connection);
-                    if (targetIndex == -1) target.InputConnections.Add(connection);
-                    else target.InputConnections.Insert(targetIndex, connection);
+        //            if (sourceIndex == -1) source.Children.Add(connection);
+        //            else source.Children.Insert(sourceIndex, connection);
+        //            if (targetIndex == -1) target.Parents.Add(connection);
+        //            else target.Parents.Insert(targetIndex, connection);
 
-                    Connections.Add(connection);
-                    return connection;
-                }
-                throw new NullReferenceException("ERROR: Connection couldn't be created.");
-            }
-            else
-            {
-                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
-            }
-        }
+        //            Connections.Add(connection);
+        //            return connection;
+        //        }
+        //        throw new NullReferenceException("ERROR: Connection couldn't be created.");
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
+        //    }
+        //}
 
         public void RemoveNode(Node node)
         {
             Nodes.Remove(node);
         }
 
-        public void RemoveConnection(Connection connection)
-        {
-            connection.SourceNode?.OutputConnections.Remove(connection);
-            connection.TargetNode?.InputConnections.Remove(connection);
-            Connections.Remove(connection);
-        }
-
         public virtual void Initialize()
         {
             Nodes.ForEach(node => node.Initialize());
-            Connections.ForEach(conn => conn.Initialize());
         }
 
         /// <summary>
@@ -215,7 +228,7 @@ namespace BehaviourAPI.Core
                 Node n = unvisitedNodes.First();
                 unvisitedNodes.Remove(n);
                 visitedNodes.Add(n);
-                foreach(var child in n.GetChildNodes())
+                foreach(var child in n.Children)
                 {
                     if (child == null) continue;
 

@@ -13,10 +13,9 @@
             var s2 = fsm.CreateState("st2");
             Transition t = fsm.CreateTransition<Transition>("t_s1_s2", s1, s2, new ConditionPerception(() => true));
 
-            Assert.AreEqual(2, fsm.Nodes.Count);
-            Assert.AreEqual(1, fsm.Connections.Count);
-            Assert.AreEqual(s1, t.SourceNode);
-            Assert.AreEqual(s2, t.TargetNode);
+            Assert.AreEqual(3, fsm.Nodes.Count);
+            Assert.AreEqual(s1, t.GetFirstParent());
+            Assert.AreEqual(s2, t.GetFirstChild());
             Assert.AreEqual(fsm.StartNode, s1);
         }
 
@@ -41,12 +40,11 @@
             Transition t3_6 = fsm.CreateTransition<Transition>("t36", s3, s6, new ConditionPerception(() => true));
 
             fsm.SetStartNode(s3);
-            Assert.AreEqual(6, fsm.Nodes.Count);
-            Assert.AreEqual(8, fsm.Connections.Count);
+            Assert.AreEqual(14, fsm.Nodes.Count);
             Assert.AreEqual(fsm.StartNode, s3);
-            Assert.AreEqual(3, s2.OutputConnections.Count);
-            Assert.AreEqual(2, s3.InputConnections.Count);
-            Assert.AreEqual(true, s2.IsParentOf(s4));
+            Assert.AreEqual(3, s2.Children.Count);
+            Assert.AreEqual(2, s3.Parents.Count);
+            //TODO: Assert.AreEqual(true, s2.IsParentOf(s4));
         }
     }
 }

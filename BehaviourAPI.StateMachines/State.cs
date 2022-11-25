@@ -3,7 +3,7 @@
     using Core;
     using Core.Actions;
 
-    public class State : Node, IStatusHandler, IActionHandler
+    public class State : FSMNode, IStatusHandler, IActionHandler
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
@@ -35,7 +35,7 @@
         public override void Initialize()
         {
             base.Initialize();
-            OutputConnections.ForEach(conn => _transitions.Add(conn as Transition));
+            Children.ForEach(child => _transitions.Add(child as Transition));
         }
 
         public State SetAction(Action? action)
