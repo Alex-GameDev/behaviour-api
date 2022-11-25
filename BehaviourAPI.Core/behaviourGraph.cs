@@ -31,7 +31,10 @@ namespace BehaviourAPI.Core
         public List<Node> Nodes = new List<Node>();
 
         // Used internally to find nodes by name
-        protected Dictionary<string, Node> nodeDict = new Dictionary<string, Node>();
+        Dictionary<string, Node> _nodeDict = new Dictionary<string, Node>();
+
+        // Used internally to reduce complexity of creating connections from O(N) to O(1)
+        HashSet<Node> _nodeSet = new HashSet<Node>();
 
         #endregion
 
@@ -42,9 +45,10 @@ namespace BehaviourAPI.Core
             T node = new();
             node.BehaviourGraph = this;
             node.Name = name;
-            if(nodeDict.TryAdd(name, node))
+            if(_nodeDict.TryAdd(name, node))
             {
                 Nodes.Add(node);
+                _nodeSet.Add(node);
                 return node;
             }
             else
@@ -64,14 +68,14 @@ namespace BehaviourAPI.Core
             if (!source.ChildType.IsAssignableFrom(target.GetType()))
                 throw new ArgumentException($"ERROR: Source node child type({source.ChildType}) can handle target's type ({target.GetType()}) as a child.");
 
-            if (!Nodes.Contains(source) || !Nodes.Contains(target))
-                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
+            if (!_nodeSet.Contains(source) || !_nodeSet.Contains(target))
+                throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");                       // O(1) -> N = _nodeSet.Count()
 
             if (!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
-                throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
+                throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");          // O(N) -> N = src.children.count(), tgt.parent.count()
 
             if (!CanCreateLoops && AreNodesConnected(target, source))
-                throw new ArgumentException("ERROR: Can't create a loop in this graph.");
+                throw new ArgumentException("ERROR: Can't create a loop in this graph.");                                     // O(N) -> N = Reachable nodes from target
 
             source.Children.Add(target);
             target.Parents.Add(source);
@@ -133,7 +137,7 @@ namespace BehaviourAPI.Core
 
         public Node? FindNode(string name)
         {
-            if (nodeDict.TryGetValue(name, out Node? node))
+            if (_nodeDict.TryGetValue(name, out Node? node))
             {
                 return node;
             }
@@ -145,7 +149,7 @@ namespace BehaviourAPI.Core
 
         public T? FindNode<T>(string name) where T : Node
         {
-            if(nodeDict.TryGetValue(name, out Node? node))
+            if(_nodeDict.TryGetValue(name, out Node? node))
             {
                 if(node is T element)
                 {
