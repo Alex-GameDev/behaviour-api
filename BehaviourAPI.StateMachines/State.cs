@@ -9,7 +9,7 @@
 
         public override int MaxInputConnections => -1;
         public override int MaxOutputConnections => -1;
-        public override Type ChildType => typeof(State);
+        public override Type ChildType => typeof(Transition);
 
         public Status Status { get; protected set; }
 

@@ -55,6 +55,9 @@ namespace BehaviourAPI.Core
 
         protected void Connect(Node source, Node target)
         {
+            if (!source.ChildType.IsAssignableFrom(target.GetType()))
+                throw new ArgumentException($"ERROR: Source node child type({source.ChildType}) can handle target's type ({target.GetType()}) as a child.");
+
             if (!Nodes.Contains(source) || !Nodes.Contains(target))
                 throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
 
