@@ -44,7 +44,8 @@
             Assert.AreEqual(fsm.StartNode, s3);
             Assert.AreEqual(3, s2.Children.Count);
             Assert.AreEqual(2, s3.Parents.Count);
-            //TODO: Assert.AreEqual(true, s2.IsParentOf(s4));
+            Assert.AreEqual(true, s2.IsParentOf(t23));
+            Assert.AreEqual(true, t3_6.IsParentOf(s6));
         }
     }
 }

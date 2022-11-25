@@ -53,7 +53,13 @@ namespace BehaviourAPI.Core
             }            
         }
 
-        protected void Connect(Node source, Node target)
+        /// <summary>
+        /// Connect two nodes
+        /// </summary>
+        /// <param name="source">The source node</param>
+        /// <param name="target"> The target node</param>
+        /// <exception cref="ArgumentException">Thown when some of the nodes are unvalid.</exception>
+        public void Connect(Node source, Node target)
         {
             if (!source.ChildType.IsAssignableFrom(target.GetType()))
                 throw new ArgumentException($"ERROR: Source node child type({source.ChildType}) can handle target's type ({target.GetType()}) as a child.");
@@ -71,6 +77,12 @@ namespace BehaviourAPI.Core
             target.Parents.Add(source);
         }
 
+        /// <summary>
+        /// Disconnect two nodes
+        /// </summary>
+        /// <param name="source">The source node</param>
+        /// <param name="target"> The target node</param>
+        /// <exception cref="ArgumentException">Thown when some of the nodes are unvalid.</exception>
         public void Disconnect(Node source, Node target)
         {
             if (!Nodes.Contains(source) || !Nodes.Contains(target))
@@ -82,30 +94,6 @@ namespace BehaviourAPI.Core
                 target.Parents.Remove(source);
             }
         }
-
-        //protected T CreateConnection<T>(Node source, Node target) where T : Connection, new()
-        //{
-        //    if (!Nodes.Contains(source) || !Nodes.Contains(target))
-        //        throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
-
-        //    if(!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
-        //        throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
-
-        //    if (!CanCreateLoops && AreNodesConnected(target, source))
-        //        throw new ArgumentException("ERROR: Can't create a loop in this graph.");
-
-        //    T connection = new();
-        //    connection.BehaviourGraph = this;
-        //    connection.SourceNode = source;
-        //    connection.TargetNode = target;
-
-        //    target.Parents.Add(connection);
-        //    source.Children.Add(connection);
-
-        //    Connections.Add(connection);
-
-        //    return connection;           
-        //}
 
         public Node CreateNode(Type type)
         {
@@ -121,46 +109,6 @@ namespace BehaviourAPI.Core
             }
             throw new NullReferenceException("ERROR: Node couldn't be created.");
         }
-
-        //public Connection CreateConnection(Type type, Node source, Node target,
-        //    int sourceIndex = -1, int targetIndex = -1)
-        //{
-        //    if(type.IsSubclassOf(type))
-        //        throw new InvalidCastException("ERROR: \"type\" value is not a type derived from the graph connection type.");
-
-        //    if (!Nodes.Contains(source) || !Nodes.Contains(target))
-        //        throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
-
-        //    if (!CanRepeatConnection && AreNodesDirectlyConnected(source, target))
-        //        throw new ArgumentException("ERROR: Can't create two connections with the same source and target.");
-
-        //    if (!CanCreateLoops && AreNodesConnected(target, source))
-        //        throw new ArgumentException("ERROR: Can't create a loop in this graph.");
-
-        //    if (Nodes.Contains(source) && Nodes.Contains(target))
-        //    {
-        //        Connection? connection = (Connection?)Activator.CreateInstance(type);
-        //        if(connection != null)
-        //        {
-        //            connection.BehaviourGraph = this;
-        //            connection.SourceNode = source;
-        //            connection.TargetNode = target;
-
-        //            if (sourceIndex == -1) source.Children.Add(connection);
-        //            else source.Children.Insert(sourceIndex, connection);
-        //            if (targetIndex == -1) target.Parents.Add(connection);
-        //            else target.Parents.Insert(targetIndex, connection);
-
-        //            Connections.Add(connection);
-        //            return connection;
-        //        }
-        //        throw new NullReferenceException("ERROR: Connection couldn't be created.");
-        //    }
-        //    else
-        //    {
-        //        throw new ArgumentException("ERROR: Source and/or target nodes are not in the graph.");
-        //    }
-        //}
 
         public void RemoveNode(Node node)
         {
