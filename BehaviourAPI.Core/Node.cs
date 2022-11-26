@@ -108,9 +108,8 @@ namespace BehaviourAPI.Core
 
         #endregion
 
-        public override void SerializeToJSON(Utf8JsonWriter writer)
+        public virtual void SerializeToJSON(Utf8JsonWriter writer)
         {
-            base.SerializeToJSON(writer);
             writer.WriteString("Name", Name);
         }
     }

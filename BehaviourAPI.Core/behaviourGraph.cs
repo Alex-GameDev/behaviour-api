@@ -228,14 +228,6 @@ namespace BehaviourAPI.Core
                 writer.WriteEndObject();
             });
             writer.WriteEndArray();
-
-            writer.WriteStartArray("connections");
-            Connections.ForEach(conn => {
-                writer.WriteStartObject();
-                conn.SerializeToJSON(writer);
-                writer.WriteEndObject();
-            });
-            writer.WriteEndArray();
         }
 
         public virtual void DeserializeFromJSON(ref Utf8JsonReader reader)
