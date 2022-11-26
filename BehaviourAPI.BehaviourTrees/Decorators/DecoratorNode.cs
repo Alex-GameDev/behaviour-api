@@ -26,9 +26,9 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Initialize()
         {
             base.Initialize();
-            if (OutputConnections.Count == 1)
+            if (Children.Count == 1)
             {
-                m_childNode = GetChildNodes().First() as BTNode;
+                m_childNode = GetFirstChild() as BTNode;
             }
             else
             {

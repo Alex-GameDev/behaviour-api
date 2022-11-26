@@ -362,20 +362,17 @@ namespace BehaviourAPI.Testing
 
             var composite_root = tree.CreateComposite<SequencerNode>("Seq", false, composite_1, composite_2, action_7);
 
-            Assert.AreEqual(9, tree.Connections.Count);
             Assert.AreEqual(10, tree.Nodes.Count);
 
-            Assert.AreEqual(3, composite_1.OutputConnections.Count);
-            Assert.AreEqual(1, composite_1.InputConnections.Count);
-            Assert.AreEqual(3, composite_root.OutputConnections.Count);
-            Assert.AreEqual(0, composite_root.InputConnections.Count);
+            Assert.AreEqual(3, composite_1.Children.Count);
+            Assert.AreEqual(1, composite_1.Parents.Count);
+            Assert.AreEqual(3, composite_root.Children.Count);
+            Assert.AreEqual(0, composite_root.Parents.Count);
 
             Assert.AreEqual(true, tree.SetStartNode(composite_root));
             Assert.AreEqual(false, tree.SetStartNode(composite_root));
 
             var decorator = tree.CreateDecorator<InverterNode>("Inv", action_1);
-            Assert.AreEqual(0, decorator.GetChildNodes().Count());
-            Assert.AreEqual(1, action_1.GetParentNodes().Count());
 
             tree.Start();
             for (int i = 0; i < 5; i++) tree.Update();

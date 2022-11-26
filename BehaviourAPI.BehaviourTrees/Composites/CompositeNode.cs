@@ -30,7 +30,7 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Initialize()
         {
             base.Initialize();
-            GetChildNodes().ToList().ForEach(node => m_children.Add(node as BTNode));
+            Children.ForEach(node => m_children.Add(node as BTNode));
         }
 
         #endregion

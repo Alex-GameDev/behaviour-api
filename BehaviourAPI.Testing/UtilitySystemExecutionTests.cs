@@ -232,22 +232,22 @@
             
         }
 
-        [TestMethod("Connection loop")]
-        public void Test_US_ConnectionLoop()
-        {
-            UtilitySystem us = new UtilitySystem();
-            var a = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
-            var b = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
-            var c = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
+        //[TestMethod("Connection loop")]
+        //public void Test_US_ConnectionLoop()
+        //{
+        //    UtilitySystem us = new UtilitySystem();
+        //    var a = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
+        //    var b = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
+        //    var c = (FunctionFactor)us.CreateNode(typeof(CustomFunction));
 
-            us.CreateConnection(us.ConnectionType, a, b);
-            us.CreateConnection(us.ConnectionType, b, c);
-            us.CreateConnection(us.ConnectionType, a, c);
+        //    us.CreateConnection(us.ConnectionType, a, b);
+        //    us.CreateConnection(us.ConnectionType, b, c);
+        //    us.CreateConnection(us.ConnectionType, a, c);
 
-            Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, a, a));
-            Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, b, a));
-            Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, c, a));
+        //    Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, a, a));
+        //    Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, b, a));
+        //    Assert.ThrowsException<ArgumentException>(() => us.CreateConnection(us.ConnectionType, c, a));
 
-        }
+        //}
     }
  }

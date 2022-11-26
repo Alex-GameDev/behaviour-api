@@ -25,7 +25,7 @@ namespace BehaviourAPI.UtilitySystems
         public override void Initialize()
         {
             base.Initialize();
-            GetChildNodes().ToList().ForEach(node => {
+            Children.ForEach(node => {
                 if (node is Factor f) m_childFactors.Add(f); 
             });
         }

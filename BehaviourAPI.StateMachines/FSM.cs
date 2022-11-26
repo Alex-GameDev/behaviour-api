@@ -10,9 +10,7 @@
 
         public override Type NodeType => typeof(State);
 
-        public override Type ConnectionType => typeof(Transition);
-
-        public override bool CanRepeatConnection => true;
+        public override bool CanRepeatConnection => false;
 
         public override bool CanCreateLoops => true;
 
@@ -21,8 +19,6 @@
         #region ------------------------------------------- Fields -------------------------------------------
 
         protected State? _currentState;
-
-        protected Dictionary<string, Transition> _transitionDict = new Dictionary<string, Transition>();
 
         #endregion
 
@@ -44,22 +40,16 @@
 
         public T CreateTransition<T>(string name, State from, State to, Perception? perception = null, Action? action = null) where T : Transition, new()
         {
-            if (!_transitionDict.ContainsKey(name))
-            {
-                T transition = CreateConnection<T>(from, to);
-                transition.Perception = perception;
-                transition.Action = action;
-                transition.SetFSM(this);
-                transition.SetSourceState(from);
-                transition.SetTargetState(to);
-                from.AddTransition(transition);
-                _transitionDict.Add(name, transition);
-                return transition;
-            }
-            else
-            {
-                throw new ArgumentException(name, "This FSM already contains a transition with this name.");
-            }           
+            T transition = CreateNode<T>(name);
+            transition.SetFSM(this);
+            transition.Perception = perception;
+            transition.Action = action;
+            Connect(from, transition);
+            Connect(transition, to);
+            transition.SetSourceState(from);
+            transition.SetTargetState(to);
+            from.AddTransition(transition);
+            return transition;       
         }
         
         public Transition CreateTransition(string name, State from, State to, Perception? perception = null, Action? action = null)
@@ -90,38 +80,6 @@
             Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure);
             return CreateTransition<Transition>(name, from, to, finishStatePerception, action);
         }
-
-        public Transition? FindTransition(string name)
-        {
-            if (_transitionDict.TryGetValue(name, out Transition? transition))
-            {
-                return transition;
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Node \"{name}\" doesn't exist in this graph");
-            }
-        }
-
-        public T? FindTransition<T>(string name) where T : Transition
-        {
-            if (_transitionDict.TryGetValue(name, out Transition? transition))
-            {
-                if (transition is T element)
-                {
-                    return element;
-                }
-                else
-                {
-                    throw new InvalidCastException($"Transition \"{name}\" exists, but is not an instance of {typeof(T).FullName} class.");
-                }
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Transition \"{name}\" doesn't exist in this fsm.");
-            }
-        }
-
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------

@@ -13,8 +13,6 @@ namespace BehaviourAPI.BehaviourTrees
 
         public override Type NodeType => typeof(BTNode);
 
-        public override Type ConnectionType => typeof(BTConnection);
-
         public override bool CanRepeatConnection => false; // This won't happen because BTNode's max input connections is 1.
 
         public override bool CanCreateLoops => false;
@@ -31,9 +29,9 @@ namespace BehaviourAPI.BehaviourTrees
         public T CreateDecorator<T>(string name, BTNode child) where T : DecoratorNode, new()
         {
             T node = CreateNode<T>(name);
-            if (child.InputConnections.Count == 0)
+            if (child.Parents.Count == 0)
             {
-                CreateConnection<BTConnection>(node, child);
+                Connect(node, child);
                 node.SetChild(child);
             }
             return node;
@@ -45,9 +43,9 @@ namespace BehaviourAPI.BehaviourTrees
             node.IsRandomized = randomOrder;
             children.ForEach(child =>
             {
-                if(child.InputConnections.Count == 0)
+                if(child.Parents.Count == 0)
                 {
-                    CreateConnection<BTConnection>(node, child);
+                    Connect(node, child);
                     node.AddChild(child);
                 }
             });
