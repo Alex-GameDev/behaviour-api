@@ -79,9 +79,10 @@ namespace BehaviourAPI.UtilitySystems
             return CreateFusionFactor<T>(name, children.ToList());
         }
 
-        public UtilityAction CreateUtilityAction(string name, Factor factor, Action? action = null, bool root = true) 
+        public UtilityAction CreateUtilityAction(string name, Factor factor, Action? action = null, bool root = true, bool finishOnComplete = false) 
         {
             UtilityAction utilityExecutable = CreateNode<UtilityAction>(name);
+            utilityExecutable.FinishSystemOnComplete = finishOnComplete;
             utilityExecutable.Action = action;
             Connect(utilityExecutable, factor);
             if (root) _utilityCandidates.Add(utilityExecutable);
@@ -145,6 +146,9 @@ namespace BehaviourAPI.UtilitySystems
                 _currentBestElement?.Start();
             }
             _currentBestElement?.Update();
+
+            // If the executed action finish and the "finish on complete" flag is true, the utility systems finish too.
+            if (_currentBestElement?.FinishExecutionWhenActionFinishes() ?? false && _currentBestElement.Status != Status.Running) Finish(_currentBestElement.Status);
         }
 
         private UtilitySelectableNode? ComputeCurrentBestAction()

@@ -12,8 +12,7 @@ namespace BehaviourAPI.UtilitySystems
         public override Type ChildType => typeof(Factor);
         public override int MaxOutputConnections => 1;
 
-        public Action? Action { get => _action; set => _action = value; }
-        Action? _action;
+        public Action? Action { get; set; }
 
         #endregion
 
@@ -21,6 +20,7 @@ namespace BehaviourAPI.UtilitySystems
 
         Factor? _factor;
 
+        public bool FinishSystemOnComplete = false;
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
@@ -67,6 +67,8 @@ namespace BehaviourAPI.UtilitySystems
         {
             Action?.Stop();
         }
+
+        public override bool FinishExecutionWhenActionFinishes() => FinishSystemOnComplete;
 
         #endregion
     }

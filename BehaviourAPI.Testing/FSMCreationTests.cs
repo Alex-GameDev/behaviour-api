@@ -47,5 +47,16 @@
             Assert.AreEqual(true, s2.IsParentOf(t23));
             Assert.AreEqual(true, t3_6.IsParentOf(s6));
         }
+
+        [TestMethod]
+        public void Test_FSM_LoopTransition()
+        {
+            FSM fsm = new FSM();
+            var s1 = fsm.CreateState("st1");
+
+            Transition t12 = fsm.CreateTransition<Transition>("t12", s1, s1, new ConditionPerception(() => true));
+
+            Assert.AreEqual(2, fsm.Nodes.Count);
+        }
     }
 }

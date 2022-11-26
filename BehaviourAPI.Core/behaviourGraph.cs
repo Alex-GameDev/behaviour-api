@@ -210,7 +210,8 @@ namespace BehaviourAPI.Core
         /// <returns>True if the connection exists.</returns>
         public bool AreNodesDirectlyConnected(Node source, Node target)
         {
-            return source.IsConnectedWith(target);
+            // should be both true or false
+            return source.IsParentOf(target) || target.IsChildOf(source);
         }
 
         #endregion   

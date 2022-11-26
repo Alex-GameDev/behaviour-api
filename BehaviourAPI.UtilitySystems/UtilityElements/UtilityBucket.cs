@@ -144,6 +144,8 @@ namespace BehaviourAPI.UtilitySystems
             _currentBestElement = null;
         }
 
+        public override bool FinishExecutionWhenActionFinishes() => _lastExecutedElement?.FinishExecutionWhenActionFinishes() ?? false;
+
         #endregion
     }
 }
