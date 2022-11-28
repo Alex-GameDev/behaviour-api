@@ -191,6 +191,7 @@ namespace BehaviourAPI.UtilitySystems
 
         public override void Stop()
         {
+            base.Stop();
             _currentBestElement?.Stop();
             _currentBestElement = null;
         }
