@@ -32,6 +32,12 @@
             GetCurrentChild()?.Start();
         }
 
+        public override void Stop()
+        {
+            base.Stop();
+            GetCurrentChild()?.Stop();
+        }
+
         protected override Status UpdateStatus()
         {
             BTNode? currentChild = GetCurrentChild();
@@ -48,11 +54,11 @@
 
         private bool TryGoToNextChild()
         {
-            currentChildIdx++;
-            BTNode? current = GetCurrentChild();
-            if (currentChildIdx < ChildCount)
+            if (currentChildIdx < ChildCount - 1)
             {
-                current?.Start();
+                GetCurrentChild()?.Stop();
+                currentChildIdx++;
+                GetCurrentChild()?.Start();
                 return true;
             }
             else

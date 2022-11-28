@@ -18,6 +18,13 @@
             base.Start();
             GetChildren().ForEach(c => c?.Start());
         }
+
+        public override void Stop()
+        {
+            base.Stop();
+            GetChildren().ForEach(c => c?.Stop());
+        }
+
         protected override Status UpdateStatus()
         {
             List<BTNode?> children = GetChildren();

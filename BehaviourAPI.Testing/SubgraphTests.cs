@@ -28,23 +28,23 @@
 
 
             bt.Start();
-            bt.Update(); //Árbol (R) [ Success - Running - None] - FSM (R) [Running - None]
-            Assert.AreEqual(Status.Success, action1.Status);
+            bt.Update(); //Árbol (R) [ None - Running - None] - FSM (R) [Running - None]
+            Assert.AreEqual(Status.None, action1.Status);
             Assert.AreEqual(Status.Running, action2.Status);
             Assert.AreEqual(Status.Running, fsm.Status);
             Assert.AreEqual(Status.Running, entry.Status);
 
-            bt.Update(); //Árbol (R) [ Success - Success - Running] - FSM (S) [None - Running]
-            Assert.AreEqual(Status.Success, action2.Status);
+            bt.Update(); //Árbol (R) [ None - None - Running] - FSM (S) [None - None]
+            Assert.AreEqual(Status.None, action2.Status);
             Assert.AreEqual(Status.Running, action3.Status);
-            Assert.AreEqual(Status.Success, fsm.Status);
-            Assert.AreEqual(Status.Running, exit.Status);
+            Assert.AreEqual(Status.None, fsm.Status);
+            Assert.AreEqual(Status.None, exit.Status);
 
-            bt.Update(); //Árbol (S) [ Success - Success - Success] - FSM (S) [None - Running]
+            bt.Update(); //Árbol (S) [ None - None - Success] - FSM (S) [None - None]
             Assert.AreEqual(Status.Success, action3.Status);
             Assert.AreEqual(Status.Success, bt.Status);
-            Assert.AreEqual(Status.Success, fsm.Status);
-            Assert.AreEqual(Status.Running, exit.Status);
+            Assert.AreEqual(Status.None, fsm.Status);
+            Assert.AreEqual(Status.None, exit.Status);
         }
 
         [TestMethod("FSM Sub BT")]
@@ -78,7 +78,7 @@
             fsm.Update(); //FSM (R) [None - Running - None] - Árbol (R) [Failure - Running]
             Assert.AreEqual(Status.Running, subBT.Status);
             Assert.AreEqual(Status.Running, bt.Status);
-            Assert.AreEqual(Status.Failure, action1.Status);
+            Assert.AreEqual(Status.None, action1.Status);
             Assert.AreEqual(Status.Running, action2.Status);
 
             fsm.Update(); //FSM (R) [None - None - Running] - Árbol (N)
