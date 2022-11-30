@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BehaviourAPI.BehaviourTrees.Decorators
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core.Perceptions;
 
     /// <summary>
@@ -50,8 +51,10 @@ namespace BehaviourAPI.BehaviourTrees.Decorators
 
             if (_executeChild)
             {
-                if (m_childNode != null) m_childNode.Start();
-                else throw new NullReferenceException("ERROR: Child node is not defined");
+                if (m_childNode == null)
+                    throw new MissingChildException(this);
+
+                m_childNode.Start();
             }
         }
 
@@ -60,27 +63,27 @@ namespace BehaviourAPI.BehaviourTrees.Decorators
             base.Stop();
             if(_executeChild)
             {
-                if (m_childNode != null) m_childNode.Stop();
-                else throw new NullReferenceException("ERROR: Child node is not defined");
-                _executeChild = false;
+                if (m_childNode == null)
+                    throw new MissingChildException(this);
+
+                m_childNode.Stop();
             }            
         }
 
         protected override Status UpdateStatus()
         {
-            if (m_childNode != null)
+            if (_executeChild)
             {
-                if (_executeChild)
-                {                    
-                    m_childNode.Update();
-                    return m_childNode.Status;
-                }
-                else
-                {                    
-                    return Status.Failure;
-                }
+                if (m_childNode == null)
+                    throw new MissingChildException(this);
+
+                m_childNode.Update();
+                return m_childNode.Status;
             }
-            throw new NullReferenceException("ERROR: Child node is not defined.");
+            else
+            {                    
+                return Status.Failure;
+            }
         }
 
         #endregion
