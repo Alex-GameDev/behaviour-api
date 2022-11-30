@@ -17,7 +17,6 @@ namespace BehaviourAPI.BehaviourTrees
         #region ------------------------------------------- Fields -------------------------------------------
 
         protected BTNode m_childNode;
-        protected bool m_resetChildFlag;
 
         #endregion
 

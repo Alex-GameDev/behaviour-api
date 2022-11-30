@@ -1,10 +1,12 @@
 namespace BehaviourAPI.BehaviourTrees
 {
+    using BehaviourAPI.BehaviourTrees.Decorators;
+    using BehaviourAPI.Core.Exceptions;
     using Core;
     /// <summary>
     /// Node that execute its child node until returns a given value.
     /// </summary>
-    public class LoopUntilNode : DecoratorNode
+    public class LoopUntilNode : DirectDecoratorNode
     {
 
         #region ------------------------------------------- Fields -------------------------------------------
@@ -39,20 +41,15 @@ namespace BehaviourAPI.BehaviourTrees
         {
             base.Start();
             _currentIterations = 0;
-            m_childNode?.Start();
-        }
-
-        public override void Stop()
-        {
-            base.Stop();
-            _currentIterations = 0;
-            m_childNode?.Stop();
         }
 
         protected override Status UpdateStatus()
         {
-            m_childNode?.Update();
-            var status = m_childNode?.Status ?? Status.Error;
+            if (m_childNode == null)
+                throw new MissingChildException(this);
+
+            m_childNode.Update();
+            var status = m_childNode.Status;
             // If child execution ends without the target value, restart until currentIterations == MaxIterations
             if (status == TargetStatus.Inverted())
             {
@@ -61,8 +58,8 @@ namespace BehaviourAPI.BehaviourTrees
                 {
                     // Restart the node execution
                     status = Status.Running;
-                    m_childNode?.Stop();
-                    m_childNode?.Start();
+                    m_childNode.Stop();
+                    m_childNode.Start();
                 }                
             }
             return status;
