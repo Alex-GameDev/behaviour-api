@@ -15,7 +15,7 @@
             FSM fsm = new FSM();
             var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Running));
             var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Running));
-            Transition t = fsm.CreateTransition<Transition>("t", s1, s2, new ConditionPerception(() => true));
+            Transition t = fsm.CreateTransition<Transition>("t", s1, s2);
 
             fsm.Start();
             Assert.AreEqual(Status.Running, fsm.Status);
@@ -42,13 +42,13 @@
             var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Running));
 
             Transition t1_2 = fsm.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => false));
-            Transition t1_3 = fsm.CreateTransition<Transition>("t13", s1, s3, new ConditionPerception(() => true));
+            Transition t1_3 = fsm.CreateTransition<Transition>("t13", s1, s3);
 
             Transition t2_1 = fsm.CreateTransition<Transition>("t21", s2, s1, new ConditionPerception(() => false));
             Transition t2_3 = fsm.CreateTransition<Transition>("t23", s2, s3, new ConditionPerception(() => false));
 
-            Transition t3_1 = fsm.CreateTransition<Transition>("t31", s3, s2, new ConditionPerception(() => true));
-            Transition t3_2 = fsm.CreateTransition<Transition>("t32", s3, s1, new ConditionPerception(() => true));
+            Transition t3_1 = fsm.CreateTransition<Transition>("t31", s3, s2);
+            Transition t3_2 = fsm.CreateTransition<Transition>("t32", s3, s1);
 
             fsm.Start();
             Assert.AreEqual(Status.Running, fsm.Status);
@@ -95,12 +95,12 @@
             var s1 = parent.CreateState("st1", new FunctionalAction(() => Status.Running));
             var s2 = parent.CreateState("st2", new EnterSystemAction(child));
             var s3 = parent.CreateState("st3", new FunctionalAction(() => Status.Running));
-            var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => true));
+            var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2);
             var t2_3 = parent.CreateFinishStateTransition("t2_3", s2, s3, false, true);
 
             var s4 = child.CreateState("st4", new FunctionalAction(() => Status.Running));
             var s5 = child.CreateState("st5", new ExitSystemAction(child, Status.Failure));
-            var t4_5 = child.CreateTransition<Transition>("t45", s4, s5, new ConditionPerception(() => true));
+            var t4_5 = child.CreateTransition<Transition>("t45", s4, s5);
 
             parent.Start(); // Enter S1
             Assert.AreEqual(Status.Running, parent.Status);
@@ -276,9 +276,9 @@
             var tp1 = fsm.CreateProbabilisticTransition("tp1", ps, s1, p1);
             var tp2 = fsm.CreateProbabilisticTransition("tp2", ps, s2, p2);
             var tp3 = fsm.CreateProbabilisticTransition("tp3", ps, s3, p3);
-            var t1p = fsm.CreateTransition("t1p", s1, ps, new ConditionPerception(() => true));
-            var t2p = fsm.CreateTransition("t2p", s2, ps, new ConditionPerception(() => true));
-            var t3p = fsm.CreateTransition("t3p", s3, ps, new ConditionPerception(() => true));
+            var t1p = fsm.CreateTransition("t1p", s1, ps);
+            var t2p = fsm.CreateTransition("t2p", s2, ps);
+            var t3p = fsm.CreateTransition("t3p", s3, ps);
 
             fsm.Start();
             Assert.AreEqual(Status.Running, ps.Status);
@@ -312,8 +312,8 @@
             var fsm = new FSM();
             var s1 = fsm.CreateState("s1", new FunctionalAction(()=> Status.Running));
             var s2 = fsm.CreateState("s2", new FunctionalAction(() => Status.Running));
-            var t1 = fsm.CreateTransition("t1", s1, s2);
-            var t2 = fsm.CreateTransition("t2", s2, s1);
+            var t1 = fsm.CreateTransition("t1", s1, s2, isPulled: false);
+            var t2 = fsm.CreateTransition("t2", s2, s1, isPulled: false);
 
             var pushT1 = new PushPerception(t1);
             var pushT2 = new PushPerception(t2);

@@ -25,6 +25,8 @@
         protected State _sourceState;
         protected State _targetState;
 
+        public bool isPulled = true;
+
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
@@ -47,7 +49,7 @@
 
         public void Start() => Perception?.Initialize();
         public void Stop() => Perception?.Reset();
-        public virtual bool Check() => Perception?.Check() ?? false;
+        public virtual bool Check() => Perception?.Check() ?? true;
         public virtual void Perform()
         {
             if (!(_fsm?.IsCurrentState(_sourceState) ?? false)) return;

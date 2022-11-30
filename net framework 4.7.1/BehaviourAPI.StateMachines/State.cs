@@ -75,7 +75,7 @@
         {
             for(int i = 0; i < _transitions.Count; i++)
             {
-                if(_transitions[i]?.Check() ?? false)
+                if(_transitions[i].isPulled && _transitions[i].Check())
                 {
                     _transitions[i]?.Perform();
                     return true;

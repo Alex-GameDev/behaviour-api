@@ -40,12 +40,13 @@ namespace BehaviourAPI.StateMachines
             return state;
         }
 
-        public T CreateTransition<T>(string name, State from, State to, Perception perception = null, Action action = null) where T : Transition, new()
+        public T CreateTransition<T>(string name, State from, State to, Perception perception = null, Action action = null, bool isPulled = true) where T : Transition, new()
         {
             T transition = CreateNode<T>(name);
             transition.SetFSM(this);
             transition.Perception = perception;
             transition.Action = action;
+            transition.isPulled = isPulled;
             Connect(from, transition);
             Connect(transition, to);
             transition.SetSourceState(from);
@@ -54,33 +55,33 @@ namespace BehaviourAPI.StateMachines
             return transition;       
         }
         
-        public Transition CreateTransition(string name, State from, State to, Perception perception = null, Action action = null)
+        public Transition CreateTransition(string name, State from, State to, Perception perception = null, Action action = null, bool isPulled = true)
         {
-            return CreateTransition<Transition>(name, from, to, perception, action);
+            return CreateTransition<Transition>(name, from, to, perception, action, isPulled);
         }
 
-        public T CreateProbabilisticTransition<T>(string name, ProbabilisticState from, State to, float probability, Perception perception = null) where T : Transition, new()
+        public T CreateProbabilisticTransition<T>(string name, ProbabilisticState from, State to, float probability, Perception perception = null, Action action = null, bool isPulled = true) where T : Transition, new()
         {
-            T transition = CreateTransition<T>(name, from, to, perception);
+            T transition = CreateTransition<T>(name, from, to, perception, action, isPulled);
             from.SetProbabilisticTransition(transition, probability);
             return transition;
         }
 
-        public Transition CreateProbabilisticTransition(string name, ProbabilisticState from, State to, float probability, Perception perception = null) 
+        public Transition CreateProbabilisticTransition(string name, ProbabilisticState from, State to, float probability, Perception perception = null, Action action = null, bool isPulled = true) 
         {
-            return CreateProbabilisticTransition<Transition>(name, from, to, probability, perception);
+            return CreateProbabilisticTransition<Transition>(name, from, to, probability, perception, action, isPulled);
         }
 
-        public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null) where T : Transition, new()
+        public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null, bool isPulled = true) where T : Transition, new()
         {
             Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure); 
-            return CreateTransition<T>(name, from, to, finishStatePerception, action);
+            return CreateTransition<T>(name, from, to, finishStatePerception, action, isPulled);
         }
 
-        public Transition CreateFinishStateTransition(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null)
+        public Transition CreateFinishStateTransition(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null, bool isPulled = true)
         {
             Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure);
-            return CreateTransition<Transition>(name, from, to, finishStatePerception, action);
+            return CreateTransition<Transition>(name, from, to, finishStatePerception, action, isPulled);
         }
         #endregion
 
