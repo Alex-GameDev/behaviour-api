@@ -1,6 +1,7 @@
 ﻿namespace BehaviourAPI.StateMachines
 {
     using BehaviourAPI.Core.Actions;
+    using BehaviourAPI.Core.Exceptions;
     using BehaviourAPI.Core.Perceptions;
     using System;
     using Action = Core.Actions.Action;
@@ -52,7 +53,7 @@
         public virtual bool Check() => Perception?.Check() ?? true;
         public virtual void Perform()
         {
-            if (!(_fsm?.IsCurrentState(_sourceState) ?? false)) return;
+            if (!_fsm.IsCurrentState(_sourceState)) return;
 
             if (Action != null)
             {
@@ -60,8 +61,13 @@
                 Action.Update();
                 Action.Stop();
             }
-            _fsm?.OnTriggerTransition(this);
-            _fsm?.SetCurrentState(_targetState);
+
+            _fsm.OnTriggerTransition(this);
+
+            if (_targetState == null)
+                throw new MissingChildException(this, "The list of utility candidates is empty.");
+
+            _fsm.SetCurrentState(_targetState);
         }
 
         public void Fire() => Perform();
