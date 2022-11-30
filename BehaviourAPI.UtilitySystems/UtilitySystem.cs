@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace BehaviourAPI.UtilitySystems
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core;
     using Core.Actions;
     using System;
@@ -25,8 +26,10 @@ namespace BehaviourAPI.UtilitySystems
         {
             get
             {
-                if (_utilityCandidates.Count == 0) return null;
-                else return _utilityCandidates[0];
+                if (_utilityCandidates.Count == 0) 
+                    throw new EmptyGraphException(this, "The list of utility candidates is empty.");
+                
+                return _utilityCandidates[0];
             }
         }
 
@@ -307,7 +310,8 @@ namespace BehaviourAPI.UtilitySystems
         public override bool SetStartNode(Node node)
         {
             bool defaultUtilityElementUpdated = base.SetStartNode(node);
-            if (defaultUtilityElementUpdated) _utilityCandidates.MoveAtFirst(node as UtilitySelectableNode);
+            if (defaultUtilityElementUpdated && node is UtilitySelectableNode utilitySelectable)
+                _utilityCandidates.MoveAtFirst(utilitySelectable);
             return defaultUtilityElementUpdated;
         }
 
@@ -326,6 +330,14 @@ namespace BehaviourAPI.UtilitySystems
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------
+
+        public override void Start()
+        {
+            base.Start();
+
+            if (_utilityCandidates.Count == 0)
+                throw new EmptyGraphException(this, "The list of utility candidates is empty.");
+        }
 
         public override void Execute()
         {

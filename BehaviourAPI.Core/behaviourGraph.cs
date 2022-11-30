@@ -1,3 +1,4 @@
+using BehaviourAPI.Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,15 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// The default entry point of the graph
         /// </summary>
-        public Node StartNode => Nodes[0];
+        public Node StartNode
+        {
+            get
+            {
+                if(Nodes.Count == 0) 
+                    throw new EmptyGraphException(this, "This graph is empty.");
+                return Nodes[0];
+            }
+        }
 
         /// <summary>
         /// True if nodes can have more than one connection with the same node.

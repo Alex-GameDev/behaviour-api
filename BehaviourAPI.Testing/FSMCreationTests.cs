@@ -1,11 +1,19 @@
 ﻿namespace BehaviourAPI.Testing
 {
+    using Core.Exceptions;
     using Core.Perceptions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using StateMachines;
     [TestClass]
     public class FSMCreationTests
     {
+        [TestMethod]
+        public void Test_EmptyGraph()
+        {
+            var fsm = new FSM();
+            Assert.ThrowsException<EmptyGraphException>(fsm.Start);
+        }
+
         [TestMethod("FSM two state creation")]
         public void Test_FSM_Simple_Creation()
         {

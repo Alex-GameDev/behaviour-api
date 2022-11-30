@@ -5,7 +5,6 @@ namespace BehaviourAPI.StateMachines
     using Core.Perceptions;
     using Core;
     using Core.Actions;
-    using System.Xml.Linq;
 
     public class FSM : BehaviourGraph
     {
@@ -315,6 +314,7 @@ namespace BehaviourAPI.StateMachines
         public override void Start()
         {
             base.Start();
+
             _currentState = StartNode as State;
             _currentState?.Start();
         }

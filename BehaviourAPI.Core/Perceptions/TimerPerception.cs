@@ -16,7 +16,7 @@ namespace BehaviourAPI.Core.Perceptions
         public TimerPerception(float time)
         {
             Time = time;
-            _timer = new System.Timers.Timer(time * 1000);
+            _timer = new Timer(time * 1000);
             _timer.Elapsed += OnTimerElapsed;
         }
 

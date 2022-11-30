@@ -1,5 +1,6 @@
 namespace BehaviourAPI.BehaviourTrees
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core;
     using Core.Actions;
     using Core.Perceptions;
@@ -175,6 +176,8 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
+            if (Nodes.Count == 0)
+                throw new EmptyGraphException(this);
             m_rootNode = StartNode as BTNode;
             m_rootNode?.Start();
         }

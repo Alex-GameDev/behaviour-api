@@ -7,10 +7,19 @@ namespace BehaviourAPI.Testing
     using System;
     using BehaviourAPI.BehaviourTrees.Decorators;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using BehaviourAPI.Core.Exceptions;
+    using BehaviourAPI.StateMachines;
 
     [TestClass]
     public class BehaviourTreeExecutionTests
     {
+        [TestMethod]
+        public void Test_EmptyGraph()
+        {
+            var bt = new BehaviourTree();
+            Assert.ThrowsException<EmptyGraphException>(bt.Start);
+        }
+
         [TestMethod("Inverter Decorator")]
         public void Test_BT_Inverter()
         {
