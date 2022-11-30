@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace BehaviourAPI.UtilitySystems
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core;
 
     /// <summary>
@@ -21,7 +22,9 @@ namespace BehaviourAPI.UtilitySystems
         {
             get
             {
-                if (_utilityCandidates.Count == 0) return null;
+                if (_utilityCandidates.Count == 0)
+                    throw new MissingChildException(this, "The list of utility candidates is empty.");
+
                 else return _utilityCandidates[0];
             }
         }
@@ -79,6 +82,8 @@ namespace BehaviourAPI.UtilitySystems
 
         public override void Start()
         {
+            if (_utilityCandidates.Count == 0)
+                throw new MissingChildException(this, "The list of utility candidates of this bucket is empty.");
         }
 
         protected override float ComputeUtility()
