@@ -1,5 +1,6 @@
 ﻿namespace BehaviourAPI.BehaviourTrees.Composites
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core;
     using System.Collections.Generic;
     using System.Linq;
@@ -19,20 +20,30 @@
         public override void Start()
         {
             base.Start();
-            GetChildren().ForEach(c => c?.Start());
+
+            if (m_children.Count == 0)
+                throw new MissingChildException(this);
+
+            m_children.ForEach(c => c?.Start());
         }
 
         public override void Stop()
         {
             base.Stop();
-            GetChildren().ForEach(c => c?.Stop());
+
+            if (m_children.Count == 0)
+                throw new MissingChildException(this);
+
+            m_children.ForEach(c => c?.Stop());
         }
 
         protected override Status UpdateStatus()
         {
-            List<BTNode> children = GetChildren();
-            children.ForEach(c => c?.Update());
-            List<Status> allStatus = children.Select(c => c?.Status ?? Status.Error).ToList();
+            if (m_children.Count == 0)
+                throw new MissingChildException(this);
+
+            m_children.ForEach(c => c.Update());
+            List<Status> allStatus = m_children.Select(c => c.Status).ToList();
 
             // Check errors
             if (allStatus.Contains(Status.Error)) return Status.Error;

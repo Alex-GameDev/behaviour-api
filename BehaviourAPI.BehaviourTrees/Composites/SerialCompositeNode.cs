@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using BehaviourAPI.Core.Exceptions;
     using Core;
     /// <summary>
     /// Composite node that executes its children sequencially.
@@ -29,20 +30,20 @@
         {
             currentChildIdx = 0;
             base.Start();
-            GetCurrentChild()?.Start();
+            GetCurrentChild().Start();
         }
 
         public override void Stop()
         {
             base.Stop();
-            GetCurrentChild()?.Stop();
+            GetCurrentChild().Stop();
         }
 
         protected override Status UpdateStatus()
         {
             BTNode currentChild = GetCurrentChild();
-            currentChild?.Update();
-            var status = currentChild?.Status ?? Status.Error;
+            currentChild.Update();
+            var status = currentChild.Status;
 
             if (status == KeepExecutingStatus)
             {
@@ -56,9 +57,9 @@
         {
             if (currentChildIdx < ChildCount - 1)
             {
-                GetCurrentChild()?.Stop();
+                GetCurrentChild().Stop();
                 currentChildIdx++;
-                GetCurrentChild()?.Start();
+                GetCurrentChild().Start();
                 return true;
             }
             else

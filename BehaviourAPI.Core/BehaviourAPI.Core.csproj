@@ -52,6 +52,7 @@
     <Compile Include="Actions\IActionHandler.cs" />
     <Compile Include="behaviourGraph.cs" />
     <Compile Include="BehaviourSystem.cs" />
+    <Compile Include="Exceptions\MissingChildException.cs" />
     <Compile Include="Exceptions\EmptyGraphException.cs" />
     <Compile Include="IStatusHandler.cs" />
     <Compile Include="Node.cs" />

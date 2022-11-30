@@ -1,3 +1,4 @@
+using BehaviourAPI.Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace BehaviourAPI.BehaviourTrees
        
         public bool IsRandomized;
 
-        List<BTNode> m_children;
+        protected List<BTNode> m_children;
 
         #endregion
 
@@ -43,17 +44,23 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
+
+            if (m_children.Count == 0)
+                throw new MissingChildException(this);
+
             if (IsRandomized) m_children.OrderBy((guid) => Guid.NewGuid());
         }
 
         protected BTNode GetChildAt(int idx)
         {
+            if (m_children.Count == 0)
+                throw new MissingChildException(this);
+
             if (idx < 0 || idx >= m_children.Count) return null;
             return m_children[idx];
         }
 
         protected int ChildCount => m_children.Count;
-        protected List<BTNode> GetChildren() => m_children;
 
         #endregion
     }
