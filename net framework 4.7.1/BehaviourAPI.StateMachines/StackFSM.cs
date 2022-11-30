@@ -24,7 +24,7 @@ namespace BehaviourAPI.StateMachines
 
         public T CreatePopTransition<T>(string name, State from, Perception perception = null, Action action = null) where T : Transition, new()
         {
-            return CreateTransition<T>(name, from, _comeBackState, perception);
+            return CreateTransition<T>(name, from, _comeBackState, perception, action);
         }
 
         public Transition CreatePopTransition(string name, State from, Perception perception = null, Action action = null)
@@ -34,7 +34,7 @@ namespace BehaviourAPI.StateMachines
 
         public T CreatePushTransition<T>(string name, State from, State to, Perception perception = null, Action action = null) where T : Transition, new()
         {
-            T transition = CreateTransition<T>(name, from, to, perception);
+            T transition = CreateTransition<T>(name, from, to, perception, action);
             _pushTransitions.Add(transition);
             return transition;
         }

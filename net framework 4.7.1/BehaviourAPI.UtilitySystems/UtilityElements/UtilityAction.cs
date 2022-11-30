@@ -1,6 +1,7 @@
 
 namespace BehaviourAPI.UtilitySystems
 {
+    using Core;
     using Core.Actions;
     using System;
     using Action = Core.Actions.Action;
@@ -55,6 +56,7 @@ namespace BehaviourAPI.UtilitySystems
 
         public override void Start()
         {
+            Status = Status.Running;
             Action?.Start();
         }
 
@@ -65,6 +67,7 @@ namespace BehaviourAPI.UtilitySystems
 
         public override void Stop()
         {
+            Status = Status.None;
             Action?.Stop();
         }
 
