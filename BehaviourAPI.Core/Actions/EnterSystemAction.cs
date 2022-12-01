@@ -1,4 +1,6 @@
-﻿namespace BehaviourAPI.Core.Actions
+﻿using BehaviourAPI.Core.Exceptions;
+
+namespace BehaviourAPI.Core.Actions
 {
     public class EnterSystemAction : Action
     {
@@ -23,22 +25,32 @@
 
         public override void Start()
         {
-            if (DontStopOnInterrupt && SubSystem?.Status == Status.None) return;
+            if (SubSystem == null)
+                throw new MissingSubsystemException(this, "Subsystem cannot be null");
+
+            if (DontStopOnInterrupt && SubSystem.Status == Status.None) return;
 
             SubSystem?.Start();
         }
 
         public override Status Update()
         {
-            if(ExecuteOnLoop && SubSystem?.Status != Status.Running) SubSystem?.Restart();
+            if (SubSystem == null)
+                throw new MissingSubsystemException(this, "Subsystem cannot be null");
 
-            SubSystem?.Update();
-            return SubSystem?.Status ?? Status.Error;
+            if (ExecuteOnLoop && SubSystem.Status != Status.Running)
+                SubSystem.Restart();
+
+            SubSystem.Update();
+            return SubSystem.Status;
         }
 
         public override void Stop()
         {
-            if (DontStopOnInterrupt && SubSystem?.Status == Status.Running) return;
+            if (SubSystem == null)
+                throw new MissingSubsystemException(this, "Subsystem cannot be null");
+
+            if (DontStopOnInterrupt && SubSystem.Status == Status.Running) return;
             
             SubSystem?.Stop();
         }

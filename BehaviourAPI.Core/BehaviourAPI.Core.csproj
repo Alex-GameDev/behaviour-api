@@ -55,6 +55,7 @@
     <Compile Include="Exceptions\MissingActionException.cs" />
     <Compile Include="Exceptions\MissingChildException.cs" />
     <Compile Include="Exceptions\EmptyGraphException.cs" />
+    <Compile Include="Exceptions\MissingSubsystemException.cs" />
     <Compile Include="IStatusHandler.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Perceptions\AndPerception.cs" />
