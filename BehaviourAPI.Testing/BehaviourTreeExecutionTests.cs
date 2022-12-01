@@ -382,8 +382,6 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(true, tree.SetStartNode(composite_root));
             Assert.AreEqual(false, tree.SetStartNode(composite_root));
 
-            var decorator = tree.CreateDecorator<InverterNode>("Inv", action_1);
-
             tree.Start();
             for (int i = 0; i < 5; i++) tree.Update();
             Assert.AreEqual(Status.Running, tree.Status);

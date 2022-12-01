@@ -90,6 +90,9 @@ namespace BehaviourAPI.Core
         /// <exception cref="ArgumentException">Thown if <paramref name="source"/> or <paramref name="target"/> values are unvalid.</exception>
         public void Connect(Node source, Node target)
         {
+            if (source == target)
+                throw new ArgumentException($"ERROR: Source and child cannot be the same node");
+
             if (!source.ChildType.IsAssignableFrom(target.GetType()))
                 throw new ArgumentException($"ERROR: Source node child type({source.GetType()}) can handle target's type ({target.GetType()}) as a child. It should be {source.ChildType}");
 
@@ -183,7 +186,6 @@ namespace BehaviourAPI.Core
         /// <returns>True if a path between the nodes exists.</returns>
         public bool AreNodesConnected(Node source, Node target)
         {
-            if(source == target) return true;
             HashSet<Node> unvisitedNodes = new HashSet<Node>();
             HashSet<Node> visitedNodes = new HashSet<Node>();
             unvisitedNodes.Add(source);

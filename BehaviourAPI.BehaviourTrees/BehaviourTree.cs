@@ -43,11 +43,8 @@ namespace BehaviourAPI.BehaviourTrees
         public T CreateDecorator<T>(string name, BTNode child) where T : DecoratorNode, new()
         {
             T node = CreateNode<T>(name);
-            if (child.Parents.Count == 0)
-            {
-                Connect(node, child);
-                node.SetChild(child);
-            }
+            Connect(node, child);
+            node.SetChild(child);
             return node;
         }
 
@@ -60,11 +57,8 @@ namespace BehaviourAPI.BehaviourTrees
         public T CreateDecorator<T>(BTNode child) where T : DecoratorNode, new()
         {
             T node = CreateNode<T>();
-            if (child.Parents.Count == 0)
-            {
-                Connect(node, child);
-                node.SetChild(child);
-            }
+            Connect(node, child);
+            node.SetChild(child);
             return node;
         }
 
