@@ -1,5 +1,6 @@
 ﻿namespace BehaviourAPI.Testing
 {
+    using BehaviourAPI.Core.Exceptions;
     using BehaviourTrees;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -91,8 +92,7 @@
             Assert.AreEqual(0, decorator.Children.Count);
             Assert.AreEqual(1, action_1.Parents.Count);
 
-            tree.Start();
-            tree.Update();
+            Assert.ThrowsException<MissingActionException>(tree.Start);
         }
     }
 }
