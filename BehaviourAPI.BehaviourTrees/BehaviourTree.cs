@@ -76,11 +76,9 @@ namespace BehaviourAPI.BehaviourTrees
             node.IsRandomized = randomOrder;
             children.ForEach(child =>
             {
-                if(child.Parents.Count == 0)
-                {
-                    Connect(node, child);
-                    node.AddChild(child);
-                }
+                Connect(node, child);
+                node.AddChild(child);
+
             });
             return node;
         }
@@ -98,11 +96,9 @@ namespace BehaviourAPI.BehaviourTrees
             node.IsRandomized = randomOrder;
             children.ForEach(child =>
             {
-                if (child.Parents.Count == 0)
-                {
-                    Connect(node, child);
-                    node.AddChild(child);
-                }
+                Connect(node, child);
+                node.AddChild(child);
+
             });
             return node;
         }
@@ -172,6 +168,7 @@ namespace BehaviourAPI.BehaviourTrees
             base.Start();
             if (Nodes.Count == 0)
                 throw new EmptyGraphException(this);
+
             m_rootNode = StartNode as BTNode;
             m_rootNode?.Start();
         }
