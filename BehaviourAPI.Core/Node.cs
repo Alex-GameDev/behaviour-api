@@ -41,8 +41,6 @@ namespace BehaviourAPI.Core
 
         #endregion
 
-        public string Name { get; internal set; }
-
         #region ---------------------------------------- Build methods ---------------------------------------
         /// <summary>
         /// Empty constructor

@@ -78,7 +78,6 @@ namespace BehaviourAPI.Core
             }
             T node = new T();
             node.BehaviourGraph = this;
-            node.Name = name;
             _nodeDict.Add(name, node);
             Nodes.Add(node);
             _nodeSet.Add(node);
