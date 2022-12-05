@@ -68,7 +68,7 @@
             }
         }
 
-        private BTNode GetCurrentChild() => GetChildAt(currentChildIdx);
+        private BTNode GetCurrentChild() => GetBTChildAt(currentChildIdx);
 
         #endregion
     }

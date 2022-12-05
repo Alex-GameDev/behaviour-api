@@ -26,6 +26,14 @@ namespace BehaviourAPI.Core
                     throw new EmptyGraphException(this, "This graph is empty.");
                 return Nodes[0];
             }
+            protected set
+            {
+                if (!Nodes.Contains(value))
+                    throw new ArgumentException("Ths node is not in the graph");
+
+                if (Nodes[0] != value)
+                    Nodes.MoveAtFirst(value);
+            }
         }
 
         /// <summary>
@@ -38,11 +46,13 @@ namespace BehaviourAPI.Core
         /// </summary>
         public abstract bool CanCreateLoops { get; }
 
+        public int NodeCount => Nodes.Count;
+
         #endregion
 
         #region ------------------------------------------- Fields ---------------------------------------------
 
-        public List<Node> Nodes = new List<Node>();
+        protected List<Node> Nodes = new List<Node>();
 
         // Used internally to find nodes by name
         Dictionary<string, Node> _nodeDict = new Dictionary<string, Node>();
@@ -88,7 +98,7 @@ namespace BehaviourAPI.Core
         /// <param name="source">The source node</param>
         /// <param name="target">The target node</param>
         /// <exception cref="ArgumentException">Thown if <paramref name="source"/> or <paramref name="target"/> values are unvalid.</exception>
-        public void Connect(Node source, Node target)
+        protected void Connect(Node source, Node target)
         {
             if (source == target)
                 throw new ArgumentException($"ERROR: Source and child cannot be the same node");
@@ -115,23 +125,7 @@ namespace BehaviourAPI.Core
             target.Parents.Add(source);
         } 
 
-        public virtual void Initialize()
-        {
-            Nodes.ForEach(node => node.Initialize());
-        }
 
-        /// <summary>
-        /// Change the start node of the graph. <paramref name="node"/> must be contained by the graph.
-        /// </summary>
-        /// <param name="node">The new start node.</param>
-        /// <returns>True if the <paramref name="node"/> was a valid parameter and wasn't the start node yet, False otherwise</returns>
-        public virtual bool SetStartNode(Node node)
-        {
-            if (!Nodes.Contains(node) || node == StartNode) return false;
-
-            Nodes.MoveAtFirst(node);
-            return true;
-        }
 
         /// <summary>
         /// Find a node in this graph by it's <paramref name="name"/>

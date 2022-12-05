@@ -153,11 +153,9 @@ namespace BehaviourAPI.BehaviourTrees
             return node;
         }
 
-        public override bool SetStartNode(Node node)
+        public void SetRootNode(BTNode node)
         {
-            bool starNodeUpdated = base.SetStartNode(node);
-            if(starNodeUpdated) m_rootNode = node as BTNode;
-            return starNodeUpdated;
+            StartNode = node;
         }
         #endregion
 
@@ -170,19 +168,19 @@ namespace BehaviourAPI.BehaviourTrees
                 throw new EmptyGraphException(this);
 
             m_rootNode = StartNode as BTNode;
-            m_rootNode?.Start();
+            m_rootNode.Start();
         }
 
         public override void Execute()
         {
-            m_rootNode?.Update();
-            Status = m_rootNode?.Status ?? Status.Error;
+            m_rootNode.Update();
+            Status = m_rootNode.Status;
         }
 
         public override void Stop()
         {
             base.Stop();
-            m_rootNode?.Stop();
+            m_rootNode.Stop();
         }
 
         #endregion

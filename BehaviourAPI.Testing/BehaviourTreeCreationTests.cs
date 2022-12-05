@@ -15,15 +15,14 @@
             BehaviourTree tree = new BehaviourTree();
             var action1 = tree.CreateLeafNode();
             var decorator = tree.CreateDecorator<SuccederNode>(action1);
-            Assert.AreEqual(1, action1.Parents.Count);
-            Assert.AreEqual(0, action1.Children.Count);
+            Assert.AreEqual(1, action1.ParentCount);
+            Assert.AreEqual(0, action1.ChildCount);
             Assert.AreEqual(true, action1.IsChildOf(decorator));
             Assert.AreEqual(true, decorator.IsParentOf(action1));
             Assert.ThrowsException<ArgumentException>(() => tree.CreateDecorator<SuccederNode>(action1));       
-            Assert.ThrowsException<ArgumentException>(() => tree.CreateComposite<SequencerNode>(false, action1));  
-            Assert.ThrowsException<ArgumentException>(() => tree.Connect(action1, decorator));                 
-            Assert.AreEqual(0, decorator.Parents.Count);
-            Assert.AreEqual(0, action1.Children.Count);
+            Assert.ThrowsException<ArgumentException>(() => tree.CreateComposite<SequencerNode>(false, action1));              
+            Assert.AreEqual(0, decorator.ParentCount);
+            Assert.AreEqual(0, action1.ChildCount);
         }
 
         [TestMethod]
@@ -34,15 +33,15 @@
             var decorator = tree.CreateDecorator<SuccederNode>(action1);
             var root_decorator = tree.CreateDecorator<SuccederNode>(decorator);
 
-            Assert.AreEqual(1, decorator.Parents.Count);
-            Assert.AreEqual(1, decorator.Children.Count);
+            Assert.AreEqual(1, decorator.ParentCount);
+            Assert.AreEqual(1, decorator.ChildCount);
             Assert.AreEqual(true, decorator.IsChildOf(root_decorator));
             Assert.AreEqual(true, root_decorator.IsParentOf(decorator));
             Assert.ThrowsException<ArgumentException>(() => tree.CreateDecorator<SuccederNode>(decorator));     // 1 parent max
-            Assert.ThrowsException<ArgumentException>(() => tree.Connect(decorator, root_decorator));           // 1 child max            
-            Assert.AreEqual(1, decorator.Parents.Count);
-            Assert.AreEqual(1, decorator.Children.Count);
-            Assert.AreEqual(1, root_decorator.Children.Count);
+    
+            Assert.AreEqual(1, decorator.ParentCount);
+            Assert.AreEqual(1, decorator.ChildCount);
+            Assert.AreEqual(1, root_decorator.ChildCount);
         }
 
         [TestMethod]
@@ -54,20 +53,15 @@
             var composite = tree.CreateComposite<SequencerNode>(false, action1, action2);
             var root_decorator = tree.CreateDecorator<SuccederNode>(composite);
 
-            Assert.AreEqual(1, composite.Parents.Count);
-            Assert.AreEqual(2, composite.Children.Count);
+            Assert.AreEqual(1, composite.ParentCount);
+            Assert.AreEqual(2, composite.ChildCount);
             Assert.AreEqual(true, action1.IsChildOf(composite));
             Assert.AreEqual(true, composite.IsParentOf(action1));
             Assert.AreEqual(true, composite.IsChildOf(root_decorator));
             Assert.AreEqual(true, root_decorator.IsParentOf(composite));
             Assert.ThrowsException<ArgumentException>(() => tree.CreateDecorator<SuccederNode>(composite));     // 1 parent max
-            Assert.ThrowsException<ArgumentException>(() => tree.Connect(composite, action2));                  // Cannot repeat connection
-            Assert.AreEqual(1, composite.Parents.Count);
-            Assert.AreEqual(2, composite.Children.Count);
-
-            var action3 = tree.CreateLeafNode();
-            tree.Connect(composite, action3);                       // (!) "child" reference not created
-            Assert.AreEqual(3, composite.Children.Count);
+            Assert.AreEqual(1, composite.ParentCount);
+            Assert.AreEqual(2, composite.ChildCount);
         }
 
         [TestMethod]
@@ -92,15 +86,20 @@
 
             var composite_root = tree.CreateComposite<SequencerNode>(false, composite_1, composite_2, action_7);
 
-            Assert.AreEqual(11, tree.Nodes.Count);
+            Assert.AreEqual(11, tree.NodeCount);
             Assert.AreEqual(action_1, tree.StartNode);
             
             var external_node = new BehaviourTree().CreateLeafNode();
-            Assert.IsFalse(tree.SetStartNode(external_node));  // Is not in the graph
+            Assert.ThrowsException<ArgumentException>(() => tree.SetRootNode(external_node));
             Assert.AreEqual(action_1, tree.StartNode);
-            Assert.IsTrue(tree.SetStartNode(composite_root));   
-            Assert.IsFalse(tree.SetStartNode(composite_root)); // Is currently the start node
+            tree.SetRootNode(composite_root);   
             Assert.AreEqual(composite_root, tree.StartNode);
+        }
+
+        [TestMethod]
+        public void Test_Build()
+        {
+            BehaviourTree tree = new BehaviourTree();
         }
     }
 }

@@ -38,7 +38,8 @@
         public override void Initialize()
         {
             base.Initialize();
-            Children.ForEach(child => _transitions.Add(child as Transition));
+            for(int i= 0; i < ChildCount; i++)
+                _transitions.Add(GetChildAt(i) as Transition);
         }
 
         public State SetAction(Action action)

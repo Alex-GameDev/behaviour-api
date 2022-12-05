@@ -31,19 +31,6 @@ namespace BehaviourAPI.UtilitySystems
             _factor = factor;
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            if(Children.Count == 1)
-            {
-                _factor = GetFirstChild() as Factor;
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
-
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------

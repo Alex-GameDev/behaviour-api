@@ -28,16 +28,20 @@ namespace BehaviourAPI.Core
         /// <summary>
         /// List of connections in the graph with this node as target.
         /// </summary>
-        public List<Node> Parents { get; private set; }
+        internal List<Node> Parents;
 
         /// <summary>
         /// List of connections in the graph with this node as source.
         /// </summary>
-        public List<Node> Children { get; private set; }
+        internal List<Node> Children;
+
+        public int ChildCount => Children.Count;
+
+        public int ParentCount => Parents.Count;
 
         #endregion
 
-        public string Name = string.Empty;
+        public string Name { get; internal set; }
 
         #region ---------------------------------------- Build methods ---------------------------------------
         /// <summary>
@@ -48,6 +52,10 @@ namespace BehaviourAPI.Core
             Children = new List<Node>();
             Parents = new List<Node>();
         }
+
+        public Node GetChildAt(int index) => Children[index];
+
+        public Node GetParentAt(int index) => Parents[index];
 
         /// <summary>
         /// Checks if a node is connected with this as target.

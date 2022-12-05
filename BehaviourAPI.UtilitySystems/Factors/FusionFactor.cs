@@ -24,14 +24,6 @@ namespace BehaviourAPI.UtilitySystems
 
         public void AddFactor(Factor factor) => m_childFactors.Add(factor);
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            Children.ForEach(node => {
-                if (node is Factor f) m_childFactors.Add(f); 
-            });
-        }
-
         #endregion
     }
 }

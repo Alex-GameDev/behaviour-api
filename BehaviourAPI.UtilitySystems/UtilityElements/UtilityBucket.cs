@@ -53,29 +53,6 @@ namespace BehaviourAPI.UtilitySystems
 
         public void AddElement(UtilitySelectableNode elem) => _utilityCandidates.Add(elem);
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            Children.ToList().ForEach(node => _utilityCandidates.Add(node as UtilitySelectableNode));
-        }
-
-        /// <summary>
-        /// For serialization reasons, default selected node must be always the first node in the list
-        /// </summary>
-        public bool SetDefaulSelectedElement(UtilitySelectableNode node)
-        {
-            if (!Children.Contains(node) || node == DefaultSelectedElement) return false;
-            _utilityCandidates.MoveAtFirst(node);
-
-            if (node.IsChildOf(this))
-            {
-                Children.MoveAtFirst(node);
-                return true;
-            }
-            else
-                return false;
-        }
-
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------

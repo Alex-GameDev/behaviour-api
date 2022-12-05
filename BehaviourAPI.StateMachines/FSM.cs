@@ -311,6 +311,11 @@ namespace BehaviourAPI.StateMachines
 
         #region --------------------------------------- Runtime methods --------------------------------------
 
+        public void SetEntryState(State state)
+        {
+            StartNode = state;
+        }
+
         public override void Start()
         {
             base.Start();

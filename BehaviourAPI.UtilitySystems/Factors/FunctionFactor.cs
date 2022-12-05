@@ -31,7 +31,7 @@ namespace BehaviourAPI.UtilitySystems
         public override void Initialize()
         {
             base.Initialize();
-            if (Children.Count == 1)
+            if (ChildCount == 1)
             {
                 m_childFactor = GetFirstChild() as Factor;
             }

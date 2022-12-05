@@ -307,24 +307,10 @@ namespace BehaviourAPI.UtilitySystems
             return CreateUtilityBucket(elements.ToList(), root, utilityThreshold, inertia, bucketThreshold);
         }
 
-        public override bool SetStartNode(Node node)
+        public void SetDefaultUtilityElement(UtilitySelectableNode node)
         {
-            bool defaultUtilityElementUpdated = base.SetStartNode(node);
-            if (defaultUtilityElementUpdated && node is UtilitySelectableNode utilitySelectable)
-                _utilityCandidates.MoveAtFirst(utilitySelectable);
-            return defaultUtilityElementUpdated;
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            Nodes.ForEach(node =>
-            {
-                if(node.Parents.Count == 0)
-                {
-                    _utilityCandidates.Add(node as UtilitySelectableNode);
-                }
-            });
+            StartNode = node;
+            _utilityCandidates.MoveAtFirst(node);
         }
 
         #endregion

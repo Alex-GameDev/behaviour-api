@@ -194,7 +194,7 @@
             bool herido = false;
             bool bebido = false;
             StackFSM fsm = new StackFSM();
-            Assert.AreEqual(1, fsm.Nodes.Count);
+            Assert.AreEqual(1, fsm.NodeCount);
             var st1 = fsm.CreateState("andando", new FunctionalAction(() => Status.Running));
             var st2 = fsm.CreateState("luchando", new FunctionalAction(() => Status.Running));
             var st3 = fsm.CreateState("beber_poción", new FunctionalAction(() => Status.Running));
@@ -206,7 +206,7 @@
             var t3_4 = fsm.CreateTransition("curado", st3, st4, new ConditionPerception(() => bebido));
             var t3_r = fsm.CreatePopTransition<Transition>("recuperado_desde_tirar", st3, new ConditionPerception(() => !herido));
             var t4_r = fsm.CreatePopTransition<Transition>("recuperado_desde_beber", st4, new ConditionPerception(() => !herido));
-            fsm.SetStartNode(st1);
+            fsm.SetEntryState(st1);
 
             fsm.Start(); // start -> s1
             Assert.AreEqual(Status.Running, st1.Status);
