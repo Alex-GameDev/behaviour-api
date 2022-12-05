@@ -52,7 +52,7 @@ namespace BehaviourAPI.Core
 
         #region ------------------------------------------- Fields ---------------------------------------------
 
-        protected internal List<Node> Nodes = new List<Node>();
+        protected List<Node> Nodes = new List<Node>();
 
         // Used internally to find nodes by name
         Dictionary<string, Node> _nodeDict = new Dictionary<string, Node>();
@@ -123,6 +123,8 @@ namespace BehaviourAPI.Core
             source.Children.Add(target);
             target.Parents.Add(source);
         } 
+
+
 
         /// <summary>
         /// Find a node in this graph by it's <paramref name="name"/>

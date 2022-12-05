@@ -29,6 +29,8 @@ namespace BehaviourAPI.BehaviourTrees
             m_children = new List<BTNode>();
         }
 
+        public void AddChild(BTNode child) => m_children.Add(child);
+
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------
@@ -36,15 +38,6 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
-
-            m_children = new List<BTNode>();
-            for (int i = 0; i < ChildCount; i++)
-            {
-                if (GetChildAt(i) is BTNode bTNode) 
-                    m_children.Add(bTNode);
-                else 
-                    throw new ArgumentException();
-            }
 
             if (m_children.Count == 0)
                 throw new MissingChildException(this);
@@ -60,6 +53,8 @@ namespace BehaviourAPI.BehaviourTrees
             if (idx < 0 || idx >= m_children.Count) return null;
             return m_children[idx];
         }
+
+        protected int BTChildCount => m_children.Count;
 
         #endregion
     }

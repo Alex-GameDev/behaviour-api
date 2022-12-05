@@ -44,6 +44,7 @@ namespace BehaviourAPI.BehaviourTrees
         {
             T node = CreateNode<T>(name);
             Connect(node, child);
+            node.SetChild(child);
             return node;
         }
 
@@ -57,6 +58,7 @@ namespace BehaviourAPI.BehaviourTrees
         {
             T node = CreateNode<T>();
             Connect(node, child);
+            node.SetChild(child);
             return node;
         }
 
@@ -75,6 +77,8 @@ namespace BehaviourAPI.BehaviourTrees
             children.ForEach(child =>
             {
                 Connect(node, child);
+                node.AddChild(child);
+
             });
             return node;
         }
@@ -93,6 +97,8 @@ namespace BehaviourAPI.BehaviourTrees
             children.ForEach(child =>
             {
                 Connect(node, child);
+                node.AddChild(child);
+
             });
             return node;
         }
