@@ -54,7 +54,7 @@
     <Compile Include="Decorators\InverterNode.cs" />
     <Compile Include="Decorators\IteratorNode.cs" />
     <Compile Include="Decorators\LoopUntilNode.cs" />
-    <Compile Include="Decorators\SimpleDecoratorNode.cs" />
+    <Compile Include="Decorators\DirectDecoratorNode.cs" />
     <Compile Include="Decorators\SuccederNode.cs" />
     <Compile Include="Decorators\SwitchDecoratorNode.cs" />
     <Compile Include="Decorators\TimerDecoratorNode.cs" />

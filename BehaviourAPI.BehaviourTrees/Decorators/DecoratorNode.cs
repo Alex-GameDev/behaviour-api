@@ -20,9 +20,14 @@ namespace BehaviourAPI.BehaviourTrees
 
         #endregion
 
-        #region ---------------------------------------- Build methods ---------------------------------------
-        public void SetChild(BTNode child) => m_childNode = child;
-       
-        #endregion
+        public override void Start()
+        {
+            base.Start();
+
+            if (GetFirstChild() is BTNode bTNode)
+                m_childNode = bTNode;
+            else
+                throw new ArgumentException();
+        }
     }
 }
