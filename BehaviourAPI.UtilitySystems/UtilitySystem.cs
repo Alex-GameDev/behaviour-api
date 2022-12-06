@@ -7,6 +7,7 @@ namespace BehaviourAPI.UtilitySystems
     using Core.Actions;
     using System;
     using System.Linq;
+    using System.Net.Sockets;
     using Action = Core.Actions.Action;
 
     /// <summary>
@@ -198,6 +199,7 @@ namespace BehaviourAPI.UtilitySystems
             UtilityAction utilityExecutable = CreateNode<UtilityAction>(name);
             utilityExecutable.FinishSystemOnComplete = finishOnComplete;
             utilityExecutable.Action = action;
+            utilityExecutable.IsRoot = root;
             Connect(utilityExecutable, factor);
             if (root) _utilityCandidates.Add(utilityExecutable);
             utilityExecutable.SetFactor(factor);
@@ -219,6 +221,7 @@ namespace BehaviourAPI.UtilitySystems
             UtilityAction utilityExecutable = CreateNode<UtilityAction>();
             utilityExecutable.FinishSystemOnComplete = finishOnComplete;
             utilityExecutable.Action = action;
+            utilityExecutable.IsRoot = root;
             Connect(utilityExecutable, factor);
             if (root) _utilityCandidates.Add(utilityExecutable);
             utilityExecutable.SetFactor(factor);
@@ -242,6 +245,7 @@ namespace BehaviourAPI.UtilitySystems
             bucket.UtilityThreshold = utilityThreshold;
             bucket.Inertia = inertia;
             bucket.BucketThreshold = bucketThreshold;
+            bucket.IsRoot = root;
             if (root) _utilityCandidates.Add(bucket);
             elements.ForEach(elem =>
             {
@@ -267,6 +271,7 @@ namespace BehaviourAPI.UtilitySystems
             bucket.UtilityThreshold = utilityThreshold;
             bucket.Inertia = inertia;
             bucket.BucketThreshold = bucketThreshold;
+            bucket.IsRoot = root;
             if (root) _utilityCandidates.Add(bucket);
             elements.ForEach(elem =>
             {
@@ -311,6 +316,14 @@ namespace BehaviourAPI.UtilitySystems
         {
             StartNode = node;
             _utilityCandidates.MoveAtFirst(node);
+        }
+
+        public override void AddNode(Node node)
+        {
+            base.AddNode(node);
+
+            if (node is UtilitySelectableNode selectableNode && selectableNode.IsRoot)
+                _utilityCandidates.Add(selectableNode);
         }
 
         #endregion

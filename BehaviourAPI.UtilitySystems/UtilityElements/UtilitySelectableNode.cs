@@ -18,6 +18,8 @@ namespace BehaviourAPI.UtilitySystems
 
         #endregion
 
+        public bool IsRoot;
+
         #region --------------------------------------- Runtime methods --------------------------------------
 
         public abstract void Start();

@@ -212,6 +212,20 @@ namespace BehaviourAPI.Core
             return source.IsParentOf(target) || target.IsChildOf(source);
         }
 
+        /// <summary>
+        /// Add an existing node (Use only to build a graph from serialized data like json)
+        /// </summary>
+        /// <param name="node"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public virtual void AddNode(Node node)
+        {
+            if (!node.GetType().IsAssignableFrom(NodeType))
+                throw new ArgumentException();
+
+            Nodes.Add(node);
+            node.BehaviourGraph = this;
+        }
+
         #endregion   
     }
 }
