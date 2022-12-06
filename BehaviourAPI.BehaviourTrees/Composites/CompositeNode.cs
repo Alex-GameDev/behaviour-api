@@ -1,3 +1,4 @@
+using BehaviourAPI.Core;
 using BehaviourAPI.Core.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,12 @@ namespace BehaviourAPI.BehaviourTrees
         }
 
         public void AddChild(BTNode child) => m_children.Add(child);
+
+        protected override void BuildConnections(List<Node> parents, List<Node> children)
+        {
+            base.BuildConnections(parents, children);
+            m_children = children.Select(c => (BTNode)c).ToList();
+        }
 
         #endregion
 
