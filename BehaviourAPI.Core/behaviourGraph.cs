@@ -30,7 +30,7 @@ namespace BehaviourAPI.Core
 
         #region ------------------------------------------- Fields ---------------------------------------------
 
-        public List<Node> Nodes = new List<Node>();
+        protected internal List<Node> Nodes = new List<Node>();
 
         // Used internally to find nodes by name
         Dictionary<string, Node> _nodeDict = new Dictionary<string, Node>();
@@ -215,24 +215,16 @@ namespace BehaviourAPI.Core
             return source.IsConnectedWith(target);
         }
 
-        #endregion
-
-        public virtual void SerializeToJSON(Utf8JsonWriter writer)
+        public virtual void AddNode(Node node)
         {
-            writer.WriteString("_type", GetType().FullName);
-            writer.WriteStartArray("nodes");
-            Nodes.ForEach(node =>
-            {
-                writer.WriteStartObject();
-                node.SerializeToJSON(writer);
-                writer.WriteEndObject();
-            });
-            writer.WriteEndArray();
+            if (!node.GetType().IsAssignableFrom(NodeType))
+                throw new ArgumentException();
+
+            Nodes.Add(node);
+            node.BehaviourGraph = this;
         }
 
-        public virtual void DeserializeFromJSON(ref Utf8JsonReader reader)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion    
+
     }
 }

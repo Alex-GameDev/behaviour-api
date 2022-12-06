@@ -1,5 +1,9 @@
 ﻿using BehaviourAPI.Core.Perceptions;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace BehaviourAPI.Core
 {
     public static class Utils
@@ -30,6 +34,16 @@ namespace BehaviourAPI.Core
                 case Status.Running: return StatusFlags.Running;
                 default: return StatusFlags.None;
             }
+        }
+
+        public static List<T> GetElements<T>(this List<T> list, List<int> indexes)
+        {
+            List<T> selectedElements = new List<T>();
+            for(int i = 0; i < indexes.Count(); i++)
+            {
+                selectedElements.Add(list[indexes[i]]);
+            }
+            return selectedElements;
         }
     }
 }
