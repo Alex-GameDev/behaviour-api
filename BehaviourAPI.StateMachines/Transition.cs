@@ -1,9 +1,11 @@
 ﻿namespace BehaviourAPI.StateMachines
 {
+    using BehaviourAPI.Core;
     using BehaviourAPI.Core.Actions;
     using BehaviourAPI.Core.Exceptions;
     using BehaviourAPI.Core.Perceptions;
     using System;
+    using System.Collections.Generic;
     using Action = Core.Actions.Action;
 
     public class Transition : FSMNode, IPerceptionHandler, IActionHandler, IPushActivable
@@ -36,13 +38,23 @@
         public void SetSourceState(State source) => _sourceState = source;
         public void SetTargetState(State target) => _targetState = target;
 
-        public override void Initialize()
+        protected override void BuildConnections(List<Node> parents, List<Node> children)
         {
-            base.Initialize();
+            base.BuildConnections(parents, children);
+
             _fsm = BehaviourGraph as FSM;
-            _targetState = GetFirstChild() as State;
-            _sourceState = GetFirstParent() as State;
+
+            if (children.Count > 0 && children[0] is State to)
+                _targetState = to;
+            else
+                throw new ArgumentException();
+
+            if (parents.Count > 0 && children[0] is State from)
+                _sourceState = from;
+            else
+                throw new ArgumentException();
         }
+
 
         #endregion
 

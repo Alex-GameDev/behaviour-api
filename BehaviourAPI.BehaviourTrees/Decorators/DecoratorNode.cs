@@ -1,6 +1,5 @@
 namespace BehaviourAPI.BehaviourTrees
 {
-    using BehaviourAPI.Core;
     using Core;
     using System;
     using System.Collections.Generic;
@@ -28,8 +27,11 @@ namespace BehaviourAPI.BehaviourTrees
         protected override void BuildConnections(List<Node> parents, List<Node> children)
         {
             base.BuildConnections(parents, children);
-            if (children.Count > 0)
-                m_childNode = (BTNode)children[0];
+
+            if (children.Count > 0 && children[0] is BTNode bTNode)
+                m_childNode = bTNode;
+            else
+                throw new ArgumentException();
         }
 
         #endregion

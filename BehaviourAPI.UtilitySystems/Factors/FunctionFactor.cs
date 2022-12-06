@@ -1,8 +1,8 @@
 namespace BehaviourAPI.UtilitySystems
 {
-    using BehaviourAPI.UtilitySystems;
     using Core;
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Factor that modifies its child value with a function.
@@ -28,18 +28,17 @@ namespace BehaviourAPI.UtilitySystems
             return this;
         }
 
-        public override void Initialize()
+        protected override void BuildConnections(List<Node> parents, List<Node> children)
         {
-            base.Initialize();
-            if (ChildCount == 1)
-            {
-                m_childFactor = GetFirstChild() as Factor;
-            }
+            base.BuildConnections(parents, children);
+
+            if (children.Count > 0 && children[0] is Factor factor)
+                m_childFactor = factor;
             else
-            {
-                throw new Exception();
-            }
+                throw new ArgumentException();
         }
+
+
 
         #endregion
 

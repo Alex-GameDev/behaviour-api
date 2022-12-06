@@ -35,7 +35,14 @@ namespace BehaviourAPI.BehaviourTrees
         protected override void BuildConnections(List<Node> parents, List<Node> children)
         {
             base.BuildConnections(parents, children);
-            m_children = children.Select(c => (BTNode)c).ToList();
+
+            for (int i = 0; i < children.Count; i++)
+            {
+                if (children[i] is BTNode t)
+                    m_children.Add(t);
+                else
+                    throw new ArgumentException();
+            }
         }
 
         #endregion

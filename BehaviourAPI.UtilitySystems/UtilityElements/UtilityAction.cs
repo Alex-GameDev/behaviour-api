@@ -4,6 +4,7 @@ namespace BehaviourAPI.UtilitySystems
     using Core;
     using Core.Actions;
     using System;
+    using System.Collections.Generic;
     using Action = Core.Actions.Action;
 
     public class UtilityAction : UtilitySelectableNode, IActionHandler
@@ -29,6 +30,16 @@ namespace BehaviourAPI.UtilitySystems
         public void SetFactor(Factor factor)
         {
             _factor = factor;
+        }
+
+        protected override void BuildConnections(List<Node> parents, List<Node> children)
+        {
+            base.BuildConnections(parents, children);
+
+            if (children.Count > 0 && children[0] is Factor f)
+                _factor = f;
+            else
+                throw new ArgumentException();
         }
 
         #endregion

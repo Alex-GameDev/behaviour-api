@@ -34,12 +34,18 @@
         }
 
         public void AddTransition(Transition transition) => _transitions.Add(transition);
-       
-        public override void Initialize()
+
+        protected override void BuildConnections(List<Node> parents, List<Node> children)
         {
-            base.Initialize();
-            for(int i= 0; i < ChildCount; i++)
-                _transitions.Add(GetChildAt(i) as Transition);
+            base.BuildConnections(parents, children);
+
+            for(int i = 0; i < children.Count; i++)
+            {
+                if (children[i] is Transition t)
+                    _transitions.Add(t);
+                else
+                    throw new ArgumentException();
+            }
         }
 
         public State SetAction(Action action)

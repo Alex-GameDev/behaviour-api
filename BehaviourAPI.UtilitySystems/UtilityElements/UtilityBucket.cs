@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace BehaviourAPI.UtilitySystems
 {
+    using BehaviourAPI.Core;
     using BehaviourAPI.Core.Exceptions;
     using Core;
 
@@ -52,6 +53,18 @@ namespace BehaviourAPI.UtilitySystems
         }
 
         public void AddElement(UtilitySelectableNode elem) => _utilityCandidates.Add(elem);
+
+        protected override void BuildConnections(List<Node> parents, List<Node> children)
+        {
+            base.BuildConnections(parents, children);
+            for (int i = 0; i < children.Count; i++)
+            {
+                if (children[i] is UtilitySelectableNode s)
+                    _utilityCandidates.Add(s);
+                else
+                    throw new ArgumentException();
+            }
+        }
 
         #endregion
 
