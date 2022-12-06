@@ -1,8 +1,12 @@
-using BehaviourAPI.Core;
-using System.Xml.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BehaviourAPI.UtilitySystems
 {
+    using BehaviourAPI.Core.Exceptions;
+    using Core;
+
     /// <summary>
     /// Utility element that handle multiple <see cref="UtilitySelectableNode"/> itself and
     /// returns the maximum utility if its best candidate utility is higher than the threshold.
@@ -14,11 +18,13 @@ namespace BehaviourAPI.UtilitySystems
         public override Type ChildType => typeof(UtilitySelectableNode);
         public override int MaxOutputConnections => -1;
 
-        public UtilitySelectableNode? DefaultSelectedElement
+        public UtilitySelectableNode DefaultSelectedElement
         {
             get
             {
-                if (_utilityCandidates.Count == 0) return null;
+                if (_utilityCandidates.Count == 0)
+                    throw new MissingChildException(this, "The list of utility candidates is empty.");
+
                 else return _utilityCandidates[0];
             }
         }
@@ -31,10 +37,10 @@ namespace BehaviourAPI.UtilitySystems
         public float Inertia = 1.3f;
         public float BucketThreshold = .3f;
 
-        List<UtilitySelectableNode?> _utilityCandidates;
+        List<UtilitySelectableNode> _utilityCandidates;
 
-        UtilitySelectableNode? _currentBestElement;
-        UtilitySelectableNode? _lastExecutedElement;
+        UtilitySelectableNode _currentBestElement;
+        UtilitySelectableNode _lastExecutedElement;
 
         #endregion
 
@@ -42,33 +48,10 @@ namespace BehaviourAPI.UtilitySystems
 
         public UtilityBucket()
         {
-            _utilityCandidates = new List<UtilitySelectableNode?>();
+            _utilityCandidates = new List<UtilitySelectableNode>();
         }
 
         public void AddElement(UtilitySelectableNode elem) => _utilityCandidates.Add(elem);
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            Children.ToList().ForEach(node => _utilityCandidates.Add(node as UtilitySelectableNode));
-        }
-
-        /// <summary>
-        /// For serialization reasons, default selected node must be always the first node in the list
-        /// </summary>
-        public bool SetDefaulSelectedElement(UtilitySelectableNode node)
-        {
-            if (!Children.Contains(node) || node == DefaultSelectedElement) return false;
-            _utilityCandidates.MoveAtFirst(node);
-
-            if (node.IsChildOf(this))
-            {
-                Children.MoveAtFirst(node);
-                return true;
-            }
-            else
-                return false;
-        }
 
         #endregion
 
@@ -76,6 +59,8 @@ namespace BehaviourAPI.UtilitySystems
 
         public override void Start()
         {
+            if (_utilityCandidates.Count == 0)
+                throw new MissingChildException(this, "The list of utility candidates of this bucket is empty.");
         }
 
         protected override float ComputeUtility()
@@ -87,11 +72,11 @@ namespace BehaviourAPI.UtilitySystems
             return maxUtility;
         }
 
-        private UtilitySelectableNode? ComputeCurrentBestAction()
+        private UtilitySelectableNode ComputeCurrentBestAction()
         {
             float currentHigherUtility = -1f; // If value starts in 0, elems with Utility == 0 cant be executed
 
-            UtilitySelectableNode? newBestElement = _currentBestElement;
+            UtilitySelectableNode newBestElement = _currentBestElement;
 
             int i = 0;
             var currentActionIsLocked = false; // True if current action is a locked bucket.
@@ -143,6 +128,8 @@ namespace BehaviourAPI.UtilitySystems
             _lastExecutedElement = null;
             _currentBestElement = null;
         }
+
+        public override bool FinishExecutionWhenActionFinishes() => _lastExecutedElement?.FinishExecutionWhenActionFinishes() ?? false;
 
         #endregion
     }

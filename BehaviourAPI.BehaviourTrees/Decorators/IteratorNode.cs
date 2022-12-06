@@ -1,4 +1,6 @@
-﻿using BehaviourAPI.Core;
+﻿using BehaviourAPI.BehaviourTrees.Decorators;
+using BehaviourAPI.Core;
+using BehaviourAPI.Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace BehaviourAPI.BehaviourTrees
     /// <summary>
     /// Node that execute its child node the number of times determined by <see cref="Itera"/>
     /// </summary>
-    public  class IteratorNode : DecoratorNode
+    public  class IteratorNode : DirectDecoratorNode
     {
         #region ------------------------------------------- Fields -------------------------------------------
 
@@ -36,37 +38,28 @@ namespace BehaviourAPI.BehaviourTrees
         {
             base.Start();
             _currentIterations = 0;
-            m_childNode?.Start();
-        }
-
-        public override void Stop()
-        {
-            base.Stop();
-            _currentIterations = 0;
-            m_childNode?.Stop();
         }
 
         protected override Status UpdateStatus()
         {
-            if(m_childNode != null)
-            {
+            if (m_childNode == null)
+                throw new MissingChildException(this);
+
                 m_childNode.Update();
                 var status = m_childNode?.Status ?? Status.Error;
 
-                // If child execution ends, restart until currentIterations > Iterations
-                if(status != Status.Running)
+            // If child execution ends, restart until currentIterations > Iterations
+            if(status != Status.Running)
+            {
+                _currentIterations++;
+                if(Iterations == -1 || _currentIterations < Iterations)
                 {
-                    _currentIterations++;
-                    if(Iterations == -1 || _currentIterations < Iterations)
-                    {
-                        status = Status.Running;
-                        m_childNode?.Stop();
-                        m_childNode?.Start();
-                    }
+                    status = Status.Running;
+                    m_childNode.Stop();
+                    m_childNode.Start();
                 }
-                return status;
             }
-            throw new NullReferenceException("ERROR: Child node is not defined.");
+            return status;
         }
         #endregion
     }

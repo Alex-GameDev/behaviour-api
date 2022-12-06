@@ -1,6 +1,9 @@
-﻿namespace BehaviourAPI.StateMachines
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace BehaviourAPI.StateMachines
 {
-    using Core.Perceptions;
     public class ProbabilisticState : State
     {
         Dictionary<Transition, float> _probabilities;
@@ -20,7 +23,7 @@
             if (_transitions.Contains(transition))
             {
                 _probabilities[transition] = probability;
-                _totalProbability = MathF.Max(_probabilities.Sum(p => p.Value), 1f);
+                _totalProbability = Math.Max(_probabilities.Sum(p => p.Value), 1f);
             }
         }
 
@@ -29,10 +32,10 @@
             var probability = _random.NextDouble() * _totalProbability;
             Prob = probability;
             var currentProbSum = 0f;
-            Transition? selectedTransition = null;
+            Transition selectedTransition = null;
             for (int i = 0; i < _transitions.Count; i++)
             {
-                Transition? transition = _transitions[i];
+                Transition transition = _transitions[i];
                 if (transition == null) break;
 
                 if (_probabilities.TryGetValue(transition, out float value))

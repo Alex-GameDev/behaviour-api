@@ -3,6 +3,7 @@
     using BehaviourAPI.Core;
     using BehaviourAPI.Core.Actions;
     using BehaviourAPI.Core.Perceptions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using StateMachines;
     [TestClass]
     public class PerceptionTests

@@ -2,7 +2,10 @@
 
 namespace BehaviourAPI.BehaviourTrees
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core;
+    using System;
+
     /// <summary>
     /// Decorator that waits an amount of time to execute the child.
     /// </summary>
@@ -11,7 +14,7 @@ namespace BehaviourAPI.BehaviourTrees
         #region ------------------------------------------ Properties -----------------------------------------
 
         public float Time;
-        System.Timers.Timer? _timer;
+        Timer _timer;
 
         bool _isTimeout;
         bool _childExecuted;
@@ -30,7 +33,7 @@ namespace BehaviourAPI.BehaviourTrees
         {
             base.Start();
             _childExecuted = false;
-            _timer = new System.Timers.Timer(Time * 1000);
+            _timer = new Timer(Time * 1000);
             _timer.Elapsed += OnTimerElapsed;
 
             _isTimeout = false;
@@ -53,7 +56,7 @@ namespace BehaviourAPI.BehaviourTrees
                 m_childNode.Update();
                 return m_childNode.Status;
             }
-            throw new NullReferenceException("ERROR: Child node is not defined.");                
+            throw new MissingChildException(this);
         }
 
         public override void Stop()
@@ -68,13 +71,14 @@ namespace BehaviourAPI.BehaviourTrees
 
             if(_childExecuted)
             {
-                if (m_childNode != null) m_childNode.Stop();
-                else throw new NullReferenceException("ERROR: Child node is not defined");
-                _childExecuted = false;
+                if (m_childNode == null)
+                    throw new MissingChildException(this);
+
+                m_childNode.Stop();
             }
         }
 
-        private void OnTimerElapsed(object? sender, ElapsedEventArgs evt)
+        private void OnTimerElapsed(object sender, ElapsedEventArgs evt)
         {
             _isTimeout = true;
         }

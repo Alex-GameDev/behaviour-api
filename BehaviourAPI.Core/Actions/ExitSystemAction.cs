@@ -4,7 +4,7 @@
     {
         public Status ReturnedStatus;
         
-        public BehaviourSystem? Graph;
+        public BehaviourSystem Graph;
 
         // Graph arg must be the IActionHandler's graph.
         public ExitSystemAction(BehaviourSystem graph, Status returnedStatus = Status.Success)

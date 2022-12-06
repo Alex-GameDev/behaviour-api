@@ -7,6 +7,6 @@ namespace BehaviourAPI.Core.Perceptions
     /// </summary>
     public interface IPerceptionHandler
     {
-        public Perception? Perception { get; set; }
+        Perception Perception { get; set; }
     }
 }

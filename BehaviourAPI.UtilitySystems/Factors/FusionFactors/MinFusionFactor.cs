@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace BehaviourAPI.UtilitySystems
 {
     public class MinFusionFactor : FusionFactor

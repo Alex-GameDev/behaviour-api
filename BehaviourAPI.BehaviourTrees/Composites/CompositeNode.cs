@@ -1,6 +1,10 @@
+using BehaviourAPI.Core.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace BehaviourAPI.BehaviourTrees
 {
-    using Core;
     /// <summary>
     /// BTNode type that has multiple children and executes them according to certain conditions.
     /// </summary>
@@ -14,7 +18,7 @@ namespace BehaviourAPI.BehaviourTrees
        
         public bool IsRandomized;
 
-        List<BTNode?> m_children;
+        protected List<BTNode> m_children;
 
         #endregion
 
@@ -22,16 +26,10 @@ namespace BehaviourAPI.BehaviourTrees
         
         public CompositeNode()
         {
-            m_children = new List<BTNode?>();
+            m_children = new List<BTNode>();
         }
 
         public void AddChild(BTNode child) => m_children.Add(child);
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            Children.ForEach(node => m_children.Add(node as BTNode));
-        }
 
         #endregion
 
@@ -40,23 +38,23 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
+
+            if (m_children.Count == 0)
+                throw new MissingChildException(this);
+
             if (IsRandomized) m_children.OrderBy((guid) => Guid.NewGuid());
         }
 
-        public override void Stop()
+        protected BTNode GetBTChildAt(int idx)
         {
-            base.Stop();
-            m_children.ForEach(c => c?.Stop());
-        }
+            if (m_children.Count == 0)
+                throw new MissingChildException(this);
 
-        protected BTNode? GetChildAt(int idx)
-        {
             if (idx < 0 || idx >= m_children.Count) return null;
             return m_children[idx];
         }
 
-        protected int ChildCount => m_children.Count;
-        protected List<BTNode?> GetChildren() => m_children;
+        protected int BTChildCount => m_children.Count;
 
         #endregion
     }

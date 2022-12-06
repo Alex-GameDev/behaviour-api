@@ -1,5 +1,8 @@
+using System;
+
 namespace BehaviourAPI.UtilitySystems
 {
+    using Core;
     public class VariableFactor : Factor
     {
         #region ------------------------------------------ Properties -----------------------------------------
@@ -10,7 +13,7 @@ namespace BehaviourAPI.UtilitySystems
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public Func<float>? Variable;
+        public Func<float> Variable;
 
         public float min, max;
 
@@ -22,7 +25,7 @@ namespace BehaviourAPI.UtilitySystems
         {
             Utility = Variable?.Invoke() ?? min;
             Utility = (Utility - min) / (max - min);
-            return Math.Clamp(Utility, 0f, 1f);
+            return MathUtilities.Clamp01(Utility);
         }
 
         #endregion

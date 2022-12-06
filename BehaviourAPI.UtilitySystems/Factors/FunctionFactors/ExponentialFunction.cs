@@ -1,5 +1,8 @@
 ﻿namespace BehaviourAPI.UtilitySystems
 {
+    using Core;
+    using System;
+
     public class ExponentialFunction : FunctionFactor
     {
         public float Exp, DespX, DespY;
@@ -22,6 +25,6 @@
             return this;
         }
 
-        protected override float Evaluate(float x) => Math.Clamp(MathF.Pow(x - DespX, Exp) + DespY, 0f, 1f);
+        protected override float Evaluate(float x) => MathUtilities.Clamp01((float)Math.Pow(x - DespX, Exp) + DespY);
     }
 }

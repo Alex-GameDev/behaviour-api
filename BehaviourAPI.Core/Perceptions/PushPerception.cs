@@ -1,4 +1,7 @@
-﻿namespace BehaviourAPI.Core.Perceptions
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace BehaviourAPI.Core.Perceptions
 {
     /// <summary>
     /// A perception that is not tied to an IPerceptionHandler, but is triggered externally.

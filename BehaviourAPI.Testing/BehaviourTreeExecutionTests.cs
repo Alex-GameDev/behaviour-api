@@ -6,10 +6,20 @@ namespace BehaviourAPI.Testing
     using BehaviourAPI.Core.Perceptions;
     using System;
     using BehaviourAPI.BehaviourTrees.Decorators;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using BehaviourAPI.Core.Exceptions;
+    using BehaviourAPI.StateMachines;
 
     [TestClass]
     public class BehaviourTreeExecutionTests
     {
+        [TestMethod]
+        public void Test_EmptyGraph()
+        {
+            var bt = new BehaviourTree();
+            Assert.ThrowsException<EmptyGraphException>(bt.Start);
+        }
+
         [TestMethod("Inverter Decorator")]
         public void Test_BT_Inverter()
         {
@@ -17,7 +27,7 @@ namespace BehaviourAPI.Testing
             var action_1 = tree.CreateLeafNode("Nodo 1");
             action_1.Action = new FunctionalAction(() => Status.Failure);
             var inv = tree.CreateDecorator<InverterNode>("inv", action_1);
-            tree.SetStartNode(inv);
+            tree.SetRootNode(inv);
 
             tree.Start();
             Assert.AreEqual(Status.Running, inv.Status);
@@ -40,7 +50,7 @@ namespace BehaviourAPI.Testing
             var action_1 = tree.CreateLeafNode("Nodo 1");
             action_1.Action = new FunctionalAction(() => Status.Failure);
             var suc = tree.CreateDecorator<SuccederNode>("inv", action_1);
-            tree.SetStartNode(suc);
+            tree.SetRootNode(suc);
 
             tree.Start();
             Assert.AreEqual(Status.Running, suc.Status);
@@ -63,7 +73,7 @@ namespace BehaviourAPI.Testing
             var action_1 = tree.CreateLeafNode("Nodo 1");
             action_1.Action = new FunctionalAction(() => Status.Success);
             var iter = tree.CreateDecorator<IteratorNode>("inv", action_1).SetIterations(3);
-            tree.SetStartNode(iter);
+            tree.SetRootNode(iter);
 
             tree.Start();
             Assert.AreEqual(Status.Running, iter.Status);
@@ -92,7 +102,7 @@ namespace BehaviourAPI.Testing
 
             var seq = tree.CreateComposite<SequencerNode>("seq", false, action_1, action_2);
             var iter = tree.CreateDecorator<IteratorNode>("inv", seq).SetIterations(2);
-            tree.SetStartNode(iter);
+            tree.SetRootNode(iter);
 
             tree.Start();
             Assert.AreEqual(Status.Running, iter.Status);
@@ -100,7 +110,7 @@ namespace BehaviourAPI.Testing
             tree.Update(); // Action 1 ends with success 
             Assert.AreEqual(Status.Running, iter.Status);
             Assert.AreEqual(Status.Running, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
             Assert.AreEqual(Status.Running, action_2.Status);
 
             tree.Update(); // Action 2 ends with success -> iters = 1 -> iter restart action 
@@ -112,13 +122,13 @@ namespace BehaviourAPI.Testing
             tree.Update(); // Action 1 ends with success
             Assert.AreEqual(Status.Running, iter.Status);
             Assert.AreEqual(Status.Running, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
             Assert.AreEqual(Status.Running, action_2.Status);
 
             tree.Update(); // Action 2 ends with success -> iters = 2 -> keep the value 
             Assert.AreEqual(Status.Success, iter.Status);
             Assert.AreEqual(Status.Success, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
             Assert.AreEqual(Status.Success, action_2.Status);
         }
 
@@ -136,7 +146,7 @@ namespace BehaviourAPI.Testing
             var loopUntil1 = tree.CreateDecorator<LoopUntilNode>("l1", action_1).SetTargetStatus(Status.Success);
             var loopUntil2 = tree.CreateDecorator<LoopUntilNode>("l2", action_2).SetTargetStatus(Status.Success).SetMaxIterations(2);
             var seq = tree.CreateComposite<SequencerNode>("seq", false, loopUntil1, loopUntil2);
-            tree.SetStartNode(seq);
+            tree.SetRootNode(seq);
 
             tree.Start();
 
@@ -151,9 +161,9 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(Status.Running, action_1.Status);
 
             i++;
-            tree.Update(); // i = 3 -> Action1 end with success -> keep the value
-            Assert.AreEqual(Status.Success, loopUntil1.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
+            tree.Update(); // i = 3 -> Action1 end with success -> finish loop and go to next child
+            Assert.AreEqual(Status.None, loopUntil1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
 
             j++;
             tree.Update(); // j = 1 -> Action1 end with failure -> iters = 1 -> loopUntil1 restart action1
@@ -180,16 +190,16 @@ namespace BehaviourAPI.Testing
             var cond_2 = tree.CreateDecorator<ConditionDecoratorNode>("cond_2", action_2)
                 .SetPerception(new ConditionPerception(()=> check_2));
             var sel = tree.CreateComposite<SelectorNode>("sel", false, cond_1, cond_2);
-            tree.SetStartNode(sel);
+            tree.SetRootNode(sel);
 
             tree.Start();  // check_1 = false -> cond_1 don't starts child
             Assert.AreEqual(Status.Running, cond_1.Status);
             Assert.AreEqual(Status.None, action_1.Status);
 
             tree.Update(); // cond_1 returns Failure -> sel go to cond_2 -> check_2 = true -> cond_2 starts child
-            Assert.AreEqual(Status.Failure, cond_1.Status);
+            Assert.AreEqual(Status.None, cond_1.Status);
             Assert.AreEqual(Status.None, action_1.Status);
-            Assert.AreEqual(Status.Failure, cond_1.Status);
+            Assert.AreEqual(Status.None, cond_1.Status);
             Assert.AreEqual(Status.Running, cond_2.Status);
             Assert.AreEqual(Status.Running, action_2.Status);
 
@@ -204,7 +214,7 @@ namespace BehaviourAPI.Testing
         //    BehaviourTree tree = new BehaviourTree();
         //    var action_1 = tree.CreateLeafNode("Nodo 1", new FunctionalAction(() => Status.Success));
         //    var timer = tree.CreateDecorator<TimerDecoratorNode>("timer", action_1).SetTime(1f);
-        //    tree.SetStartNode(timer);
+        //    tree.SetRootNode(timer);
 
         //    tree.Start();
         //    Assert.AreEqual(Status.Running, tree.Status);
@@ -245,7 +255,7 @@ namespace BehaviourAPI.Testing
             action_1.Action = new FunctionalAction(() => Status.Success);
             var cond = tree.CreateDecorator<SwitchDecoratorNode>("inv", action_1);
             cond.Perception = new ConditionPerception(() => i > 2 && i < 4);
-            tree.SetStartNode(cond);
+            tree.SetRootNode(cond);
 
             tree.Start();
 
@@ -279,30 +289,30 @@ namespace BehaviourAPI.Testing
             var action_2 = tree.CreateLeafNode("Nodo 2", new FunctionalAction(() => Status.Success));
             var action_3 = tree.CreateLeafNode("Nodo 3", new FunctionalAction(() => Status.Success));
             var seq = tree.CreateComposite<SequencerNode>("Seq", false, action_1, action_2, action_3);
-            tree.SetStartNode(seq);
+            tree.SetRootNode(seq);
 
-            tree.Start();
+            tree.Start(); // Start action 1
             Assert.AreEqual(Status.Running, seq.Status);
             Assert.AreEqual(Status.Running, action_1.Status);
             Assert.AreEqual(Status.None, action_2.Status);
             Assert.AreEqual(Status.None, action_3.Status);
 
-            tree.Update();
+            tree.Update(); // Action 1 ends with success -> Stop Action 1 -> Start Action 2
             Assert.AreEqual(Status.Running, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
             Assert.AreEqual(Status.Running, action_2.Status);
             Assert.AreEqual(Status.None, action_3.Status);
 
-            tree.Update();
+            tree.Update(); // Action 2 ends with success -> Stop Action 2 -> Start Action 3
             Assert.AreEqual(Status.Running, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
-            Assert.AreEqual(Status.Success, action_2.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+            Assert.AreEqual(Status.None, action_2.Status);
             Assert.AreEqual(Status.Running, action_3.Status);
 
-            tree.Update();
+            tree.Update(); // Action 3 ends with success -> Sequence ends with success
             Assert.AreEqual(Status.Success, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
-            Assert.AreEqual(Status.Success, action_2.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
+            Assert.AreEqual(Status.None, action_2.Status);
             Assert.AreEqual(Status.Success, action_3.Status);
         }
 
@@ -315,23 +325,23 @@ namespace BehaviourAPI.Testing
             var action_2 = tree.CreateLeafNode("Nodo 2", new FunctionalAction(() => Status.Failure));
             var action_3 = tree.CreateLeafNode("Nodo 3", new FunctionalAction(() => Status.Success));
             var seq = tree.CreateComposite<SequencerNode>("Seq", false, action_1, action_2, action_3);
-            tree.SetStartNode(seq);
+            tree.SetRootNode(seq);
 
-            tree.Start();
+            tree.Start(); // Start action 1
             Assert.AreEqual(Status.Running, seq.Status);
             Assert.AreEqual(Status.Running, action_1.Status);
             Assert.AreEqual(Status.None, action_2.Status);
             Assert.AreEqual(Status.None, action_3.Status);
 
-            tree.Update();
+            tree.Update(); // Action 1 ends with success -> Stop Action 1 -> Start Action 2
             Assert.AreEqual(Status.Running, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
             Assert.AreEqual(Status.Running, action_2.Status);
             Assert.AreEqual(Status.None, action_3.Status);
 
-            tree.Update();
+            tree.Update(); // Action 2 ends with failure -> Sequence ends with failure
             Assert.AreEqual(Status.Failure, seq.Status);
-            Assert.AreEqual(Status.Success, action_1.Status);
+            Assert.AreEqual(Status.None, action_1.Status);
             Assert.AreEqual(Status.Failure, action_2.Status);
             Assert.AreEqual(Status.None, action_3.Status);
         }
@@ -362,17 +372,14 @@ namespace BehaviourAPI.Testing
 
             var composite_root = tree.CreateComposite<SequencerNode>("Seq", false, composite_1, composite_2, action_7);
 
-            Assert.AreEqual(10, tree.Nodes.Count);
+            Assert.AreEqual(10, tree.NodeCount);
 
-            Assert.AreEqual(3, composite_1.Children.Count);
-            Assert.AreEqual(1, composite_1.Parents.Count);
-            Assert.AreEqual(3, composite_root.Children.Count);
-            Assert.AreEqual(0, composite_root.Parents.Count);
+            Assert.AreEqual(3, composite_1.ChildCount);
+            Assert.AreEqual(1, composite_1.ParentCount);
+            Assert.AreEqual(3, composite_root.ChildCount);
+            Assert.AreEqual(0, composite_root.ParentCount);
 
-            Assert.AreEqual(true, tree.SetStartNode(composite_root));
-            Assert.AreEqual(false, tree.SetStartNode(composite_root));
-
-            var decorator = tree.CreateDecorator<InverterNode>("Inv", action_1);
+            tree.SetRootNode(composite_root);
 
             tree.Start();
             for (int i = 0; i < 5; i++) tree.Update();

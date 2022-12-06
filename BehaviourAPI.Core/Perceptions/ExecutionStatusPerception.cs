@@ -49,7 +49,7 @@
         }
     }
 
-    [Flags]
+    [System.Flags]
     public enum StatusFlags
     {
         None = 0,

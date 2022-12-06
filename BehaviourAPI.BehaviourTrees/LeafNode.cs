@@ -4,6 +4,7 @@ using BehaviourAPI.Core.Perceptions;
 
 namespace BehaviourAPI.BehaviourTrees
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core.Actions;
     /// <summary>
     /// BTNode type that has no children.
@@ -12,7 +13,7 @@ namespace BehaviourAPI.BehaviourTrees
     {
         #region ------------------------------------------ Properties -----------------------------------------
         public sealed override int MaxOutputConnections => 0;
-        public Action? Action { get; set; }     
+        public Action Action { get; set; }     
 
         #endregion
 
@@ -31,19 +32,29 @@ namespace BehaviourAPI.BehaviourTrees
         public override void Start()
         {
             base.Start();
-            Action?.Start();
+            if (Action == null)
+                throw new MissingActionException(this, "Leaf nodes need an action to work.");
+
+            Action.Start();
         }
 
         protected override Status UpdateStatus()
         {
-            Status = Action?.Update() ?? Status.Error;
+            if (Action == null)
+                throw new MissingActionException(this, "Leaf nodes need an action to work.");
+
+            Status = Action.Update();
             return Status;
         }
 
         public override void Stop()
         {
             base.Stop();
-            Action?.Stop();
+
+            if (Action == null)
+                throw new MissingActionException(this, "Leaf nodes need an action to work.");
+
+            Action.Stop();
         }
 
         #endregion

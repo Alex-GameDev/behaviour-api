@@ -1,4 +1,5 @@
 ﻿using BehaviourAPI.Core.Perceptions;
+using System.Collections.Generic;
 
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace BehaviourAPI.Core
 {
-    public static class Utils
+    public static class Extensions
     {
         public static Status Inverted(this Status status)
         {

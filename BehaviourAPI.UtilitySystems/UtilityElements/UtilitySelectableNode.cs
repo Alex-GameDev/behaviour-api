@@ -26,6 +26,11 @@ namespace BehaviourAPI.UtilitySystems
 
         public abstract void Stop();
 
+        /// <summary>
+        /// Return true if the utility system should change its status when a selectable node finish its execution
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool FinishExecutionWhenActionFinishes(); 
         #endregion
     }
 }

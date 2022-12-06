@@ -1,4 +1,7 @@
-﻿namespace BehaviourAPI.UtilitySystems
+﻿using BehaviourAPI.Core;
+using System;
+
+namespace BehaviourAPI.UtilitySystems
 {
     public class SigmoidFunction : FunctionFactor
     {
@@ -24,6 +27,6 @@
             return this;
         }
 
-        protected override float Evaluate(float x) => Math.Clamp(1f / (1f + MathF.Pow(MathF.E, -grownRate * (x - midpoint))), 0f, 1f);
+        protected override float Evaluate(float x) => MathUtilities.Clamp01((float)(1f / (1f + Math.Pow(Math.E, -grownRate * (x - midpoint)))));
     }
 }

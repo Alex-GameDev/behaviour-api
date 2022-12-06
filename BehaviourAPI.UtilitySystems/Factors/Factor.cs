@@ -1,3 +1,5 @@
+using System;
+
 namespace BehaviourAPI.UtilitySystems
 {
     public abstract class Factor : UtilityNode

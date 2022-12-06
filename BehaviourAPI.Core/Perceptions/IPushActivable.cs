@@ -2,6 +2,6 @@
 {
     public interface IPushActivable
     {
-        public void Fire();
+        void Fire();
     }
 }

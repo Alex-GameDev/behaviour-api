@@ -1,29 +1,22 @@
 namespace BehaviourAPI.BehaviourTrees
 {
+    using BehaviourAPI.BehaviourTrees.Decorators;
+    using BehaviourAPI.Core.Exceptions;
     using Core;
     /// <summary>
     /// Node that changes the result returned by its child node to Succeded if it's Failure.
     /// </summary>
-    public class SuccederNode : DecoratorNode
+    public class SuccederNode : DirectDecoratorNode
     {
         #region --------------------------------------- Runtime methods --------------------------------------
 
-        public override void Start()
-        {
-            base.Start();
-            m_childNode?.Start();
-        }
-
-        public override void Stop()
-        {
-            base.Stop();
-            m_childNode?.Stop();
-        }
-
         protected override Status UpdateStatus()
         {
-            m_childNode?.Update();
-            var status = m_childNode?.Status ?? Status.Error;
+            if (m_childNode == null)
+                throw new MissingChildException(this);
+
+            m_childNode.Update();
+            var status = m_childNode.Status;
             if (status == Status.Failure) status = Status.Success;
             return status;
         }

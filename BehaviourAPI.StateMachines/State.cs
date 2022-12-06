@@ -2,6 +2,9 @@
 {
     using Core;
     using Core.Actions;
+    using System;
+    using System.Collections.Generic;
+    using Action = Core.Actions.Action;
 
     public class State : FSMNode, IStatusHandler, IActionHandler
     {
@@ -13,13 +16,13 @@
 
         public Status Status { get; protected set; }
 
-        public Action? Action { get; set; }
+        public Action Action { get; set; }
 
         #endregion
 
         #region -------------------------------------------- Fields ------------------------------------------
 
-        protected List<Transition?> _transitions;
+        protected List<Transition> _transitions;
 
         #endregion
 
@@ -27,7 +30,7 @@
 
         public State()
         {
-            _transitions = new List<Transition?>();
+            _transitions = new List<Transition>();
         }
 
         public void AddTransition(Transition transition) => _transitions.Add(transition);
@@ -35,10 +38,11 @@
         public override void Initialize()
         {
             base.Initialize();
-            Children.ForEach(child => _transitions.Add(child as Transition));
+            for(int i= 0; i < ChildCount; i++)
+                _transitions.Add(GetChildAt(i) as Transition);
         }
 
-        public State SetAction(Action? action)
+        public State SetAction(Action action)
         {
             Action = action;
             return this;
@@ -72,7 +76,7 @@
         {
             for(int i = 0; i < _transitions.Count; i++)
             {
-                if(_transitions[i]?.Check() ?? false)
+                if(_transitions[i].isPulled && _transitions[i].Check())
                 {
                     _transitions[i]?.Perform();
                     return true;

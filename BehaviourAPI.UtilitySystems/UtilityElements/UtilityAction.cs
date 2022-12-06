@@ -1,10 +1,11 @@
-using BehaviourAPI.Core;
-using BehaviourAPI.Core.Actions;
-using System.Xml.Linq;
 
 namespace BehaviourAPI.UtilitySystems
 {
+    using Core;
     using Core.Actions;
+    using System;
+    using Action = Core.Actions.Action;
+
     public class UtilityAction : UtilitySelectableNode, IActionHandler
     {
         #region ------------------------------------------ Properties ----------------------------------------
@@ -12,15 +13,15 @@ namespace BehaviourAPI.UtilitySystems
         public override Type ChildType => typeof(Factor);
         public override int MaxOutputConnections => 1;
 
-        public Action? Action { get => _action; set => _action = value; }
-        Action? _action;
+        public Action Action { get; set; }
 
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        Factor? _factor;
+        Factor _factor;
 
+        public bool FinishSystemOnComplete = false;
         #endregion
 
         #region ---------------------------------------- Build methods ---------------------------------------
@@ -28,19 +29,6 @@ namespace BehaviourAPI.UtilitySystems
         public void SetFactor(Factor factor)
         {
             _factor = factor;
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            if(Children.Count == 1)
-            {
-                _factor = GetFirstChild() as Factor;
-            }
-            else
-            {
-                throw new Exception();
-            }
         }
 
         #endregion
@@ -55,18 +43,22 @@ namespace BehaviourAPI.UtilitySystems
 
         public override void Start()
         {
+            Status = Status.Running;
             Action?.Start();
         }
 
         public override void Update()
         {
-            Status = Action?.Update() ?? Status.Error;
+            Status = Action.Update();
         }
 
         public override void Stop()
         {
+            Status = Status.None;
             Action?.Stop();
         }
+
+        public override bool FinishExecutionWhenActionFinishes() => FinishSystemOnComplete;
 
         #endregion
     }

@@ -10,15 +10,15 @@ namespace BehaviourAPI.Core.Actions
     {
         Func<Status> _update;
 
-        System.Action? _start;
-        System.Action? _stop;
+        System.Action _start;
+        System.Action _stop;
 
         /// <summary>
         /// Create a <see cref="FunctionalAction"/> that executes a method on Start, a Function on Update and, optionally, a method on stop.
         /// </summary>
         /// <param name="update"></param>
         /// <param name="stop"></param>
-        public FunctionalAction(System.Action start, Func<Status> update, System.Action? stop = null)
+        public FunctionalAction(System.Action start, Func<Status> update, System.Action stop = null)
         {
             _start = start;
             _update = update;
@@ -30,7 +30,7 @@ namespace BehaviourAPI.Core.Actions
         /// </summary>
         /// <param name="update"></param>
         /// <param name="stop"></param>
-        public FunctionalAction(Func<Status> update, System.Action? stop = null)
+        public FunctionalAction(Func<Status> update, System.Action stop = null)
         {
             _update = update;
             _stop = stop;

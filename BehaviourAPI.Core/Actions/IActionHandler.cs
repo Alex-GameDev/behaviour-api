@@ -6,6 +6,6 @@ namespace BehaviourAPI.Core.Actions
     /// </summary>
     public interface IActionHandler
     {
-        public Action? Action { get; set; }
+        Action Action { get; set; }
     }
 }

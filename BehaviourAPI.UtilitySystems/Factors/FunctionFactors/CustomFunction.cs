@@ -1,8 +1,10 @@
-﻿namespace BehaviourAPI.UtilitySystems
+﻿using System;
+
+namespace BehaviourAPI.UtilitySystems
 {
     public class CustomFunction : FunctionFactor
     {
-        public Func<float, float>? Func;
+        public Func<float, float> Func;
 
         public CustomFunction SetFunction(Func<float, float> func)
         {

@@ -1,5 +1,6 @@
 ﻿namespace BehaviourAPI.UtilitySystems
 {
+    using Core;
     public class LinearFunction : FunctionFactor
     {
         public float slope, yIntercept;
@@ -16,6 +17,6 @@
             return this;
         }
 
-        protected override float Evaluate(float x) => Math.Clamp(slope * x + yIntercept, 0f, 1f);
+        protected override float Evaluate(float x) => MathUtilities.Clamp01(slope * x + yIntercept);
     }
 }

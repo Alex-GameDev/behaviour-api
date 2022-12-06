@@ -2,6 +2,7 @@ namespace BehaviourAPI.UtilitySystems
 {
     using BehaviourAPI.UtilitySystems;
     using Core;
+    using System;
 
     /// <summary>
     /// Factor that modifies its child value with a function.
@@ -15,7 +16,7 @@ namespace BehaviourAPI.UtilitySystems
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        Factor? m_childFactor;
+        Factor m_childFactor;
 
         #endregion
 
@@ -30,7 +31,7 @@ namespace BehaviourAPI.UtilitySystems
         public override void Initialize()
         {
             base.Initialize();
-            if (Children.Count == 1)
+            if (ChildCount == 1)
             {
                 m_childFactor = GetFirstChild() as Factor;
             }

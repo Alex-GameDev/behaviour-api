@@ -1,7 +1,9 @@
 ﻿namespace BehaviourAPI.BehaviourTrees
 {
+    using BehaviourAPI.Core.Exceptions;
     using Core;
     using Core.Perceptions;
+    using System;
 
     /// <summary>
     /// Decorator that executes its child only if a perception is triggered. Perception is checked every frame
@@ -11,8 +13,7 @@
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Perception? Perception { get => _perception; set => _perception = value; }
-        Perception? _perception;
+        public Perception Perception { get; set; }
 
         #endregion
 
@@ -26,7 +27,7 @@
 
         public SwitchDecoratorNode SetPerception(Perception perception)
         {
-            _perception = perception;
+            Perception = perception;
             return this;
         }
 
@@ -44,7 +45,12 @@
         public override void Stop()
         {
             base.Stop();
-            if(m_childNode != null && _childExecutedLastFrame) m_childNode.Stop();
+            if(_childExecutedLastFrame)
+            {
+                if (m_childNode == null)
+                    throw new MissingChildException(this);
+                m_childNode.Stop();
+            }
             if (Perception != null) Perception.Reset();
             else throw new NullReferenceException("ERROR: Perception is not defined.");
         }
@@ -69,7 +75,7 @@
                         return Status.Running;
                     }
                 }
-                throw new NullReferenceException("ERROR: Child node is not defined.");
+                throw new MissingChildException(this);
             }
             throw new NullReferenceException("ERROR: Perception is not defined.");
         }

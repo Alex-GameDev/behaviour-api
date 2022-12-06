@@ -1,4 +1,6 @@
-﻿namespace BehaviourAPI.Core.Perceptions
+﻿using System.Collections.Generic;
+
+namespace BehaviourAPI.Core.Perceptions
 {
     public class AndPerception : CompoundPerception
     {

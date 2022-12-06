@@ -3,10 +3,21 @@
     using UtilitySystems;
     using Core;
     using Core.Actions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    using BehaviourAPI.Core.Exceptions;
+    using BehaviourAPI.StateMachines;
 
     [TestClass]
     public class UtilitySystemExecutionTests
     {
+        [TestMethod]
+        public void Test_EmptyGraph()
+        {
+            var us = new UtilitySystem();
+            Assert.ThrowsException<EmptyGraphException>(us.Start);
+        }
+
         [TestMethod]
         public void Test_UtilitySystem_VariableFactor()
         {
