@@ -318,7 +318,7 @@ namespace BehaviourAPI.UtilitySystems
             _utilityCandidates.MoveAtFirst(node);
         }
 
-        public override void AddNode(Node node)
+        protected override void AddNode(Node node)
         {
             base.AddNode(node);
 

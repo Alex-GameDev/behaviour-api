@@ -56,6 +56,7 @@
     <Compile Include="FSMExecutionTests.cs" />
     <Compile Include="PerceptionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationTests.cs" />
     <Compile Include="SubgraphTests.cs" />
     <Compile Include="UtilitySystemExecutionTests.cs" />
   </ItemGroup>

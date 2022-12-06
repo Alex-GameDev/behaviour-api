@@ -69,7 +69,8 @@
     <Compile Include="Perceptions\PushPerception.cs" />
     <Compile Include="Perceptions\TimerPerception.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\BehaviourGraphBuilder.cs" />
+    <Compile Include="Serialization\BehaviourGraphBuilder.cs" />
+    <Compile Include="Serialization\NodeData.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\MathUtilities.cs" />

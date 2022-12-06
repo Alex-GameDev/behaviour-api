@@ -217,10 +217,11 @@ namespace BehaviourAPI.Core
         /// </summary>
         /// <param name="node"></param>
         /// <exception cref="ArgumentException"></exception>
-        public virtual void AddNode(Node node)
+        protected internal virtual void AddNode(Node node)
         {
-            if (!node.GetType().IsAssignableFrom(NodeType))
-                throw new ArgumentException();
+            if (!NodeType.IsAssignableFrom(node.GetType()))
+                throw new ArgumentException($"Error adding a node: An instance of type {node.GetType()} cannot be " +
+                    $"added, this graph only handles nodes of types derived from {NodeType}");
 
             Nodes.Add(node);
             node.BehaviourGraph = this;
