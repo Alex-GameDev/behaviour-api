@@ -107,10 +107,18 @@ namespace BehaviourAPI.Core
         public bool CanAddAParent() => MaxInputConnections == -1 || Parents.Count < MaxInputConnections;
 
         /// <summary>
-        /// Build the internal references
+        /// Build the internal connection references.
         /// </summary>
-        public virtual void Initialize()
+        protected internal virtual void BuildConnections(List<Node> parents, List<Node> children)
         {
+            if (MaxInputConnections != -1 && parents.Count > MaxInputConnections)
+                throw new ArgumentException();
+
+            if (MaxOutputConnections != -1 && children.Count > MaxOutputConnections)
+                throw new ArgumentException();
+
+            Parents = parents;
+            Children = children;
         }
 
         #endregion
