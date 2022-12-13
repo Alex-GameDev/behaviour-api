@@ -10,7 +10,7 @@ namespace BehaviourAPI.StateMachines
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public override Type NodeType => typeof(State);
+        public override Type NodeType => typeof(FSMNode);
 
         public override bool CanRepeatConnection => false;
 
