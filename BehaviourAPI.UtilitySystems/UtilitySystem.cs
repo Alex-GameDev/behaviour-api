@@ -51,6 +51,16 @@ namespace BehaviourAPI.UtilitySystems
 
         /// <summary>
         /// Creates a new <see cref="UtilitySystem"/>
+        /// </summary>       
+        public UtilitySystem()
+        {
+            Inertia = 1.3f;
+            UtilityThreshold = 0f;
+            _utilityCandidates = new List<UtilitySelectableNode>();
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="UtilitySystem"/>
         /// </summary>
         /// <param name="inertia">The utility multiplier applied to the last selected element when the best element is calculated.</param>
         /// <param name="utilityThreshold">The minimum utility value an element must have to be selected.</param>
