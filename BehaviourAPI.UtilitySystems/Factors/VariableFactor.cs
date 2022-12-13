@@ -17,6 +17,13 @@ namespace BehaviourAPI.UtilitySystems
 
         public float min, max;
 
+        public VariableFactor()
+        {
+            Variable = null;
+            min = 0.0f;
+            max = 1.0f;
+        }
+
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------
