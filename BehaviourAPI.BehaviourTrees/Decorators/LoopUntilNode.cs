@@ -11,9 +11,9 @@ namespace BehaviourAPI.BehaviourTrees
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public Status TargetStatus = Status.Success;
+        public Variable<Status> TargetStatus = Status.Success;
 
-        public int MaxIterations = -1;
+        public Variable<int> MaxIterations = -1;
 
         int _currentIterations;
 
@@ -21,13 +21,13 @@ namespace BehaviourAPI.BehaviourTrees
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public LoopUntilNode SetTargetStatus(Status status)
+        public LoopUntilNode SetTargetStatus(Variable<Status> status)
         {
             TargetStatus = status;
             return this;
         }
 
-        public LoopUntilNode SetMaxIterations(int maxIterations)
+        public LoopUntilNode SetMaxIterations(Variable<int> maxIterations)
         {
             MaxIterations = maxIterations;
             return this;
@@ -51,10 +51,10 @@ namespace BehaviourAPI.BehaviourTrees
             m_childNode.Update();
             var status = m_childNode.Status;
             // If child execution ends without the target value, restart until currentIterations == MaxIterations
-            if (status == TargetStatus.Inverted())
+            if (status == TargetStatus.Value.Inverted())
             {
                 _currentIterations++;
-                if(_currentIterations != MaxIterations)
+                if(_currentIterations != MaxIterations.Value)
                 {
                     // Restart the node execution
                     status = Status.Running;

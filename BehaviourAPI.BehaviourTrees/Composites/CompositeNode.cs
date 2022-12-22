@@ -17,7 +17,7 @@ namespace BehaviourAPI.BehaviourTrees
 
         #region ------------------------------------------- Fields -------------------------------------------
        
-        public bool IsRandomized;
+        public Variable<bool> IsRandomized;
 
         protected List<BTNode> m_children;
 
@@ -56,7 +56,7 @@ namespace BehaviourAPI.BehaviourTrees
             if (m_children.Count == 0)
                 throw new MissingChildException(this);
 
-            if (IsRandomized) m_children.OrderBy((guid) => Guid.NewGuid());
+            if (IsRandomized.Value) m_children.OrderBy((guid) => Guid.NewGuid());
         }
 
         protected BTNode GetBTChildAt(int idx)

@@ -82,7 +82,7 @@
         {
             for(int i = 0; i < _transitions.Count; i++)
             {
-                if(_transitions[i].isPulled && _transitions[i].Check())
+                if(_transitions[i].isPulled.Value && _transitions[i].Check())
                 {
                     _transitions[i]?.Perform();
                     return true;

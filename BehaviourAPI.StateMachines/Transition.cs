@@ -28,7 +28,7 @@
         protected State _sourceState;
         protected State _targetState;
 
-        public bool isPulled = true;
+        public Variable<bool> isPulled = true;
 
         #endregion
 

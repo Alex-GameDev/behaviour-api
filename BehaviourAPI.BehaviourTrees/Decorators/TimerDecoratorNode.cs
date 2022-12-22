@@ -13,7 +13,7 @@ namespace BehaviourAPI.BehaviourTrees
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public float Time;
+        public Variable<float> Time;
         Timer _timer;
 
         bool _isTimeout;
@@ -23,7 +23,7 @@ namespace BehaviourAPI.BehaviourTrees
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public TimerDecoratorNode SetTime(float time)
+        public TimerDecoratorNode SetTime(Variable<float> time)
         {
             Time = time;
             return this;
@@ -33,7 +33,7 @@ namespace BehaviourAPI.BehaviourTrees
         {
             base.Start();
             _childExecuted = false;
-            _timer = new Timer(Time * 1000);
+            _timer = new Timer(Time.Value * 1000);
             _timer.Elapsed += OnTimerElapsed;
 
             _isTimeout = false;

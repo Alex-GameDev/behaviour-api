@@ -16,7 +16,7 @@ namespace BehaviourAPI.BehaviourTrees
     {
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public int Iterations = 1;
+        public Variable<int> Iterations = 1;
 
         int _currentIterations;
 
@@ -24,7 +24,7 @@ namespace BehaviourAPI.BehaviourTrees
 
         #region ---------------------------------------- Build methods ---------------------------------------
 
-        public IteratorNode SetIterations(int iterations)
+        public IteratorNode SetIterations(Variable<int> iterations)
         {
             Iterations = iterations;
             return this;
@@ -52,7 +52,7 @@ namespace BehaviourAPI.BehaviourTrees
             if(status != Status.Running)
             {
                 _currentIterations++;
-                if(Iterations == -1 || _currentIterations < Iterations)
+                if(Iterations.Value == -1 || _currentIterations < Iterations.Value)
                 {
                     status = Status.Running;
                     m_childNode.Stop();

@@ -5,7 +5,7 @@
 
     public class ExponentialFunction : FunctionFactor
     {
-        public float Exp, DespX, DespY;
+        public Variable<float> Exp, DespX, DespY;
 
         public ExponentialFunction SetExponent(float exp)
         {
@@ -25,6 +25,6 @@
             return this;
         }
 
-        protected override float Evaluate(float x) => MathUtilities.Clamp01((float)Math.Pow(x - DespX, Exp) + DespY);
+        protected override float Evaluate(float x) => MathUtilities.Clamp01((float)Math.Pow(x - DespX.Value, Exp.Value) + DespY.Value);
     }
 }

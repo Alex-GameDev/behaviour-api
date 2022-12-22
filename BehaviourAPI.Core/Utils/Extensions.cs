@@ -1,5 +1,6 @@
 ﻿using BehaviourAPI.Core.Perceptions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BehaviourAPI.Core
 {
@@ -31,6 +32,11 @@ namespace BehaviourAPI.Core
                 case Status.Running: return StatusFlags.Running;
                 default: return StatusFlags.None;
             }
+        }
+
+        public static IEnumerable<Variable<T>> Map<T>(this IEnumerable<T> enumerable)
+        {
+            return enumerable.Select(t => new Variable<T> { Value = t });
         }
     }
 }

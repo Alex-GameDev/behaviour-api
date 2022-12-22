@@ -50,6 +50,7 @@
     <Compile Include="Actions\ExitSystemAction.cs" />
     <Compile Include="Actions\FunctionalAction.cs" />
     <Compile Include="Actions\IActionHandler.cs" />
+    <Compile Include="Variable.cs" />
     <Compile Include="behaviourGraph.cs" />
     <Compile Include="BehaviourSystem.cs" />
     <Compile Include="Exceptions\MissingActionException.cs" />

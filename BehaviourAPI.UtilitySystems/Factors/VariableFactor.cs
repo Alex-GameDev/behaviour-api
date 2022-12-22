@@ -15,7 +15,7 @@ namespace BehaviourAPI.UtilitySystems
 
         public Func<float> Variable;
 
-        public float min, max;
+        public Variable<float> min, max;
 
         public VariableFactor()
         {
@@ -30,8 +30,8 @@ namespace BehaviourAPI.UtilitySystems
 
         protected override float ComputeUtility()
         {
-            Utility = Variable?.Invoke() ?? min;
-            Utility = (Utility - min) / (max - min);
+            Utility = Variable?.Invoke() ?? min.Value;
+            Utility = (Utility - min.Value) / (max.Value - min.Value);
             return MathUtilities.Clamp01(Utility);
         }
 

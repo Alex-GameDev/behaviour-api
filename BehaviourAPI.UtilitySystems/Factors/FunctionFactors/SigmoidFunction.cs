@@ -5,7 +5,7 @@ namespace BehaviourAPI.UtilitySystems
 {
     public class SigmoidFunction : FunctionFactor
     {
-        public float grownRate, midpoint;
+        public Variable<float> grownRate, midpoint;
 
         public SigmoidFunction SetValues(float grownRate, float midpoint)
         {
@@ -27,6 +27,6 @@ namespace BehaviourAPI.UtilitySystems
             return this;
         }
 
-        protected override float Evaluate(float x) => MathUtilities.Clamp01((float)(1f / (1f + Math.Pow(Math.E, -grownRate * (x - midpoint)))));
+        protected override float Evaluate(float x) => MathUtilities.Clamp01((float)(1f / (1f + Math.Pow(Math.E, -grownRate.Value * (x - midpoint.Value)))));
     }
 }
