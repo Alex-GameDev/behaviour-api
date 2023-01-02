@@ -20,6 +20,9 @@
         public override int MaxInputConnections => 1;
 
         public override int MaxOutputConnections => 1;
+
+        public System.Action TransitionTriggered { get; set; }
+
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
@@ -79,6 +82,7 @@
             if (_targetState == null)
                 throw new MissingChildException(this, "The list of utility candidates is empty.");
 
+            TransitionTriggered?.Invoke();
             _fsm.SetCurrentState(_targetState);
         }
 

@@ -26,7 +26,6 @@ namespace BehaviourAPI.Core
 
         public Action<Status> StatusChanged { get; set; }
 
-
         Status _status;
 
         /// <summary>
