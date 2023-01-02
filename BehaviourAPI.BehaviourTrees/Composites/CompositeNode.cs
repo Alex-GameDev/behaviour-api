@@ -11,6 +11,8 @@ namespace BehaviourAPI.BehaviourTrees
     /// </summary>
     public abstract class CompositeNode : BTNode
     {
+        private static Random rng = new Random();
+
         #region ------------------------------------------ Properties -----------------------------------------
         public sealed override int MaxOutputConnections => -1;
         #endregion
@@ -56,7 +58,8 @@ namespace BehaviourAPI.BehaviourTrees
             if (m_children.Count == 0)
                 throw new MissingChildException(this);
 
-            if (IsRandomized) m_children.OrderBy((guid) => Guid.NewGuid());
+            if (IsRandomized) 
+                m_children = m_children.OrderBy(elem => rng.NextDouble()).ToList();
         }
 
         protected BTNode GetBTChildAt(int idx)
