@@ -81,6 +81,8 @@
             Assert.AreEqual(Status.None, s3.Status);
         }
 
+        Status foo() => Status.Running;
+
         [TestMethod]
         public void Test_FSM_SubFSM()
         {
@@ -93,7 +95,7 @@
             FSM parent = new FSM();
 
             var s1 = parent.CreateState("st1", new FunctionalAction(() => Status.Running));
-            var s2 = parent.CreateState("st2", new EnterSystemAction(child));
+            var s2 = parent.CreateState("st2", child);
             var s3 = parent.CreateState("st3", new FunctionalAction(() => Status.Running));
             var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2);
             var t2_3 = parent.CreateFinishStateTransition("t2_3", s2, s3, false, true);

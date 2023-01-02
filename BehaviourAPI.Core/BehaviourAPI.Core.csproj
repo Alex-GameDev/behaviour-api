@@ -53,6 +53,8 @@
     <Compile Include="Variable.cs" />
     <Compile Include="behaviourGraph.cs" />
     <Compile Include="BehaviourSystem.cs" />
+    <Compile Include="Blackboard.cs" />
+    <Compile Include="BlackboardVariable.cs" />
     <Compile Include="Exceptions\MissingActionException.cs" />
     <Compile Include="Exceptions\MissingChildException.cs" />
     <Compile Include="Exceptions\EmptyGraphException.cs" />

@@ -13,7 +13,7 @@ namespace BehaviourAPI.BehaviourTrees
 
         public Variable<Status> TargetStatus = Status.Success;
 
-        public Variable<int> MaxIterations = -1;
+        public BlackboardVariable<int> MaxIterations = -1;
 
         int _currentIterations;
 
@@ -27,7 +27,7 @@ namespace BehaviourAPI.BehaviourTrees
             return this;
         }
 
-        public LoopUntilNode SetMaxIterations(Variable<int> maxIterations)
+        public LoopUntilNode SetMaxIterations(BlackboardVariable<int> maxIterations)
         {
             MaxIterations = maxIterations;
             return this;

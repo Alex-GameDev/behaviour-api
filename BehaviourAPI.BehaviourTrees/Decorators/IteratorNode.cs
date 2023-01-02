@@ -16,7 +16,7 @@ namespace BehaviourAPI.BehaviourTrees
     {
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public Variable<int> Iterations = 1;
+        public BlackboardVariable<int> Iterations = 1;
 
         int _currentIterations;
 
@@ -25,6 +25,7 @@ namespace BehaviourAPI.BehaviourTrees
         #region ---------------------------------------- Build methods ---------------------------------------
 
         public IteratorNode SetIterations(Variable<int> iterations)
+        public IteratorNode SetIterations(BlackboardVariable<int> iterations)
         {
             Iterations = iterations;
             return this;

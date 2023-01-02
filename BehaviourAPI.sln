@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BehaviourAPI.Testing", "Beh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BehaviourAPI.UtilitySystems", "BehaviourAPI.UtilitySystems\BehaviourAPI.UtilitySystems.csproj", "{28E1B049-3C2A-4BDE-B50F-0A6A16DD86A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{1B731DB0-6BB0-493C-9FFF-1A4A23308991}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{28E1B049-3C2A-4BDE-B50F-0A6A16DD86A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28E1B049-3C2A-4BDE-B50F-0A6A16DD86A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28E1B049-3C2A-4BDE-B50F-0A6A16DD86A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B731DB0-6BB0-493C-9FFF-1A4A23308991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B731DB0-6BB0-493C-9FFF-1A4A23308991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B731DB0-6BB0-493C-9FFF-1A4A23308991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B731DB0-6BB0-493C-9FFF-1A4A23308991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

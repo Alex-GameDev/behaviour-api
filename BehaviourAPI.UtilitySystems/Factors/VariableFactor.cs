@@ -13,7 +13,7 @@ namespace BehaviourAPI.UtilitySystems
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        public Func<float> Variable;
+        public BlackboardVariable<float> Variable;
 
         public Variable<float> min, max;
 
@@ -30,8 +30,8 @@ namespace BehaviourAPI.UtilitySystems
 
         protected override float ComputeUtility()
         {
-            Utility = Variable?.Invoke() ?? min.Value;
-            Utility = (Utility - min.Value) / (max.Value - min.Value);
+            Utility = Variable.Value;
+            Utility = (Utility - min) / (max - min);
             return MathUtilities.Clamp01(Utility);
         }
 

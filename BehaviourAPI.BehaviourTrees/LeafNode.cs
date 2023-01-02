@@ -13,7 +13,9 @@ namespace BehaviourAPI.BehaviourTrees
     {
         #region ------------------------------------------ Properties -----------------------------------------
         public sealed override int MaxOutputConnections => 0;
-        public Action Action { get; set; }     
+        public Action Action { get; set; }
+
+        public Action action1;
 
         #endregion
 
