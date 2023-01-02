@@ -21,7 +21,7 @@
         // This method should never be executed cause Start method will always exit this node.
         public override Status Update()
         {
-            return Status.Error;
+            return Status.None;
         }
 
         // This method should never be executed cause Start method will always exit this node.

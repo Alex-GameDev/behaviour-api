@@ -1,6 +1,7 @@
 namespace BehaviourAPI.UtilitySystems
 {
     using Core;
+    using System;
 
     /// <summary>
     /// Utility node that implements IStatusHandler
@@ -9,8 +10,22 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Status Status { get; protected set; }
+        public Status Status
+        {
+            get => _status;
+            protected set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    StatusChanged?.Invoke(_status);
+                }
+            }
+        }
 
+        public Action<Status> StatusChanged { get; set; }
+
+        Status _status;
         /// <summary>
         /// True if this element should be executed even if later elements have more utility:
         /// </summary>

@@ -12,7 +12,22 @@ namespace BehaviourAPI.BehaviourTrees
         #region ------------------------------------------ Properties -----------------------------------------
         public override int MaxInputConnections => 1;
         public override Type ChildType => typeof(BTNode);
-        public Status Status { get => _status; protected set => _status = value; }
+
+        public Status Status
+        {
+            get => _status;
+            protected set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    StatusChanged?.Invoke(_status);
+                }
+            }
+        }
+
+        public Action<Status> StatusChanged { get; set; }
+
         Status _status;
 
         #endregion

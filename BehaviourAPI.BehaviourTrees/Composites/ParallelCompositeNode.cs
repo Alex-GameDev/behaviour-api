@@ -45,9 +45,6 @@
             m_children.ForEach(c => c.Update());
             List<Status> allStatus = m_children.Select(c => c.Status).ToList();
 
-            // Check errors
-            if (allStatus.Contains(Status.Error)) return Status.Error;
-
             // Check for trigger value
             if (allStatus.Contains(TriggerStatus)) return TriggerStatus;
 

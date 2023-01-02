@@ -8,11 +8,26 @@ namespace BehaviourAPI.Core
 {
     public abstract class BehaviourSystem : IStatusHandler
     {
-
         /// <summary>
         /// The current execution status of the graph.
         /// </summary>
-        public Status Status { get; protected set; }
+        public Status Status 
+        {
+            get => _status; 
+            protected set
+            {
+                if(_status != value)
+                {
+                    _status = value;
+                    StatusChanged?.Invoke(_status);
+                }
+            }
+        }
+
+        public Action<Status> StatusChanged { get; set; }
+
+
+        Status _status;
 
         /// <summary>
         /// Enter this behavior graph

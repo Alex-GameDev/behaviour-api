@@ -46,7 +46,7 @@ namespace BehaviourAPI.BehaviourTrees
                 throw new MissingChildException(this);
 
                 m_childNode.Update();
-                var status = m_childNode?.Status ?? Status.Error;
+                var status = m_childNode.Status;
 
             // If child execution ends, restart until currentIterations > Iterations
             if(status != Status.Running)

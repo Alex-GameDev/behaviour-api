@@ -14,7 +14,22 @@
         public override int MaxOutputConnections => -1;
         public override Type ChildType => typeof(Transition);
 
-        public Status Status { get; protected set; }
+        public Status Status
+        {
+            get => _status;
+            protected set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    StatusChanged?.Invoke(_status);
+                }
+            }
+        }
+
+        public Action<Status> StatusChanged { get; set; }
+
+        Status _status;
 
         public Action Action { get; set; }
 
@@ -67,7 +82,7 @@
 
         public void Update()
         {
-            Status = Action?.Update() ?? Status.Error;
+            Status = Action?.Update() ?? Status.Running;
             CheckTransitions();           
         }
 
