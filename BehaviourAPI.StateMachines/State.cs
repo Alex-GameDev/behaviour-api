@@ -10,6 +10,10 @@
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
+        public override string Description => "FSM Node that execute an Action and check its transitions every iteration";
+
+        public override Type ChildType => typeof(Transition);
+
         public override int MaxInputConnections => -1;
         public override int MaxOutputConnections => -1;
         public override Type ChildType => typeof(Transition);

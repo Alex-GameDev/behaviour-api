@@ -10,6 +10,8 @@
     /// </summary>
     public class ParallelCompositeNode : CompositeNode
     {
+        public override string Description => "Composite node that executes all its BTNode childs in parallel";
+
         #region ------------------------------------------- Fields -------------------------------------------
 
         public Status TriggerStatus = Status.Failure;

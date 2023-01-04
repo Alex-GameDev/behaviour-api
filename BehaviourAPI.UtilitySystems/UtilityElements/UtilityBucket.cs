@@ -19,6 +19,8 @@ namespace BehaviourAPI.UtilitySystems
         public override Type ChildType => typeof(UtilitySelectableNode);
         public override int MaxOutputConnections => -1;
 
+        public override string Description => "Utility node that holds a group of utility nodes and executes the best of them according to its utility";
+
         public UtilitySelectableNode DefaultSelectedElement
         {
             get

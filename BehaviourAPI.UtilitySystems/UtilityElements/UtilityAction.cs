@@ -10,10 +10,7 @@ namespace BehaviourAPI.UtilitySystems
     public class UtilityAction : UtilitySelectableNode, IActionHandler
     {
         #region ------------------------------------------ Properties ----------------------------------------
-        
-        public override Type ChildType => typeof(Factor);
-        public override int MaxOutputConnections => 1;
-
+        public override string Description => "Utility node that executes an action and computes its utility with it child factor";
         public Action Action { get; set; }
 
         #endregion

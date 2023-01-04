@@ -5,6 +5,7 @@ namespace BehaviourAPI.UtilitySystems
 {
     public class SigmoidFunction : FunctionFactor
     {
+        public override string Description => "Factor that returns the result of applying a sigmoid function to its child utility";
         public float grownRate, midpoint;
 
         public SigmoidFunction SetValues(float grownRate, float midpoint)

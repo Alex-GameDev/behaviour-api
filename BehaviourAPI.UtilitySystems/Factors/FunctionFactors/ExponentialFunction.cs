@@ -5,6 +5,8 @@
 
     public class ExponentialFunction : FunctionFactor
     {
+        public override string Description => "Factor that returns the result of applying a exponential function to its child utility";
+
         public float Exp, DespX, DespY;
 
         public ExponentialFunction SetExponent(float exp)

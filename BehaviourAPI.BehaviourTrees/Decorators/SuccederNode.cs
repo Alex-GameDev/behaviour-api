@@ -8,6 +8,8 @@ namespace BehaviourAPI.BehaviourTrees
     /// </summary>
     public class SuccederNode : DirectDecoratorNode
     {
+        public override string Description => "Decorator node that return Success if the child status is Failure";
+
         #region --------------------------------------- Runtime methods --------------------------------------
 
         protected override Status UpdateStatus()

@@ -5,6 +5,8 @@ namespace BehaviourAPI.UtilitySystems
     using Core;
     public class PointedFunction : FunctionFactor
     {
+        public override string Description => "Factor that returns the result of applying a pointed function to its child utility";
+
         public List<Vector2> points = new List<Vector2>();
         // Points shouldn't be changed directly using the list
 

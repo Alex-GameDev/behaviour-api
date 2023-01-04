@@ -9,6 +9,8 @@ namespace BehaviourAPI.BehaviourTrees
 
     public class InverterNode : DirectDecoratorNode
     {
+        public override string Description => "Decorator node that return the status of its child inverted";
+
         #region --------------------------------------- Runtime methods --------------------------------------
 
         protected override Status UpdateStatus()

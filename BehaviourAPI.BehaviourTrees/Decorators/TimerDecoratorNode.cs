@@ -13,6 +13,8 @@ namespace BehaviourAPI.BehaviourTrees
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
+        public override string Description => "Decorator node which waits a certain time to execute its child";
+
         public float Time;
         Timer _timer;
 

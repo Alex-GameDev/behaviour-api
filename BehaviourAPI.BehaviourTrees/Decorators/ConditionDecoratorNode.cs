@@ -22,6 +22,7 @@ namespace BehaviourAPI.BehaviourTrees.Decorators
         public Perception Perception { get; set; }
 
         bool _executeChild;
+        public override string Description => "Decorator that execute its child if the perceptions returns true";
 
         #endregion
 

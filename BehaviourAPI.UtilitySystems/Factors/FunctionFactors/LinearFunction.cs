@@ -3,6 +3,8 @@
     using Core;
     public class LinearFunction : FunctionFactor
     {
+        public override string Description => "Factor that returns the result of applying a linear function to its child utility";
+
         public float slope, yIntercept;
 
         public LinearFunction SetSlope(float slope)

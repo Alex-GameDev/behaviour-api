@@ -14,6 +14,8 @@ namespace BehaviourAPI.BehaviourTrees
     /// </summary>
     public  class IteratorNode : DirectDecoratorNode
     {
+        public override string Description => "Decorator node that executes its child several times, returning running until the last execution ends";
+
         #region ------------------------------------------- Fields -------------------------------------------
 
         public int Iterations = 1;

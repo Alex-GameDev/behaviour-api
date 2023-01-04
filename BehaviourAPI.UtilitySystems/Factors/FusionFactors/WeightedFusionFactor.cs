@@ -5,6 +5,8 @@ namespace BehaviourAPI.UtilitySystems
 {
     public class WeightedFusionFactor : FusionFactor
     {
+        public override string Description => "Factor that return the weighted sum of the utility of its children";
+
         public float[] Weights = new float[0];
 
         protected override float ComputeUtility()

@@ -13,7 +13,9 @@
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Perception Perception { get; set; }
+        public override string Description => "Decorator that execute its child if the perceptions returns true checking it every iteration";
+
+        public Perception Perception;
 
         #endregion
 

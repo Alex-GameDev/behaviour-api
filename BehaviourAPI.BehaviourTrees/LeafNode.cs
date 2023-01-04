@@ -12,6 +12,8 @@ namespace BehaviourAPI.BehaviourTrees
     public class LeafNode : BTNode, IActionHandler
     {
         #region ------------------------------------------ Properties -----------------------------------------
+
+        public override string Description => "BT Node that executes an action";
         public sealed override int MaxOutputConnections => 0;
         public Action Action { get; set; }     
 

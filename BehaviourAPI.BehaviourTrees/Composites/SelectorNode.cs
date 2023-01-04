@@ -7,6 +7,7 @@ namespace BehaviourAPI.BehaviourTrees
     /// </summary>
     public class SelectorNode : SerialCompositeNode
     {
+        public override string Description => "Composite node that executes its childs one by one until some of them returns Success";
         public override Status KeepExecutingStatus => Status.Failure;
     }
 }

@@ -15,6 +15,8 @@ namespace BehaviourAPI.Core
         /// </summary>
         public abstract Type ChildType { get; }
 
+        public abstract string Description { get; }
+
         /// <summary>
         /// Maximum number of elements in <see cref="Parents"/>.
         /// </summary>

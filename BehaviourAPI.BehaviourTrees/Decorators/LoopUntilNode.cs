@@ -8,6 +8,7 @@ namespace BehaviourAPI.BehaviourTrees
     /// </summary>
     public class LoopUntilNode : DirectDecoratorNode
     {
+        public override string Description => "Decorator node that executes its child several times until its status is equal to TargetStatus or until the maximum number of iterations is reached";
 
         #region ------------------------------------------- Fields -------------------------------------------
 

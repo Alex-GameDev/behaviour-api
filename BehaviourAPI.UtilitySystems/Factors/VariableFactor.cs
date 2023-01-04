@@ -7,6 +7,7 @@ namespace BehaviourAPI.UtilitySystems
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
+        public override string Description => "Factor that return the result of a custom function normalized";
         public override int MaxOutputConnections => 0;
 
         #endregion
