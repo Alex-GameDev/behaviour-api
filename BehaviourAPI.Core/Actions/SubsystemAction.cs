@@ -2,7 +2,7 @@
 
 namespace BehaviourAPI.Core.Actions
 {
-    public class EnterSystemAction : Action
+    public class SubsystemAction : Action
     {
         public BehaviourSystem SubSystem;
 
@@ -16,7 +16,7 @@ namespace BehaviourAPI.Core.Actions
         /// </summary>
         public bool DontStopOnInterrupt;
 
-        public EnterSystemAction(BehaviourSystem subSystem, bool executeOnLoop = false, bool dontStopOnInterrupt = false)
+        public SubsystemAction(BehaviourSystem subSystem, bool executeOnLoop = false, bool dontStopOnInterrupt = false)
         {
             SubSystem = subSystem;
             ExecuteOnLoop = executeOnLoop;

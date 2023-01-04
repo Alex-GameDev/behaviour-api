@@ -18,8 +18,8 @@
         public void Test_FSM_Simple_Creation()
         {
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState("st1");
-            var s2 = fsm.CreateState("st2");
+            var s1 = fsm.CreateActionState("st1");
+            var s2 = fsm.CreateActionState("st2");
             Transition t = fsm.CreateTransition<Transition>("t_s1_s2", s1, s2, new ConditionPerception(() => true));
 
             Assert.AreEqual(3, fsm.NodeCount);
@@ -32,12 +32,12 @@
         public void Test_FSM_Complex_Creation()
         {
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState("st1");
-            var s2 = fsm.CreateState("st2");
-            var s3 = fsm.CreateState("st3");
-            var s4 = fsm.CreateState("st4");
-            var s5 = fsm.CreateState("st5");
-            var s6 = fsm.CreateState("st6");
+            var s1 = fsm.CreateActionState("st1");
+            var s2 = fsm.CreateActionState("st2");
+            var s3 = fsm.CreateActionState("st3");
+            var s4 = fsm.CreateActionState("st4");
+            var s5 = fsm.CreateActionState("st5");
+            var s6 = fsm.CreateActionState("st6");
 
             Transition t12 = fsm.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => true));
             Transition t13 = fsm.CreateTransition<Transition>("t13", s1, s3, new ConditionPerception(() => true));
@@ -61,7 +61,7 @@
         public void Test_FSM_LoopTransition()
         {
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState("st1");
+            var s1 = fsm.CreateActionState("st1");
 
             Transition t12 = fsm.CreateTransition<Transition>("t12", s1, s1, new ConditionPerception(() => true));
 

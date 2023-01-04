@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BehaviourAPI.UtilitySystems
 {
-    using BehaviourAPI.Core;
-    using BehaviourAPI.Core.Exceptions;
+    using Core.Exceptions;
     using Core;
 
     /// <summary>

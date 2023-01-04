@@ -8,12 +8,12 @@
     using System.Collections.Generic;
     using Action = Core.Actions.Action;
 
-    public class Transition : FSMNode, IPerceptionHandler, IActionHandler, IPushActivable
+    public class Transition : FSMNode, IPushActivable
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Perception Perception { get; set; }
-        public Action Action { get; set; }
+        public Perception Perception;
+        public Action Action;
 
         public override Type ChildType => typeof(State);
 
@@ -28,7 +28,7 @@
         #region ------------------------------------------- Fields -------------------------------------------
 
         protected FSM _fsm;
-        protected State _sourceState;
+        protected ActionState _sourceState;
         protected State _targetState;
 
         public bool isPulled = true;
@@ -38,7 +38,7 @@
         #region ---------------------------------------- Build methods ---------------------------------------
 
         public void SetFSM(FSM fsm) => _fsm = fsm;
-        public void SetSourceState(State source) => _sourceState = source;
+        public void SetSourceState(ActionState source) => _sourceState = source;
         public void SetTargetState(State target) => _targetState = target;
 
         protected override void BuildConnections(List<Node> parents, List<Node> children)
@@ -52,7 +52,7 @@
             else
                 throw new ArgumentException();
 
-            if (parents.Count > 0 && children[0] is State from)
+            if (parents.Count > 0 && children[0] is ActionState from)
                 _sourceState = from;
             else
                 throw new ArgumentException();

@@ -1,56 +1,28 @@
 
 namespace BehaviourAPI.UtilitySystems
 {
+    using BehaviourAPI.UtilitySystems.UtilityElements;
     using Core;
     using Core.Actions;
     using System;
     using System.Collections.Generic;
     using Action = Core.Actions.Action;
 
-    public class UtilityAction : UtilitySelectableNode, IActionHandler
+    public class UtilityAction : UtilityExecutableNode
     {
         #region ------------------------------------------ Properties ----------------------------------------
         
-        public override Type ChildType => typeof(Factor);
-        public override int MaxOutputConnections => 1;
-
         public Action Action { get; set; }
 
         #endregion
 
         #region ------------------------------------------- Fields -------------------------------------------
 
-        Factor _factor;
-
         public bool FinishSystemOnComplete = false;
-        #endregion
-
-        #region ---------------------------------------- Build methods ---------------------------------------
-
-        public void SetFactor(Factor factor)
-        {
-            _factor = factor;
-        }
-
-        protected override void BuildConnections(List<Node> parents, List<Node> children)
-        {
-            base.BuildConnections(parents, children);
-
-            if (children.Count > 0 && children[0] is Factor f)
-                _factor = f;
-            else
-                throw new ArgumentException();
-        }
 
         #endregion
 
         #region --------------------------------------- Runtime methods --------------------------------------
-
-        protected override float ComputeUtility()
-        {
-            _factor?.UpdateUtility();
-            return _factor?.Utility ?? 0f;
-        }
 
         public override void Start()
         {

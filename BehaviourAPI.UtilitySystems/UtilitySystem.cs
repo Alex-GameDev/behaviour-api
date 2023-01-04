@@ -3,11 +3,13 @@ using System.Collections.Generic;
 namespace BehaviourAPI.UtilitySystems
 {
     using BehaviourAPI.Core.Exceptions;
+    using BehaviourAPI.UtilitySystems.UtilityElements;
     using Core;
     using Core.Actions;
     using System;
     using System.Linq;
     using System.Net.Sockets;
+    using System.Xml.Linq;
     using Action = Core.Actions.Action;
 
     /// <summary>
@@ -231,6 +233,44 @@ namespace BehaviourAPI.UtilitySystems
             UtilityAction utilityExecutable = CreateNode<UtilityAction>();
             utilityExecutable.FinishSystemOnComplete = finishOnComplete;
             utilityExecutable.Action = action;
+            utilityExecutable.IsRoot = root;
+            Connect(utilityExecutable, factor);
+            if (root) _utilityCandidates.Add(utilityExecutable);
+            utilityExecutable.SetFactor(factor);
+            return utilityExecutable;
+        }
+
+        /// <summary>
+        /// Create a new <see cref="UtilityExitNode"/> named <paramref name="name"/> that computes its utility using <paramref name="factor"/> and exit the current graph execution with the value of <paramref name="exitStatus"/>.
+        /// To prevent the action from being added to the <see cref="UtilitySystem"/> candidate list, set <paramref name="root"/> to false (default is true).
+        /// </summary>
+        /// <param name="name">The name of the utility action.</param>
+        /// <param name="factor">The child factor of the action.</param>
+        /// <param name="root">true if the action is added to the selectable element list, false otherwise."</param>
+        /// <returns>The created <see cref="UtilityAction"/></returns>
+        public UtilityExitNode CreateUtilityExitNode(string name, Factor factor, Status exitStatus, bool root = true)
+        {
+            UtilityExitNode utilityExecutable = CreateNode<UtilityExitNode>(name);
+            utilityExecutable.ExitStatus = exitStatus;
+            utilityExecutable.IsRoot = root;
+            Connect(utilityExecutable, factor);
+            if (root) _utilityCandidates.Add(utilityExecutable);
+            utilityExecutable.SetFactor(factor);
+            return utilityExecutable;
+        }
+
+        /// <summary>
+        /// Create a new <see cref="UtilityExitNode"/> named <paramref name="name"/> that computes its utility using <paramref name="factor"/> and exit the current graph execution with the value of <paramref name="exitStatus"/>.
+        /// To prevent the action from being added to the <see cref="UtilitySystem"/> candidate list, set <paramref name="root"/> to false (default is true).
+        /// </summary>
+        /// <param name="name">The name of the utility action.</param>
+        /// <param name="factor">The child factor of the action.</param>
+        /// <param name="root">true if the action is added to the selectable element list, false otherwise."</param>
+        /// <returns>The created <see cref="UtilityAction"/></returns>
+        public UtilityExitNode CreateUtilityExitNode(Factor factor, Status exitStatus, bool root = true)
+        {
+            UtilityExitNode utilityExecutable = CreateNode<UtilityExitNode>();
+            utilityExecutable.ExitStatus = exitStatus;
             utilityExecutable.IsRoot = root;
             Connect(utilityExecutable, factor);
             if (root) _utilityCandidates.Add(utilityExecutable);

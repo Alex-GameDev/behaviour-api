@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BehaviourAPI.StateMachines
 {
-    public class ProbabilisticState : State
+    public class ProbabilisticState : ActionState
     {
         Dictionary<Transition, float> _probabilities;
         float _totalProbability;

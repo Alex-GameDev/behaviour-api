@@ -9,11 +9,11 @@
     /// Decorator that executes its child only if a perception is triggered. Perception is checked every frame
     /// and starts or stops the child execution when the value changes.
     /// </summary>
-    public class SwitchDecoratorNode : DecoratorNode, IPerceptionHandler
+    public class SwitchDecoratorNode : DecoratorNode
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
-        public Perception Perception { get; set; }
+        public Perception Perception;
 
         #endregion
 

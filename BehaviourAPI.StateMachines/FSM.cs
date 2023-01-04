@@ -30,10 +30,10 @@ namespace BehaviourAPI.StateMachines
         /// Create a new State in this <see cref="FSM"/> that executes the <see cref="Action"/> specified in <paramref name="action"/>.
         /// </summary>
         /// <param name="action">The action this state executes.</param>
-        /// <returns>The <see cref="State"/> created.</returns>
-        public State CreateState(Action action = null)
+        /// <returns>The <see cref="ActionState"/> created.</returns>
+        public ActionState CreateActionState(Action action = null)
         {
-            State state = CreateNode<State>();
+            ActionState state = CreateNode<ActionState>();
             state.Action = action;
             return state;
         }
@@ -43,10 +43,10 @@ namespace BehaviourAPI.StateMachines
         /// </summary>
         /// <param name="name">The name of this node.</param>
         /// <param name="action">The action this state executes.</param>
-        /// <returns>The <see cref="State"/> created.</returns>
-        public State CreateState(string name, Action action = null)
+        /// <returns>The <see cref="ActionState"/> created.</returns>
+        public ActionState CreateActionState(string name, Action action = null)
         {
-            State state = CreateNode<State>(name);
+            ActionState state = CreateNode<ActionState>(name);
             state.Action = action;
             return state;
         }
@@ -56,10 +56,34 @@ namespace BehaviourAPI.StateMachines
         /// </summary>
         /// <param name="action">The action this state wil executes</param>
         /// <returns>The State created</returns>
-        public T CreateState<T>(Action action = null) where T : State, new()
+        public T CreateActionState<T>(Action action = null) where T : ActionState, new()
         {
             T state = CreateNode<T>();
             state.Action = action;
+            return state;
+        }
+
+        /// <summary>
+        /// Create a new State named <paramref name="name"/> in this <see cref="FSM"/> that exits the graph execution with value of <paramref name="exitStatus"/>.
+        /// </summary>
+        /// <param name="name">The name of this node.</param>
+        /// <param name="exitStatus">The exit value.</param>
+        public ExitState CreateExitState(string name, Status exitStatus)
+        {
+            ExitState state = CreateNode<ExitState>(name);
+            state.ExitStatus = exitStatus;
+            return state;
+        }
+
+        /// <summary>
+        /// Create a new State named <paramref name="name"/> in this <see cref="FSM"/> that exits the graph execution with value of <paramref name="exitStatus"/>.
+        /// </summary>
+        /// <param name="name">The name of this node.</param>
+        /// <param name="exitStatus">The exit value.</param>
+        public ExitState CreateExitState(Status exitStatus)
+        {
+            ExitState state = CreateNode<ExitState>();
+            state.ExitStatus = exitStatus;
             return state;
         }
 
@@ -69,7 +93,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="name">The name of this node.</param>
         /// <param name="action">The action this state executes.</param>
         /// <returns>The <typeparamref name="T"/> created.</returns>
-        public T CreateState<T>(string name, Action action = null) where T : State, new()
+        public T CreateActionState<T>(string name, Action action = null) where T : ActionState, new()
         {
             T state = CreateNode<T>(name);
             state.Action = action;
@@ -89,7 +113,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="action">The action executed by the transition.</param>
         /// <param name="isPulled">True if the transition will be checked by its source state, false otherwise.</param>
         /// <returns>The <typeparamref name="T"/> created.</returns>
-        public T CreateTransition<T>(string name, State from, State to, Perception perception = null, Action action = null, bool isPulled = true) where T : Transition, new()
+        public T CreateTransition<T>(string name, ActionState from, State to, Perception perception = null, Action action = null, bool isPulled = true) where T : Transition, new()
         {
             T transition = CreateNode<T>(name);
             transition.SetFSM(this);
@@ -116,7 +140,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="action">The action executed by the transition.</param>
         /// <param name="isPulled">True if the transition will be checked by its source state, false otherwise.</param>
         /// <returns>The <typeparamref name="T"/> created.</returns>
-        public T CreateTransition<T>(State from, State to, Perception perception = null, Action action = null, bool isPulled = true) where T : Transition, new()
+        public T CreateTransition<T>(ActionState from, State to, Perception perception = null, Action action = null, bool isPulled = true) where T : Transition, new()
         {
             T transition = CreateNode<T>();
             transition.SetFSM(this);
@@ -143,7 +167,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="action">The action executed by the transition.</param>
         /// <param name="isPulled">True if the transition will be checked by its source state, false otherwise.</param>
         /// <returns>The <see cref="Transition"/> created.</returns>
-        public Transition CreateTransition(string name, State from, State to, Perception perception = null, Action action = null, bool isPulled = true)
+        public Transition CreateTransition(string name, ActionState from, State to, Perception perception = null, Action action = null, bool isPulled = true)
         {
             return CreateTransition<Transition>(name, from, to, perception, action, isPulled);
         }
@@ -159,7 +183,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="action">The action executed by the transition.</param>
         /// <param name="isPulled">True if the transition will be checked by its source state, false otherwise.</param>
         /// <returns>The <see cref="Transition"/> created.</returns>
-        public Transition CreateTransition(State from, State to, Perception perception = null, Action action = null, bool isPulled = true)
+        public Transition CreateTransition(ActionState from, State to, Perception perception = null, Action action = null, bool isPulled = true)
         {
             return CreateTransition<Transition>(from, to, perception, action, isPulled);
         }
@@ -254,7 +278,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="to">The target state of the transition and it's child node.</param>
         /// <param name="action">The action executed by the transition.</param>
         /// <returns>The <typeparamref name="T"/> created.</returns>
-        public T CreateFinishStateTransition<T>(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null) where T : Transition, new()
+        public T CreateFinishStateTransition<T>(string name, ActionState from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null) where T : Transition, new()
         {
             Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure); 
             return CreateTransition<T>(name, from, to, finishStatePerception, action);
@@ -270,7 +294,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="to">The target state of the transition and it's child node.</param>
         /// <param name="action">The action executed by the transition.</param>
         /// <returns>The <typeparamref name="T"/> created.</returns>
-        public T CreateFinishStateTransition<T>(State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null) where T : Transition, new()
+        public T CreateFinishStateTransition<T>(ActionState from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null) where T : Transition, new()
         {
             Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure);
             return CreateTransition<T>(from, to, finishStatePerception, action);
@@ -286,7 +310,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="to">The target state of the transition and it's child node.</param>
         /// <param name="action">The action executed by the transition.</param>
         /// <returns>The <see cref="Transition"/> created.</returns>
-        public Transition CreateFinishStateTransition(string name, State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null)
+        public Transition CreateFinishStateTransition(string name, ActionState from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null)
         {
             Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure);
             return CreateTransition<Transition>(name, from, to, finishStatePerception, action);
@@ -301,7 +325,7 @@ namespace BehaviourAPI.StateMachines
         /// <param name="to">The target state of the transition and it's child node.</param>
         /// <param name="action">The action executed by the transition.</param>
         /// <returns>The <see cref="Transition"/> created.</returns>
-        public Transition CreateFinishStateTransition(State from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null)
+        public Transition CreateFinishStateTransition(ActionState from, State to, bool triggerOnSuccess, bool triggerOnFailure, Action action = null)
         {
             Perception finishStatePerception = new ExecutionStatusPerception(from, triggerOnSuccess, triggerOnFailure);
             return CreateTransition<Transition>(from, to, finishStatePerception, action);
@@ -320,7 +344,7 @@ namespace BehaviourAPI.StateMachines
         {
             base.Start();
 
-            _currentState = StartNode as State;
+            _currentState = StartNode as ActionState;
             _currentState?.Start();
         }
 

@@ -13,8 +13,8 @@
         public void Test_FSM_Transition()
         {
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Running));
-            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Running));
+            var s1 = fsm.CreateActionState("st1", new FunctionalAction(() => Status.Running));
+            var s2 = fsm.CreateActionState("st2", new FunctionalAction(() => Status.Running));
             Transition t = fsm.CreateTransition<Transition>("t", s1, s2);
 
             fsm.Start();
@@ -37,9 +37,9 @@
         public void Test_FSM_MultipleTransitions()
         {
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Running));
-            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Running));
-            var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Running));
+            var s1 = fsm.CreateActionState("st1", new FunctionalAction(() => Status.Running));
+            var s2 = fsm.CreateActionState("st2", new FunctionalAction(() => Status.Running));
+            var s3 = fsm.CreateActionState("st3", new FunctionalAction(() => Status.Running));
 
             Transition t1_2 = fsm.CreateTransition<Transition>("t12", s1, s2, new ConditionPerception(() => false));
             Transition t1_3 = fsm.CreateTransition<Transition>("t13", s1, s3);
@@ -92,14 +92,14 @@
             FSM child = new FSM();
             FSM parent = new FSM();
 
-            var s1 = parent.CreateState("st1", new FunctionalAction(() => Status.Running));
-            var s2 = parent.CreateState("st2", new EnterSystemAction(child));
-            var s3 = parent.CreateState("st3", new FunctionalAction(() => Status.Running));
+            var s1 = parent.CreateActionState("st1", new FunctionalAction(() => Status.Running));
+            var s2 = parent.CreateActionState("st2", new SubsystemAction(child));
+            var s3 = parent.CreateActionState("st3", new FunctionalAction(() => Status.Running));
             var t1_2 = parent.CreateTransition<Transition>("t12", s1, s2);
             var t2_3 = parent.CreateFinishStateTransition("t2_3", s2, s3, false, true);
 
-            var s4 = child.CreateState("st4", new FunctionalAction(() => Status.Running));
-            var s5 = child.CreateState("st5", new ExitSystemAction(child, Status.Failure));
+            var s4 = child.CreateActionState("st4", new FunctionalAction(() => Status.Running));
+            var s5 = child.CreateExitState("st5", Status.Failure);
             var t4_5 = child.CreateTransition<Transition>("t45", s4, s5);
 
             parent.Start(); // Enter S1
@@ -147,9 +147,9 @@
 
             var i = 0;
             FSM fsm = new FSM();
-            var s1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Success));
-            var s2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Success));
-            var s3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Success));
+            var s1 = fsm.CreateActionState("st1", new FunctionalAction(() => Status.Success));
+            var s2 = fsm.CreateActionState("st2", new FunctionalAction(() => Status.Success));
+            var s3 = fsm.CreateActionState("st3", new FunctionalAction(() => Status.Success));
             var t1_2 = fsm.CreateTransition("t12", s1, s2, new ConditionPerception(() => true), new FunctionalAction(() => i--));
             var t2_3 = fsm.CreateTransition("t23", s2, s3, new ConditionPerception(() => i < 0), new FunctionalAction(() => i++));
             var t3_2 = fsm.CreateTransition("t32", s3, s2, new ConditionPerception(() => true), new FunctionalAction(() => i++));
@@ -195,10 +195,10 @@
             bool bebido = false;
             StackFSM fsm = new StackFSM();
             Assert.AreEqual(1, fsm.NodeCount);
-            var st1 = fsm.CreateState("andando", new FunctionalAction(() => Status.Running));
-            var st2 = fsm.CreateState("luchando", new FunctionalAction(() => Status.Running));
-            var st3 = fsm.CreateState("beber_poción", new FunctionalAction(() => Status.Running));
-            var st4 = fsm.CreateState("tirar_poción", new FunctionalAction(() => Status.Running));
+            var st1 = fsm.CreateActionState("andando", new FunctionalAction(() => Status.Running));
+            var st2 = fsm.CreateActionState("luchando", new FunctionalAction(() => Status.Running));
+            var st3 = fsm.CreateActionState("beber_poción", new FunctionalAction(() => Status.Running));
+            var st4 = fsm.CreateActionState("tirar_poción", new FunctionalAction(() => Status.Running));
             var t1_2 = fsm.CreateTransition("enemigo", st1, st2, new ConditionPerception(() => detectaEnemigo));
             var t2_1 = fsm.CreateTransition("vencido", st2, st1, new ConditionPerception(() => !detectaEnemigo));
             var t1_3 = fsm.CreatePushTransition("caida", st1, st3, new ConditionPerception(() => herido));
@@ -258,7 +258,7 @@
             Assert.AreEqual(Status.None, st4.Status);
         }
 
-        [TestMethod("Probability State")]
+        [TestMethod("Probability ActionState")]
         public void Test_FSM_ProbabilityState()
         {
             var p1 = .5f;
@@ -269,10 +269,10 @@
             var sumProb = p1 + p2 + p3;
             FSM fsm = new FSM();
 
-            var ps = fsm.CreateState<ProbabilisticState>("ps", new FunctionalAction(() => Status.Running));
-            var s1 = fsm.CreateState("s1", new FunctionalAction(() => Status.Running));
-            var s2 = fsm.CreateState("s2", new FunctionalAction(() => Status.Running));
-            var s3 = fsm.CreateState("s3", new FunctionalAction(() => Status.Running));
+            var ps = fsm.CreateActionState<ProbabilisticState>("ps", new FunctionalAction(() => Status.Running));
+            var s1 = fsm.CreateActionState("s1", new FunctionalAction(() => Status.Running));
+            var s2 = fsm.CreateActionState("s2", new FunctionalAction(() => Status.Running));
+            var s3 = fsm.CreateActionState("s3", new FunctionalAction(() => Status.Running));
             var tp1 = fsm.CreateProbabilisticTransition("tp1", ps, s1, p1);
             var tp2 = fsm.CreateProbabilisticTransition("tp2", ps, s2, p2);
             var tp3 = fsm.CreateProbabilisticTransition("tp3", ps, s3, p3);
@@ -292,7 +292,7 @@
                 fsm.Update();
                 Assert.IsTrue(ps.Prob < sumProb);
 
-                State s;
+                ActionState s;
                 if (ps.Prob < p1) s = s1;
                 else if (ps.Prob < p1 + p2) s = s2;
                 else s = s3;
@@ -310,8 +310,8 @@
         public void Test_FSM_FireTransitions()
         {
             var fsm = new FSM();
-            var s1 = fsm.CreateState("s1", new FunctionalAction(()=> Status.Running));
-            var s2 = fsm.CreateState("s2", new FunctionalAction(() => Status.Running));
+            var s1 = fsm.CreateActionState("s1", new FunctionalAction(()=> Status.Running));
+            var s2 = fsm.CreateActionState("s2", new FunctionalAction(() => Status.Running));
             var t1 = fsm.CreateTransition("t1", s1, s2, isPulled: false);
             var t2 = fsm.CreateTransition("t2", s2, s1, isPulled: false);
 

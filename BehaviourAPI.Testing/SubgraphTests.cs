@@ -20,13 +20,13 @@
             BehaviourTree bt = new BehaviourTree();
             FSM fsm = new FSM();
             var action1 = bt.CreateLeafNode("action1", new FunctionalAction(() => Status.Success));
-            var action2 = bt.CreateLeafNode("action2", new EnterSystemAction(fsm));
+            var action2 = bt.CreateLeafNode("action2", new SubsystemAction(fsm));
             var action3 = bt.CreateLeafNode("action3", new FunctionalAction(() => Status.Success));
             var seq = bt.CreateComposite<SequencerNode>("seq", false, action1, action2, action3);
             bt.SetRootNode(seq);
 
-            var entry = fsm.CreateState("entry");
-            var exit = fsm.CreateState("exit", new ExitSystemAction(fsm, Status.Success));
+            var entry = fsm.CreateActionState("entry");
+            var exit = fsm.CreateExitState("exit", Status.Success);
             var t = fsm.CreateTransition("t", entry, exit, new ConditionPerception(() => true));
 
 
@@ -58,16 +58,16 @@
             FSM fsm = new FSM();
             UtilitySystem us = new UtilitySystem();
 
-            var action1 = bt.CreateLeafNode("action1", new EnterSystemAction(us));
-            var action2 = bt.CreateLeafNode("action2", new EnterSystemAction(fsm));
+            var action1 = bt.CreateLeafNode("action1", new SubsystemAction(us));
+            var action2 = bt.CreateLeafNode("action2", new SubsystemAction(fsm));
             var action3 = bt.CreateLeafNode("action3", new FunctionalAction(() => Status.Success));
 
             var seq = bt.CreateComposite<SequencerNode>("seq", false, action1, action2, action3);
             var loop = bt.CreateDecorator<IteratorNode>("loop", seq).SetIterations(-1);
             bt.SetRootNode(loop);
 
-            var entry = fsm.CreateState("entry");
-            var exit = fsm.CreateState("exit", new ExitSystemAction(fsm, Status.Success));
+            var entry = fsm.CreateActionState("entry");
+            var exit = fsm.CreateExitState("exit", Status.Success);
             var t = fsm.CreateTransition("t", entry, exit, new ConditionPerception(() => true));
 
             var f1 = us.CreateVariableFactor("f1", () => v1, 0, 1);
@@ -143,9 +143,9 @@
         {
             FSM fsm = new FSM();
             BehaviourTree bt = new BehaviourTree();
-            var entry = fsm.CreateState("entry");
-            var subBT = fsm.CreateState("subBT", new EnterSystemAction(bt));
-            var final = fsm.CreateState("final");
+            var entry = fsm.CreateActionState("entry");
+            var subBT = fsm.CreateActionState("subBT", new SubsystemAction(bt));
+            var final = fsm.CreateActionState("final");
             var t1 = fsm.CreateTransition("t1", entry, subBT, new ConditionPerception(() => true));
             var t2 = fsm.CreateFinishStateTransition<Transition>("t2", subBT, final, true, false);
 
@@ -194,11 +194,11 @@
             BehaviourTree bt = new BehaviourTree();
 
             var basic = us.CreateUtilityAction("base", f1, new FunctionalAction(()=> { v1 = 0f; v2 = 1f; }, () => Status.Running));
-            var subfsm = us.CreateUtilityAction("fsm", f2, new EnterSystemAction(fsm));
-            var subbt = us.CreateUtilityAction("bt", f3, new EnterSystemAction(bt));
+            var subfsm = us.CreateUtilityAction("fsm", f2, new SubsystemAction(fsm));
+            var subbt = us.CreateUtilityAction("bt", f3, new SubsystemAction(bt));
 
-            var entry = fsm.CreateState("entry");
-            var action = fsm.CreateState("action", new FunctionalAction(() => { v2 = 0f; v3 = .5f; }, () => Status.Running));
+            var entry = fsm.CreateActionState("entry");
+            var action = fsm.CreateActionState("action", new FunctionalAction(() => { v2 = 0f; v3 = .5f; }, () => Status.Running));
 
             var t1 = fsm.CreateTransition("t1", entry, action, new ConditionPerception(() => true));
 
@@ -238,9 +238,9 @@
         {
             BehaviourTree tree = new BehaviourTree();
             FSM fsm = new FSM();
-            fsm.CreateState("State", new FunctionalAction(() => Status.Running));
-            var a1 = tree.CreateLeafNode("sub1", new EnterSystemAction(fsm));
-            var a2 = tree.CreateLeafNode("sub2", new EnterSystemAction(fsm));
+            fsm.CreateActionState("ActionState", new FunctionalAction(() => Status.Running));
+            var a1 = tree.CreateLeafNode("sub1", new SubsystemAction(fsm));
+            var a2 = tree.CreateLeafNode("sub2", new SubsystemAction(fsm));
             var parallel = tree.CreateComposite<ParallelCompositeNode>("parallel", false, a1, a2);
             tree.SetRootNode(parallel);
             Assert.ThrowsException<Exception>(() => tree.Start());           

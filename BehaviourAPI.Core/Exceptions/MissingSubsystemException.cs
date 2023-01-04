@@ -6,24 +6,24 @@ namespace BehaviourAPI.Core.Exceptions
 {
     public class MissingSubsystemException : NullReferenceException
     {
-        public EnterSystemAction SubsystemAction;
+        public SubsystemAction SubsystemAction;
 
-        public MissingSubsystemException(EnterSystemAction subsystemAction)
+        public MissingSubsystemException(SubsystemAction subsystemAction)
         {
             SubsystemAction = subsystemAction;
         }
 
-        public MissingSubsystemException(EnterSystemAction subsystemAction, string message) : base(message)
+        public MissingSubsystemException(SubsystemAction subsystemAction, string message) : base(message)
         {
             SubsystemAction = subsystemAction;
         }
 
-        public MissingSubsystemException(EnterSystemAction subsystemAction, string message, Exception innerException) : base(message, innerException)
+        public MissingSubsystemException(SubsystemAction subsystemAction, string message, Exception innerException) : base(message, innerException)
         {
             SubsystemAction = subsystemAction;
         }
 
-        protected MissingSubsystemException(EnterSystemAction subsystemAction, SerializationInfo info, StreamingContext context) : base(info, context)
+        protected MissingSubsystemException(SubsystemAction subsystemAction, SerializationInfo info, StreamingContext context) : base(info, context)
         {
             SubsystemAction = subsystemAction;
         }

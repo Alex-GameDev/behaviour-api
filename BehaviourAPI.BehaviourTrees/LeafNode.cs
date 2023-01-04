@@ -9,11 +9,11 @@ namespace BehaviourAPI.BehaviourTrees
     /// <summary>
     /// BTNode type that has no children.
     /// </summary>
-    public class LeafNode : BTNode, IActionHandler
+    public class LeafNode : BTNode
     {
         #region ------------------------------------------ Properties -----------------------------------------
         public sealed override int MaxOutputConnections => 0;
-        public Action Action { get; set; }     
+        public Action Action; 
 
         #endregion
 
