@@ -19,7 +19,7 @@ namespace BehaviourAPI.UtilitySystems
             return this;
         }
 
-        public Factor SetWeights(List<float> weights)
+        public Factor SetWeights(IEnumerable<float> weights)
         {
             Weights = weights.ToArray();
             return this;

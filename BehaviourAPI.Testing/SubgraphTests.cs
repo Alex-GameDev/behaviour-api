@@ -25,10 +25,8 @@
             var seq = bt.CreateComposite<SequencerNode>("seq", false, action1, action2, action3);
             bt.SetRootNode(seq);
 
-            var entry = fsm.CreateActionState("entry");
-            var exit = fsm.CreateExitState("exit", Status.Success);
-            var t = fsm.CreateTransition("t", entry, exit, new ConditionPerception(() => true));
-
+            var entry = fsm.CreateState("entry");
+            var exit = fsm.CreateExitTransition("exit", entry, Status.Success);
 
             bt.Start();
             bt.Update(); //Árbol (R) [ None - Running - None] - FSM (R) [Running - None]
@@ -41,13 +39,11 @@
             Assert.AreEqual(Status.None, action2.Status);
             Assert.AreEqual(Status.Running, action3.Status);
             Assert.AreEqual(Status.None, fsm.Status);
-            Assert.AreEqual(Status.None, exit.Status);
 
             bt.Update(); //Árbol (S) [ None - None - Success] - FSM (S) [None - None]
             Assert.AreEqual(Status.Success, action3.Status);
             Assert.AreEqual(Status.Success, bt.Status);
             Assert.AreEqual(Status.None, fsm.Status);
-            Assert.AreEqual(Status.None, exit.Status);
         }
 
         [TestMethod("BT Sub FSM loop")]
@@ -66,9 +62,8 @@
             var loop = bt.CreateDecorator<IteratorNode>("loop", seq).SetIterations(-1);
             bt.SetRootNode(loop);
 
-            var entry = fsm.CreateActionState("entry");
-            var exit = fsm.CreateExitState("exit", Status.Success);
-            var t = fsm.CreateTransition("t", entry, exit, new ConditionPerception(() => true));
+            var entry = fsm.CreateState("entry");
+            var exit = fsm.CreateExitTransition("exit", entry, Status.Success);
 
             var f1 = us.CreateVariableFactor("f1", () => v1, 0, 1);
             var f2 = us.CreateVariableFactor("f2", () => v2, 0, 1);
@@ -87,7 +82,6 @@
             Assert.AreEqual(Status.None, u_action_1.Status);
             Assert.AreEqual(Status.None, u_action_2.Status);
             Assert.AreEqual(Status.None, entry.Status);
-            Assert.AreEqual(Status.None, exit.Status);
 
             bt.Update(); //Árbol (R) [ None - Running - None] - FSM (R) [Running - None] - US [None - None]
             Assert.AreEqual(Status.Running, bt.Status);
@@ -99,7 +93,6 @@
             Assert.AreEqual(Status.None, u_action_1.Status);
             Assert.AreEqual(Status.None, u_action_2.Status);
             Assert.AreEqual(Status.Running, entry.Status);
-            Assert.AreEqual(Status.None, exit.Status);
 
             bt.Update(); //Árbol (R) [ None - None - Running] - FSM (S) [None - None] - US [N - N]
             Assert.AreEqual(Status.Running, bt.Status);
@@ -111,7 +104,6 @@
             Assert.AreEqual(Status.None, u_action_1.Status);
             Assert.AreEqual(Status.None, u_action_2.Status);
             Assert.AreEqual(Status.None, entry.Status);
-            Assert.AreEqual(Status.None, exit.Status);
 
             bt.Update(); //Árbol (S) [ Running - None - None] - FSM (S) [None - None]
             Assert.AreEqual(Status.Running, bt.Status);
@@ -123,7 +115,6 @@
             Assert.AreEqual(Status.None, u_action_1.Status);
             Assert.AreEqual(Status.None, u_action_2.Status);
             Assert.AreEqual(Status.None, entry.Status);
-            Assert.AreEqual(Status.None, exit.Status);
 
             bt.Update(); //Árbol (R) [ None - Running - None] - FSM (R) [Running - None]
             Assert.AreEqual(Status.Running, bt.Status);
@@ -135,7 +126,6 @@
             Assert.AreEqual(Status.None, u_action_1.Status);
             Assert.AreEqual(Status.None, u_action_2.Status);
             Assert.AreEqual(Status.Running, entry.Status);
-            Assert.AreEqual(Status.None, exit.Status);
         }
 
         [TestMethod("FSM Sub BT")]
@@ -143,11 +133,11 @@
         {
             FSM fsm = new FSM();
             BehaviourTree bt = new BehaviourTree();
-            var entry = fsm.CreateActionState("entry");
-            var subBT = fsm.CreateActionState("subBT", new SubsystemAction(bt));
-            var final = fsm.CreateActionState("final");
+            var entry = fsm.CreateState("entry");
+            var subBT = fsm.CreateState("subBT", new SubsystemAction(bt));
+            var final = fsm.CreateState("final");
             var t1 = fsm.CreateTransition("t1", entry, subBT, new ConditionPerception(() => true));
-            var t2 = fsm.CreateFinishStateTransition<Transition>("t2", subBT, final, true, false);
+            var t2 = fsm.CreateTransition("t2", subBT, final, new ExecutionStatusPerception(subBT, StatusFlags.Success));
 
             var action1 = bt.CreateLeafNode("action1", new FunctionalAction(() => Status.Failure));
             var action2 = bt.CreateLeafNode("action2", new FunctionalAction(() => Status.Success));
@@ -197,8 +187,8 @@
             var subfsm = us.CreateUtilityAction("fsm", f2, new SubsystemAction(fsm));
             var subbt = us.CreateUtilityAction("bt", f3, new SubsystemAction(bt));
 
-            var entry = fsm.CreateActionState("entry");
-            var action = fsm.CreateActionState("action", new FunctionalAction(() => { v2 = 0f; v3 = .5f; }, () => Status.Running));
+            var entry = fsm.CreateState("entry");
+            var action = fsm.CreateState("action", new FunctionalAction(() => { v2 = 0f; v3 = .5f; }, () => Status.Running));
 
             var t1 = fsm.CreateTransition("t1", entry, action, new ConditionPerception(() => true));
 
@@ -238,7 +228,7 @@
         {
             BehaviourTree tree = new BehaviourTree();
             FSM fsm = new FSM();
-            fsm.CreateActionState("ActionState", new FunctionalAction(() => Status.Running));
+            fsm.CreateState("State", new FunctionalAction(() => Status.Running));
             var a1 = tree.CreateLeafNode("sub1", new SubsystemAction(fsm));
             var a2 = tree.CreateLeafNode("sub2", new SubsystemAction(fsm));
             var parallel = tree.CreateComposite<ParallelCompositeNode>("parallel", false, a1, a2);

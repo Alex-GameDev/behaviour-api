@@ -37,7 +37,7 @@ namespace BehaviourAPI.Testing
             Assert.AreEqual(4, tree.NodeCount);
 
             // Throws an error when adding a node with a wrong type
-            Assert.ThrowsException<ArgumentException>(() => builder.AddNode(new NodeData(new ActionState(), new List<Node>(), new List<Node>())));
+            Assert.ThrowsException<ArgumentException>(() => builder.AddNode(new NodeData(new State(), new List<Node>(), new List<Node>())));
             
             // Throws an error at building if the connection number is wrong
             Assert.ThrowsException<ArgumentException>(() =>

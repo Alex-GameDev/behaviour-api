@@ -12,36 +12,26 @@ namespace BehaviourAPI.StateMachines
     {
         Stack<State> _stateStack;
 
-        ActionState _comeBackState;
+        State _comeBackState;
         HashSet<Transition> _pushTransitions;
 
         public StackFSM()
         {
             _stateStack = new Stack<State>();
-            _comeBackState = CreateActionState("comeback", new FunctionalAction(() => ReturnToLastState(), () => Status.None));
+            _comeBackState = CreateState("comeback", new FunctionalAction(() => ReturnToLastState(), () => Status.None));
             _pushTransitions = new HashSet<Transition>();
         }
 
-        public T CreatePopTransition<T>(string name, ActionState from, Perception perception = null, Action action = null) where T : Transition, new()
+        public StateTransition CreatePopTransition(string name, State from, Perception perception = null, Action action = null)
         {
-            return CreateTransition<T>(name, from, _comeBackState, perception, action);
+            return CreateTransition(name, from, _comeBackState, perception, action);
         }
 
-        public Transition CreatePopTransition(string name, ActionState from, Perception perception = null, Action action = null)
+        public StateTransition CreatePushTransition(string name, State from, State to, Perception perception = null, Action action = null)
         {
-            return CreatePopTransition<Transition>(name, from, perception, action);
-        }
-
-        public T CreatePushTransition<T>(string name, ActionState from, ActionState to, Perception perception = null, Action action = null) where T : Transition, new()
-        {
-            T transition = CreateTransition<T>(name, from, to, perception, action);
+            StateTransition transition = CreateTransition(name, from, to, perception, action);
             _pushTransitions.Add(transition);
             return transition;
-        }
-
-        public Transition CreatePushTransition(string name, ActionState from, ActionState to, Perception perception = null, Action action = null)
-        {
-            return CreatePushTransition<Transition>(name, from, to, perception, action);
         }
 
         public override void Stop()

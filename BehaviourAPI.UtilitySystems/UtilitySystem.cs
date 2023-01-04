@@ -247,7 +247,7 @@ namespace BehaviourAPI.UtilitySystems
         /// <param name="name">The name of the utility action.</param>
         /// <param name="factor">The child factor of the action.</param>
         /// <param name="root">true if the action is added to the selectable element list, false otherwise."</param>
-        /// <returns>The created <see cref="UtilityAction"/></returns>
+        /// <returns>The created <see cref="UtilityExitNode"/></returns>
         public UtilityExitNode CreateUtilityExitNode(string name, Factor factor, Status exitStatus, bool root = true)
         {
             UtilityExitNode utilityExecutable = CreateNode<UtilityExitNode>(name);
@@ -266,7 +266,7 @@ namespace BehaviourAPI.UtilitySystems
         /// <param name="name">The name of the utility action.</param>
         /// <param name="factor">The child factor of the action.</param>
         /// <param name="root">true if the action is added to the selectable element list, false otherwise."</param>
-        /// <returns>The created <see cref="UtilityAction"/></returns>
+        /// <returns>The created <see cref="UtilityExitNode"/></returns>
         public UtilityExitNode CreateUtilityExitNode(Factor factor, Status exitStatus, bool root = true)
         {
             UtilityExitNode utilityExecutable = CreateNode<UtilityExitNode>();

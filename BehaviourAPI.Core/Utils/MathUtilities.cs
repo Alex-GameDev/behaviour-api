@@ -1,7 +1,11 @@
-﻿namespace BehaviourAPI.Core
+﻿using System;
+
+namespace BehaviourAPI.Core
 {
     public static class MathUtilities
     {
+        public static Random Random = new Random();
+
         /// <summary>
         /// Clamp the float value between 0 and 1.
         /// </summary>
@@ -25,5 +29,7 @@
             else if (value < 0) return 0;
             else return 1;
         }
+
+
     }
 }

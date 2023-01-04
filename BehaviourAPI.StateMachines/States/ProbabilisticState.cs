@@ -1,21 +1,20 @@
-﻿using System;
+﻿using BehaviourAPI.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BehaviourAPI.StateMachines
 {
-    public class ProbabilisticState : ActionState
+    public class ProbabilisticState : State
     {
         Dictionary<Transition, float> _probabilities;
-        float _totalProbability;
-        Random _random;
+        float _totalProbability;        
 
         public double Prob { get; private set; }
 
         public ProbabilisticState()
         {
             _probabilities = new Dictionary<Transition, float>();
-            _random = new Random();
         }
 
         public void SetProbabilisticTransition(Transition transition, float probability)
@@ -29,7 +28,7 @@ namespace BehaviourAPI.StateMachines
 
         protected override bool CheckTransitions()
         {
-            var probability = _random.NextDouble() * _totalProbability;
+            var probability = MathUtilities.Random.NextDouble() * _totalProbability;
             Prob = probability;
             var currentProbSum = 0f;
             Transition selectedTransition = null;

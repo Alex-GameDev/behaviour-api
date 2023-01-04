@@ -8,7 +8,7 @@
     using System.Collections.Generic;
     using Action = Core.Actions.Action;
 
-    public class Transition : FSMNode, IPushActivable
+    public abstract class Transition : FSMNode, IPushActivable
     {
         #region ------------------------------------------ Properties -----------------------------------------
 
@@ -19,8 +19,6 @@
 
         public override int MaxInputConnections => 1;
 
-        public override int MaxOutputConnections => 1;
-
         public System.Action TransitionTriggered { get; set; }
 
         #endregion
@@ -28,8 +26,8 @@
         #region ------------------------------------------- Fields -------------------------------------------
 
         protected FSM _fsm;
-        protected ActionState _sourceState;
-        protected State _targetState;
+
+        protected State _sourceState;
 
         public bool isPulled = true;
 
@@ -38,8 +36,7 @@
         #region ---------------------------------------- Build methods ---------------------------------------
 
         public void SetFSM(FSM fsm) => _fsm = fsm;
-        public void SetSourceState(ActionState source) => _sourceState = source;
-        public void SetTargetState(State target) => _targetState = target;
+        public void SetSourceState(State source) => _sourceState = source;
 
         protected override void BuildConnections(List<Node> parents, List<Node> children)
         {
@@ -47,12 +44,12 @@
 
             _fsm = BehaviourGraph as FSM;
 
-            if (children.Count > 0 && children[0] is State to)
-                _targetState = to;
-            else
-                throw new ArgumentException();
+            //if (children.Count > 0 && children[0] is State to)
+            //    _targetState = to;
+            //else
+            //    throw new ArgumentException();
 
-            if (parents.Count > 0 && children[0] is ActionState from)
+            if (parents.Count > 0 && children[0] is State from)
                 _sourceState = from;
             else
                 throw new ArgumentException();
@@ -79,11 +76,7 @@
 
             _fsm.OnTriggerTransition(this);
 
-            if (_targetState == null)
-                throw new MissingChildException(this, "The list of utility candidates is empty.");
-
             TransitionTriggered?.Invoke();
-            _fsm.SetCurrentState(_targetState);
         }
 
         public void Fire() => Perform();
