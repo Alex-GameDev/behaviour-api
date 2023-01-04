@@ -21,16 +21,5 @@ namespace BehaviourAPI.Core
         {
             if(list.Remove(element)) list.Insert(0, element);
         }
-
-        public static StatusFlags GetFlags(this Status status)
-        {
-            switch(status)
-            {
-                case Status.Success: return StatusFlags.Success;
-                case Status.Failure: return StatusFlags.Failure;
-                case Status.Running: return StatusFlags.Running;
-                default: return StatusFlags.None;
-            }
-        }
     }
 }

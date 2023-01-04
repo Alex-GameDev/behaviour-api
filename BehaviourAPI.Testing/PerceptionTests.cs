@@ -15,10 +15,10 @@
             var st1 = fsm.CreateState("st1", new FunctionalAction(() => Status.Success));
             var st2 = fsm.CreateState("st2", new FunctionalAction(() => Status.Failure));
             var st3 = fsm.CreateState("st3", new FunctionalAction(() => Status.Failure));
-            var t1 = fsm.CreateTransition("t1", st1, st2, new ExecutionStatusPerception(st1, true, true));
-            var t2 = fsm.CreateTransition("t2", st2, st3, new ExecutionStatusPerception(st2, false, true));
-            var t3 = fsm.CreateTransition("t3", st3, st1, new ExecutionStatusPerception(st3, true, false));
-            var t4 = fsm.CreateTransition("t4", st3, st2, new ExecutionStatusPerception(st3, false, true));
+            var t1 = fsm.CreateTransition("t1", st1, st2, new ExecutionStatusPerception(st1, StatusFlags.Finished));
+            var t2 = fsm.CreateTransition("t2", st2, st3, new ExecutionStatusPerception(st2, StatusFlags.Failure));
+            var t3 = fsm.CreateTransition("t3", st3, st1, new ExecutionStatusPerception(st3, StatusFlags.Success));
+            var t4 = fsm.CreateTransition("t4", st3, st2, new ExecutionStatusPerception(st3, StatusFlags.Failure));
 
             fsm.Start();
             Assert.AreEqual(Status.Running, st1.Status);
@@ -33,9 +33,14 @@
         [TestMethod]
         public void Test_StatusFlags()
         {
-            Assert.IsTrue((StatusFlags.Success | StatusFlags.Failure & StatusFlags.Success) != 0);
-            Assert.IsTrue((StatusFlags.Success | StatusFlags.Failure & StatusFlags.Failure) != 0);
+            Assert.IsTrue((StatusFlags.Finished & StatusFlags.Success) != 0);
+            Assert.IsTrue((StatusFlags.Finished & StatusFlags.Failure) != 0);
             Assert.IsFalse((StatusFlags.Failure & StatusFlags.Success) != 0);
+
+            Assert.AreEqual(StatusFlags.Finished, StatusFlags.Success | StatusFlags.Failure);
+            Assert.AreEqual(StatusFlags.NotSuccess, StatusFlags.Running | StatusFlags.Failure);
+            Assert.AreEqual(StatusFlags.NotFailure, StatusFlags.Success | StatusFlags.Running);
+            Assert.AreEqual(StatusFlags.Actived, StatusFlags.Success | StatusFlags.Failure | StatusFlags.Running);
         }
 
         [TestMethod]
